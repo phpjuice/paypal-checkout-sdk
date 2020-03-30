@@ -1,5 +1,5 @@
 {
-    "name": "phpjuice/paypal_checkout_sdk",
+    "name": "phpjuice/paypal-checkout-sdk",
     "description": "Paypal Checkout SDK",
     "keywords": [
         "paypal",
