@@ -1,7 +1,10 @@
 # PayPal Checkout SDK
 
+[![Latest Stable Version](https://poser.pugx.org/phpjuice/paypal-checkout-sdk/v/stable)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
+[![Build Status](https://travis-ci.com/phpjuice/paypal-checkout-sdk.svg?branch=master)](https://travis-ci.com/phpjuice/paypal-checkout-sdk)
+[![Total Downloads](https://poser.pugx.org/phpjuice/paypal-checkout-sdk/downloads)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
+[![License](https://poser.pugx.org/phpjuice/paypal-checkout-sdk/license)](https://github.com/phpjuice/paypal-checkout-sdk/blob/master/LICENSE)
 
-[![GitHub](https://img.shields.io/github/license/phpjuice/paypal-checkout-sdk.svg?style=flat-square)](https://github.com/phpjuice/paypal-checkout-sdk/blob/master/LICENSE)
 
 PayPal Checkout SDK is a wrapper around the V2 Paypal rest API.
 
@@ -114,6 +117,9 @@ If you discover any security related issues, please email author instead of usin
 
 ## License
 
-license. Please see the [license file](LICENCE) for more information.
+license. Please see the [Licence](https://github.com/phpjuice/paypal-checkout-sdk/blob/master/LICENSE) for more information.
 
-[![GitHub](https://img.shields.io/github/license/phpjuice/paypal-checkout-sdk.svg?style=flat-square)](https://github.com/phpjuice/paypal-checkout-sdk/blob/master/LICENSE)
+[![Latest Stable Version](https://poser.pugx.org/phpjuice/paypal-checkout-sdk/v/stable)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
+[![Build Status](https://travis-ci.com/phpjuice/paypal-checkout-sdk.svg?branch=master)](https://travis-ci.com/phpjuice/paypal-checkout-sdk)
+[![Total Downloads](https://poser.pugx.org/phpjuice/paypal-checkout-sdk/downloads)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
+[![License](https://poser.pugx.org/phpjuice/paypal-checkout-sdk/license)](https://github.com/phpjuice/paypal-checkout-sdk/blob/master/LICENSE)
