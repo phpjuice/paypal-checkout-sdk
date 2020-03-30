@@ -7,7 +7,7 @@ PayPal Checkout SDK is a wrapper around the V2 Paypal rest API.
 
 ## Installation
 
-PayPal Checkout SDK Package requires PHP 7.2 or higher.
+PayPal Checkout SDK Package requires PHP 7.4 or higher.
 
 > **INFO:** If you are using an older version of php this package may not function correctly.
 
