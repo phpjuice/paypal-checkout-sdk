@@ -40,7 +40,7 @@ class Item implements Arrayable, Jsonable
      *
      * @var \PayPal\Checkout\Orders\Amount
      */
-    protected $tax;
+    protected $tax = null;
 
     /**
      * The item quantity. Must be a whole number.
@@ -68,21 +68,14 @@ class Item implements Arrayable, Jsonable
      *     - DIGITAL_GOODS. Goods that are stored, delivered, and used in their electronic format.
      *     - PHYSICAL_GOODS. A tangible item that can be shipped with proof of delivery.
      *
-     * @var enum
+     * @var string
      */
     protected $category = DIGITAL_GOODS;
 
     /**
-     * Create a new collection.
-     *
-     * @param string $name
-     * @param string $currency_code
-     * @param float  $value
-     * @param int    $quantity
-     *
-     * @return void
+     * create a new item instance.
      */
-    public function __construct($name, $currency_code, $value, $quantity = 1)
+    public function __construct(string $name, string $currency_code, float $value, int $quantity = 1)
     {
         $this->name = $name;
         $this->unit_amount = new Amount($currency_code, $value);
@@ -92,10 +85,8 @@ class Item implements Arrayable, Jsonable
 
     /**
      * set's item name.
-     *
-     * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -103,9 +94,9 @@ class Item implements Arrayable, Jsonable
     }
 
     /**
-     * set's item Amount.
+     * set's item amount.
      */
-    public function setUnitAmount(Amount $unit_amount)
+    public function setUnitAmount(Amount $unit_amount): self
     {
         $this->unit_amount = $unit_amount;
 
@@ -115,7 +106,7 @@ class Item implements Arrayable, Jsonable
     /**
      * set's item quantity.
      */
-    public function setQuantity(int $quantity)
+    public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
 
@@ -125,7 +116,7 @@ class Item implements Arrayable, Jsonable
     /**
      * set's item description.
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -135,7 +126,7 @@ class Item implements Arrayable, Jsonable
     /**
      * set's item category.
      */
-    public function setCategory($category)
+    public function setCategory(string $category): self
     {
         $validOptions = [DIGITAL_GOODS, PHYSICAL_GOODS];
         if (!in_array($category, $validOptions)) {
@@ -147,9 +138,9 @@ class Item implements Arrayable, Jsonable
     }
 
     /**
-     * return's item sku.
+     * set's item sku.
      */
-    public function setSku($sku)
+    public function setSku(string $sku): self
     {
         $this->sku = $sku;
 
@@ -157,9 +148,17 @@ class Item implements Arrayable, Jsonable
     }
 
     /**
+     * return's item name.
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
      * return's item sku.
      */
-    public function getSku()
+    public function getSku(): ?string
     {
         return $this->sku;
     }
@@ -167,32 +166,46 @@ class Item implements Arrayable, Jsonable
     /**
      * return's item sku.
      */
-    public function getAmount()
+    public function getAmount(): Amount
     {
         return $this->unit_amount;
     }
 
     /**
-     * get's item quantity.
+     * return's item quantity.
      */
-    public function getQuantity()
+    public function getQuantity(): int
     {
         return $this->quantity;
     }
 
     /**
-     * Get the instance as an array.
-     *
-     * @return array
+     * return's item category.
      */
-    public function toArray()
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    /**
+     * return's item description.
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * Get the instance as an array.
+     */
+    public function toArray(): array
     {
         return [
-            'name' => $this->name,
+            'name' => $this->getName(),
             'unit_amount' => $this->unit_amount->toArray(),
-            'quantity' => $this->quantity,
-            'description' => $this->description,
-            'category' => $this->category,
+            'quantity' => $this->getQuantity(),
+            'description' => $this->getDescription(),
+            'category' => $this->getCategory(),
         ];
     }
 }

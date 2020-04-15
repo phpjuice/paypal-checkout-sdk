@@ -9,18 +9,16 @@ class AmountBreakdown extends Amount
 {
     /**
      * Get the instance as an array.
-     *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
-            'currency_code' => $this->currency_code,
-            'value' => $this->value,
+            'currency_code' => $this->getCurrencyCode(),
+            'value' => $this->getValue(),
             'breakdown' => [
                 'item_total' => [
-                    'currency_code' => $this->currency_code,
-                    'value' => $this->value,
+                    'currency_code' => $this->getCurrencyCode(),
+                    'value' => $this->getValue(),
                 ],
             ],
         ];

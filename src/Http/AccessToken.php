@@ -32,7 +32,7 @@ class AccessToken
      */
     protected $created_at;
 
-    public function __construct($token, $token_type, $expires_in)
+    public function __construct(string $token, string $token_type, int $expires_in)
     {
         $this->token = $token;
         $this->token_type = $token_type;
@@ -43,7 +43,7 @@ class AccessToken
     /**
      * gets the token.
      */
-    public function getToken()
+    public function getToken(): ?string
     {
         return $this->token;
     }
@@ -51,7 +51,7 @@ class AccessToken
     /**
      * gets the token.
      */
-    public function getTokenType(): string
+    public function getTokenType(): ?string
     {
         return $this->token_type;
     }
@@ -59,7 +59,7 @@ class AccessToken
     /**
      * returns authorization string.
      */
-    public function authorizationString(): string
+    public function authorizationString(): ?string
     {
         return $this->token_type.' '.$this->token;
     }

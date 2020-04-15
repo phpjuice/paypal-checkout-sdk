@@ -28,14 +28,9 @@ class Payee implements Arrayable, Jsonable
     protected $merchant_id;
 
     /**
-     * Create a new instance.
-     *
-     * @param string $email_address
-     * @param string $merchant_id
-     *
-     * @return self
+     * create a new payee instance.
      */
-    public function __construct($email_address, $merchant_id)
+    public function __construct(string $email_address, string $merchant_id)
     {
         $this->email_address = $email_address;
         $this->merchant_id = $merchant_id;
@@ -44,17 +39,15 @@ class Payee implements Arrayable, Jsonable
     /**
      * Gets payee email address.
      */
-    public function getEmailAddress()
+    public function getEmailAddress(): string
     {
         return $this->email_address;
     }
 
     /**
      * Sets payee email address.
-     *
-     * @param float $email_address
      */
-    public function setEmailAddress($email_address)
+    public function setEmailAddress(string $email_address): self
     {
         $this->email_address = $email_address;
 
@@ -64,17 +57,15 @@ class Payee implements Arrayable, Jsonable
     /**
      * Gets merchant id.
      */
-    public function getMerchantId()
+    public function getMerchantId(): ?string
     {
         return $this->merchant_id;
     }
 
     /**
      * Sets payee merchant id.
-     *
-     * @param string $merchant_id
      */
-    public function setMerchantId($merchant_id)
+    public function setMerchantId(string $merchant_id): self
     {
         $this->merchant_id = $merchant_id;
 
@@ -83,14 +74,12 @@ class Payee implements Arrayable, Jsonable
 
     /**
      * Get the instance as an array.
-     *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
-            'email_address' => $this->email_address,
-            'merchant_id' => $this->merchant_id,
+            'email_address' => $this->getEmailAddress(),
+            'merchant_id' => $this->getMerchantId(),
         ];
     }
 }

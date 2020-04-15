@@ -75,23 +75,18 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     protected $payee = null;
 
     /**
-     * Create a new collection.
-     *
-     * @param string $currency_code
-     * @param string $value
-     *
-     * @return self
+     * creates a new order instance.
      */
-    public function __construct($intent = CAPTURE)
+    public function __construct(string $intent = CAPTURE)
     {
         $this->setIntent($intent);
         $this->application_context = new ApplicationContext();
     }
 
     /**
-     *  Push an item onto the end of the purchase unit.
+     *  push a new item into purchase_units array.
      */
-    public function addPurchaseUnit(PurchaseUnit $purchase_unit)
+    public function addPurchaseUnit(PurchaseUnit $purchase_unit): self
     {
         if (count($this->purchase_units) >= 1) {
             throw new OrderPurchaseUnitException('At present only 1 purchase_unit is supported.');
@@ -102,21 +97,17 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     }
 
     /**
-     * getter for purchase units.
-     *
-     * @return PurchaseUnit[] $purchase_units
+     * return's order purchase units.
      */
-    public function getPurchaseUnits()
+    public function getPurchaseUnits(): array
     {
         return $this->purchase_units;
     }
 
     /**
-     * setter for order intent.
-     *
-     * @return $this
+     * set's order application context.
      */
-    public function setApplicationContext(ApplicationContext $application_context)
+    public function setApplicationContext(ApplicationContext $application_context): self
     {
         $this->application_context = $application_context;
 
@@ -124,21 +115,17 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     }
 
     /**
-     * setter for order intent.
-     *
-     * @return $this
+     * return's order application context.
      */
-    public function getApplicationContext()
+    public function getApplicationContext(): ?ApplicationContext
     {
         return $this->application_context;
     }
 
     /**
-     * setter for order intent.
-     *
-     * @return $this
+     * set's order intent.
      */
-    public function setIntent(string $intent)
+    public function setIntent(string $intent): self
     {
         if (!in_array($intent, [CAPTURE, AUTHORIZE])) {
             throw new InvalidOrderIntentException();
@@ -150,37 +137,33 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     }
 
     /**
-     * setter for order intent.
-     *
-     * @return $this
+     * return's order intent.
      */
-    public function getIntent()
+    public function getIntent(): string
     {
         return $this->intent;
     }
 
     /**
-     * get for order status.
+     * return's order id.
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->status;
     }
 
     /**
-     * get for order status.
+     * return's order status.
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
 
     /**
      * Get the instance as an array.
-     *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         if (empty($this->purchase_units)) {
             throw new OrderPurchaseUnitException('Paypal orders must have 1 purchase_unit at least.');

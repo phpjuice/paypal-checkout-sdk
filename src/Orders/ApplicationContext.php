@@ -125,7 +125,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * gets brand_name.
      */
-    public function getBrandName()
+    public function getBrandName(): ?string
     {
         return $this->brand_name;
     }
@@ -133,7 +133,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * sets the brand_name.
      */
-    public function setBrandName($brand_name)
+    public function setBrandName($brand_name): self
     {
         $this->brand_name = $brand_name;
 
@@ -143,7 +143,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * gets brand_name.
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
@@ -151,7 +151,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * sets the locale.
      */
-    public function setLocale($locale)
+    public function setLocale($locale): self
     {
         $this->locale = $locale;
 
@@ -161,7 +161,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * gets landing_page.
      */
-    public function getLandingPage()
+    public function getLandingPage(): string
     {
         return $this->landing_page;
     }
@@ -169,7 +169,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * sets the landing_page.
      */
-    public function setLandingPage($landing_page)
+    public function setLandingPage($landing_page): self
     {
         $validOptions = [LOGIN, BILLING, NO_PREFERENCE];
         if (!in_array($landing_page, $validOptions)) {
@@ -184,7 +184,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * gets shipping_preference.
      */
-    public function getShippingPreference()
+    public function getShippingPreference(): string
     {
         return $this->shipping_preference;
     }
@@ -192,7 +192,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * sets the shipping_preference.
      */
-    public function setShippingPreference($shipping_preference)
+    public function setShippingPreference($shipping_preference): self
     {
         $validOptions = [GET_FROM_FILE, NO_SHIPPING, SET_PROVIDED_ADDRESS];
         if (!in_array($shipping_preference, $validOptions)) {
@@ -207,7 +207,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * gets return_url.
      */
-    public function getReturnUrl()
+    public function getReturnUrl(): ?string
     {
         return $this->return_url;
     }
@@ -215,7 +215,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * sets the return_url.
      */
-    public function setReturnUrl($return_url)
+    public function setReturnUrl($return_url): self
     {
         $this->return_url = $return_url;
 
@@ -225,7 +225,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * gets cancel_url.
      */
-    public function getCancelUrl()
+    public function getCancelUrl(): ?string
     {
         return $this->cancel_url;
     }
@@ -233,7 +233,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * sets the cancel_url.
      */
-    public function setCancelUrl($cancel_url)
+    public function setCancelUrl($cancel_url): self
     {
         $this->cancel_url = $cancel_url;
 
@@ -243,7 +243,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * gets user_action.
      */
-    public function getUserAction()
+    public function getUserAction(): string
     {
         return $this->user_action;
     }
@@ -251,7 +251,7 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * sets the user_action.
      */
-    public function setUserAction($user_action)
+    public function setUserAction($user_action): self
     {
         $validOptions = [ACTION_CONTINUE, ACTION_PAY_NOW];
         if (!in_array($user_action, $validOptions)) {
@@ -264,19 +264,17 @@ class ApplicationContext implements Arrayable, Jsonable
 
     /**
      * Get the instance as an array.
-     *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $arrayable = [
-            'brand_name' => $this->brand_name ?? null,
-            'locale' => $this->locale ?? null,
-            'shipping_preference' => $this->shipping_preference ?? null,
-            'landing_page' => $this->landing_page ?? null,
-            'user_action' => $this->user_action ?? null,
-            'return_url' => $this->return_url ?? null,
-            'cancel_url' => $this->cancel_url ?? null,
+            'brand_name' => $this->getBrandName() ?? null,
+            'locale' => $this->getLocale() ?? null,
+            'shipping_preference' => $this->getShippingPreference() ?? null,
+            'landing_page' => $this->getLandingPage() ?? null,
+            'user_action' => $this->getUserAction() ?? null,
+            'return_url' => $this->getReturnUrl() ?? null,
+            'cancel_url' => $this->getCancelUrl() ?? null,
         ];
 
         return array_filter(

@@ -10,10 +10,10 @@ class AmountTest extends TestCase
     public function testToArray()
     {
         $expected = [
-            'value' => '100.00',
+            'value' => 100.00,
             'currency_code' => 'CAD',
         ];
-        $amount = new Amount('CAD', '100.00');
+        $amount = new Amount('CAD', 100.00);
         $this->assertEquals($expected, $amount->toArray());
     }
 
@@ -21,9 +21,9 @@ class AmountTest extends TestCase
     {
         $expectedJson = ' {
             "currency_code": "CAD",
-            "value": "100.00"
+            "value": 100.00
         }';
-        $amount = new Amount('CAD', '100.00');
+        $amount = new Amount('CAD', 100.00);
         $this->assertJsonStringEqualsJsonString($expectedJson, $amount->toJson());
     }
 }

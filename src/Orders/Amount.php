@@ -32,41 +32,34 @@ class Amount implements Arrayable, Jsonable
     protected $value;
 
     /**
-     * Create a new collection.
-     *
-     * @param string $currency_code
-     * @param float  $value
-     *
-     * @return void
+     * create a new amount instance.
      */
-    public function __construct($currency_code, $value)
+    public function __construct(string $currency_code, float $value)
     {
         $this->currency_code = $currency_code;
         $this->value = $value;
     }
 
     /**
-     * gets Amount value.
+     * gets amount value.
      */
-    public function getValue()
+    public function getValue(): float
     {
-        return $this->value;
+        return (float) $this->value;
     }
 
     /**
-     * gets Amount's currency code.
+     * return amount's currency code.
      */
-    public function getCurrencyCode()
+    public function getCurrencyCode(): string
     {
         return $this->currency_code;
     }
 
     /**
-     * sets Amount value.
-     *
-     * @param float $value
+     * sets amount value.
      */
-    public function setValue($value)
+    public function setValue(float $value): self
     {
         $this->value = $value;
 
@@ -74,11 +67,9 @@ class Amount implements Arrayable, Jsonable
     }
 
     /**
-     * sets Amount's currency code.
-     *
-     * @param string $currency_code
+     * sets amount's currency code.
      */
-    public function setCurrencyCode($currency_code)
+    public function setCurrencyCode(string $currency_code): self
     {
         $this->currency_code = $currency_code;
 
@@ -86,15 +77,13 @@ class Amount implements Arrayable, Jsonable
     }
 
     /**
-     * Get the instance as an array.
-     *
-     * @return array
+     * convert amount to an array.
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
-            'currency_code' => $this->currency_code,
-            'value' => $this->value,
+            'currency_code' => $this->getCurrencyCode(),
+            'value' => $this->getValue(),
         ];
     }
 }
