@@ -58,14 +58,22 @@ class PurchaseUnitTest extends TestCase
     {
         $this->expectException(ItemTotalMismatchException::class);
         $this->expectExceptionMessage('Items Total Should equal sum of (unit_amount * quantity) across all items for a given purchase_unit');
-        $purchase_unit = new PurchaseUnit('USD', 100.00);
-        $item1 = new Item('item 1', 'USD', 100.00, 1);
-        $item2 = new Item('item 2', 'USD', 100.00, 2);
-        $item3 = new Item('item 3', 'USD', 50.00, 4);
-        $purchase_unit->addItem($item1)
-                      ->addItem($item2)
-                      ->addItem($item3);
-        $purchase_unit->toArray();
+        $pu = new PurchaseUnit('USD', 100);
+        $item1 = new Item('item 1', 'USD', 49.66, 1);
+        $item2 = new Item('item 2', 'USD', 50.33, 1);
+        $pu->addItem($item1);
+        $pu->addItem($item2);
+        $pu->toArray();
+    }
+
+    public function testCalculatedAmountMatchesAmount()
+    {
+        $pu = new PurchaseUnit('USD', 100);
+        $item1 = new Item('item 1', 'USD', 49.67, 1);
+        $item2 = new Item('item 2', 'USD', 50.33, 1);
+        $pu->addItem($item1);
+        $pu->addItem($item2);
+        $this->assertEquals($pu->getCalculatedAmount(), 100);
     }
 
     public function testToArray()

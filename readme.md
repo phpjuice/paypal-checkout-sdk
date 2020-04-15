@@ -34,7 +34,8 @@ Get client ID and client secret by going to [https://developer.paypal.com/develo
 
 Inorder to communicate with paypal platform we need to setup a client first :
 
-- Create a client with sandbox environment
+- Create a client with sandbox environment : 
+  
 ```php
 // import namespace
 use PayPal\Checkout\Environment\SandboxEnvironment;
@@ -51,7 +52,8 @@ $environment = new SandboxEnvironment($clientId, $clientSecret);
 $client = new PayPalClient($environment);
 ```
 
-- Create a client with production environment
+- Create a client with production environment :
+  
 ```php
 // import namespace
 use PayPal\Checkout\Environment\ProductionEnvironment;
@@ -68,9 +70,7 @@ $environment = new ProductionEnvironment($clientId, $clientSecret);
 $client = new PayPalClient($environment);
 ```
 
-
 ### Create a new Order
-
 
 ```php
 // import namespace
@@ -98,7 +98,6 @@ $response = $client->send($request);
 $result = json_decode((string) $response->getBody());
 echo $result->id; // id of the created order
 ```
-
 
 ## Change log
 
