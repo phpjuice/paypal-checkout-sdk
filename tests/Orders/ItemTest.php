@@ -14,7 +14,7 @@ class ItemTest extends TestCase
             'name' => 'booking',
             'unit_amount' => [
                 'currency_code' => 'USD',
-                'value' => '100.00',
+                'value' => 100.00,
             ],
             'quantity' => 2,
             'description' => 'this is my test description',

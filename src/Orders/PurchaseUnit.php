@@ -32,25 +32,22 @@ class PurchaseUnit implements Arrayable, Jsonable, ArrayAccess
      *
      * @var \PayPal\Checkout\Orders\Item[]
      */
-    protected $items;
+    protected $items = [];
 
     /**
      * Create a new collection.
      *
-     * @param string $currency_code
-     * @param string $value
-     *
      * @return self
      */
-    public function __construct($currency_code, $value)
+    public function __construct(string $currency_code, float $value)
     {
         $this->amount = new AmountBreakdown($currency_code, $value);
     }
 
     /**
-     *  Push an item onto the end of the purchase unit.
+     *  push a new item into items array.
      */
-    public function addItem(Item $item)
+    public function addItem(Item $item): self
     {
         if ($item->getAmount()->getCurrencyCode() != $this->amount->getCurrencyCode()) {
             throw new MultiCurrencyOrderException();
@@ -62,31 +59,25 @@ class PurchaseUnit implements Arrayable, Jsonable, ArrayAccess
     }
 
     /**
-     * getter for purchase unit items.
-     *
-     * @return Item[] $items
+     * return's purchase unit items.
      */
-    public function getItems()
+    public function getItems(): array
     {
         return $this->items;
     }
 
     /**
-     * getter for purchase unit Amount.
-     *
-     * @return Amount $amount
+     * return's the purchase unit amount breakdown.
      */
-    public function getAmount()
+    public function getAmount(): AmountBreakdown
     {
         return $this->amount;
     }
 
     /**
-     * sets Amount's currency code.
-     *
-     * @param string $currency_code
+     * sets the amount currency code.
      */
-    public function setCurrencyCode($currency_code)
+    public function setCurrencyCode(string $currency_code): self
     {
         $this->amount->setCurrencyCode($currency_code);
 
@@ -94,11 +85,9 @@ class PurchaseUnit implements Arrayable, Jsonable, ArrayAccess
     }
 
     /**
-     * sets Amount value.
-     *
-     * @param string $value
+     * set's the amount value.
      */
-    public function setValue($value)
+    public function setValue(float $value): self
     {
         $this->amount->setValue($value);
 
@@ -106,13 +95,11 @@ class PurchaseUnit implements Arrayable, Jsonable, ArrayAccess
     }
 
     /**
-     * getter for purchase unit Amount.
-     *
-     * @return int $amount
+     * return's recalculated amount of the purchase unit.
      */
-    public function getCalculatedAmount()
+    public function getCalculatedAmount(): float
     {
-        return array_reduce(
+        return (float) array_reduce(
             $this->items,
             function ($totalAmount, Item $item) {
                 $amount = $item->getAmount();
@@ -126,13 +113,15 @@ class PurchaseUnit implements Arrayable, Jsonable, ArrayAccess
     }
 
     /**
-     * Get the instance as an array.
-     *
-     * @return array
+     * convert a purchase unit instance to array.
      */
-    public function toArray()
+    public function toArray(): array
     {
-        if ($this->getCalculatedAmount() !== $this->amount->getValue()) {
+        $realAmount = $this->amount->getValue();
+        $calculatedAmount = $this->getCalculatedAmount();
+        $epsilon = 0.00001;
+
+        if (abs($calculatedAmount - $realAmount) > $epsilon) {
             throw new ItemTotalMismatchException();
         }
 

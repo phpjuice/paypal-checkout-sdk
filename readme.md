@@ -54,7 +54,7 @@ $client = new PayPalClient($environment);
 - Create a client with production environment
 ```php
 // import namespace
-use PayPal\Checkout\Environment\Production;
+use PayPal\Checkout\Environment\ProductionEnvironment;
 use PayPal\Checkout\Http\PayPalClient;
 
 // client id and client secret retrieved from paypal
@@ -62,7 +62,7 @@ $clientId = "<<PAYPAL-CLIENT-ID>>";
 $clientSecret = "<<PAYPAL-CLIENT-SECRET>>";
 
 // create a new sandbox environment
-$environment = new Production($clientId, $clientSecret);
+$environment = new ProductionEnvironment($clientId, $clientSecret);
 
 // create a new client
 $client = new PayPalClient($environment);
