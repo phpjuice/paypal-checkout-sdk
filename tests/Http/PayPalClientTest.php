@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Utils;
 use PayPal\Checkout\Environment\ProductionEnvironment;
 use PayPal\Checkout\Http\AccessTokenRequest;
 use PayPal\Checkout\Http\OrderCaptureRequest;
@@ -88,7 +89,7 @@ class PayPalClientTest extends TestCase
 
         $response = $paypalClient->send($request);
 
-        $result = json_decode((string) $response->getBody());
+        $result = Utils::jsonDecode((string) $response->getBody());
         $this->assertEquals('1KC5501443316171H', $result->id);
     }
 }
