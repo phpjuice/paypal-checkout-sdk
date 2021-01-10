@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Utils;
 use PayPal\Checkout\Http\OrderCaptureRequest;
 use PHPUnit\Framework\TestCase;
 
@@ -32,7 +33,7 @@ class OrderCaptureRequestTest extends TestCase
 
     public function testExecuteRequest()
     {
-        $mockResponse = json_encode([
+        $mockResponse = Utils::jsonEncode([
             'id' => '1KC5501443316171H',
         ]);
         $mock = new MockHandler([
@@ -45,7 +46,7 @@ class OrderCaptureRequestTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
 
-        $result = json_decode((string) $response->getBody());
+        $result = Utils::jsonDecode((string) $response->getBody());
         $this->assertEquals('1KC5501443316171H', $result->id);
     }
 }

@@ -4,6 +4,7 @@ namespace PayPal\Checkout\Http;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Utils;
 use PayPal\Checkout\Contracts\Environment;
 use PayPal\Checkout\Contracts\HttpClient;
 
@@ -143,7 +144,7 @@ class PayPalClient implements HttpClient
     public function fetchAccessToken()
     {
         $response = $this->client->send(new AccessTokenRequest($this->environment));
-        $result = json_decode((string) $response->getBody());
+        $result = Utils::jsonDecode((string) $response->getBody());
         $this->access_token = new AccessToken($result->access_token, $result->token_type, $result->expires_in);
 
         return $this->access_token;

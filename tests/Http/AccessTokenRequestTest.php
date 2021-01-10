@@ -5,8 +5,8 @@ namespace Tests\Http;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use function GuzzleHttp\json_decode;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Utils;
 use PayPal\Checkout\Environment\ProductionEnvironment;
 use PayPal\Checkout\Http\AccessTokenRequest;
 use PHPUnit\Framework\TestCase;
@@ -72,7 +72,7 @@ class AccessTokenRequestTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
 
-        $body = json_decode((string) $response->getBody());
+        $body = Utils::jsonDecode((string) $response->getBody());
         $this->assertEquals('A21AAFSO5otrlVigoJUQ1p', $body->access_token);
         $this->assertEquals('Bearer', $body->token_type);
         $this->assertEquals(32400, $body->expires_in);

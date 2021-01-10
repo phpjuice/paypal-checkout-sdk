@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Utils;
 use PayPal\Checkout\Http\OrderCreateRequest;
 use PayPal\Checkout\Orders\ApplicationContext;
 use PayPal\Checkout\Orders\Item;
@@ -48,12 +49,12 @@ class OrderCreateRequestTest extends TestCase
 
         $request = new OrderCreateRequest($order);
         $this->assertEquals((string) $order, (string) $request->getBody());
-        $this->assertEquals($order->toArray(), json_decode($request->getBody(), true));
+        $this->assertEquals($order->toArray(), Utils::jsonDecode($request->getBody(), true));
     }
 
     public function testExecuteRequest()
     {
-        $mockResponse = json_encode([
+        $mockResponse = Utils::jsonEncode([
             'id' => '1KC5501443316171H',
             'intent' => 'CAPTURE',
             'status' => 'CREATED',
@@ -72,7 +73,7 @@ class OrderCreateRequestTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
 
-        $result = json_decode((string) $response->getBody());
+        $result = Utils::jsonDecode((string) $response->getBody());
         $this->assertEquals('1KC5501443316171H', $result->id);
         $this->assertEquals('CAPTURE', $result->intent);
         $this->assertEquals('CREATED', $result->status);
