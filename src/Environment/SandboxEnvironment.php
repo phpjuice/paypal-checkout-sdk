@@ -13,4 +13,12 @@ class SandboxEnvironment extends PayPalEnvironment
     {
         return 'https://api.sandbox.paypal.com';
     }
+
+    /**
+     * @return string
+     */
+    public function name()
+    {
+        return 'sandbox';
+    }
 }

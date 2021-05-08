@@ -24,30 +24,45 @@ class AccessTokenRequestTest extends TestCase
         $this->environment = new ProductionEnvironment('client_id', 'client_secret');
     }
 
+    /**
+     * @test
+     */
     public function testHasCorrectUri()
     {
         $request = new AccessTokenRequest($this->environment);
         $this->assertEquals('/v1/oauth2/token', $request->getUri());
     }
 
+    /**
+     * @test
+     */
     public function testHasCorrectMethod()
     {
         $request = new AccessTokenRequest($this->environment);
         $this->assertEquals('POST', $request->getMethod());
     }
 
+    /**
+     * @test
+     */
     public function testHasCorrectHeaders()
     {
         $request = new AccessTokenRequest($this->environment);
         $this->assertEquals('application/x-www-form-urlencoded', $request->getHeaderLine('Content-Type'));
     }
 
+    /**
+     * @test
+     */
     public function testHasBasicAuthHeaders()
     {
         $request = new AccessTokenRequest($this->environment);
         $this->assertEquals('Basic '.$this->environment->basicAuthorizationString(), $request->getHeaderLine('Authorization'));
     }
 
+    /**
+     * @test
+     */
     public function testHasCorrectDataWithGetBody()
     {
         $request = new AccessTokenRequest($this->environment);
@@ -55,6 +70,9 @@ class AccessTokenRequestTest extends TestCase
         $this->assertEquals($expected, (string) $request->getBody());
     }
 
+    /**
+     * @test
+     */
     public function testExecuteRequest()
     {
         $mockResponse = json_encode([
