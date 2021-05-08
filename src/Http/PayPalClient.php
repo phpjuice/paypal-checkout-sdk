@@ -101,9 +101,19 @@ class PayPalClient implements HttpClient
      */
     public function injectSdkHeaders(Request $request)
     {
-        return $request->withHeader('sdk_name', 'Checkout SDK')
-                    ->withHeader('sdk_version', '1.0.0')
-                    ->withHeader('sdk_tech_stack', 'PHP '.PHP_VERSION);
+        $r = $request->withHeader('sdk_name', 'Checkout SDK')
+                    ->withHeader('sdk_version', '1.0.0');
+
+        /*
+         * Only inject this header on production
+         *
+         * @see https://github.com/phpjuice/paypal-checkout-sdk/issues/6
+         */
+        if ('production' == $this->environment->name()) {
+            $r = $r->withHeader('sdk_tech_stack', 'PHP '.PHP_VERSION);
+        }
+
+        return $r;
     }
 
     /**

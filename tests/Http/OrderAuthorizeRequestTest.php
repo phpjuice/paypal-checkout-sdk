@@ -12,18 +12,27 @@ use PHPUnit\Framework\TestCase;
 
 class OrderAuthorizeRequestTest extends TestCase
 {
+    /**
+     * @test
+     */
     public function testHasCorrectUri()
     {
         $request = new OrderAuthorizeRequest('1KC5501443316171H');
         $this->assertEquals('/v2/checkout/orders/1KC5501443316171H/authorize', $request->getUri());
     }
 
+    /**
+     * @test
+     */
     public function testHasCorrectMethod()
     {
         $request = new OrderAuthorizeRequest('1KC5501443316171H');
         $this->assertEquals('POST', $request->getMethod());
     }
 
+    /**
+     * @test
+     */
     public function testHasCorrectHeaders()
     {
         $request = new OrderAuthorizeRequest('1KC5501443316171H');
@@ -31,6 +40,9 @@ class OrderAuthorizeRequestTest extends TestCase
         $this->assertEquals('return=representation', $request->getHeaderLine('Prefer'));
     }
 
+    /**
+     * @test
+     */
     public function testExecuteRequest()
     {
         $mockResponse = json_encode([

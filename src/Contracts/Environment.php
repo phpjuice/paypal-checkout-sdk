@@ -7,6 +7,11 @@ interface Environment
     /**
      * @return string
      */
+    public function name();
+
+    /**
+     * @return string
+     */
     public function baseUrl();
 
     /**

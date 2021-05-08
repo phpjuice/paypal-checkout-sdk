@@ -8,6 +8,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Utils;
 use PayPal\Checkout\Environment\ProductionEnvironment;
+use PayPal\Checkout\Environment\SandboxEnvironment;
 use PayPal\Checkout\Http\AccessTokenRequest;
 use PayPal\Checkout\Http\OrderCaptureRequest;
 use PayPal\Checkout\Http\PayPalClient;
@@ -46,6 +47,9 @@ class PayPalClientTest extends TestCase
         $this->httpClient = new Client(['handler' => $handlerStack]);
     }
 
+    /**
+     * @test
+     */
     public function testFetchAccessToken()
     {
         $paypalClient = new PayPalClient($this->environment);
@@ -54,6 +58,9 @@ class PayPalClientTest extends TestCase
         $this->assertEquals('Bearer A21AAFSO5otrlVigoJUQ1p', $accessToken->authorizationString());
     }
 
+    /**
+     * @test
+     */
     public function testHasAuthorizationHeader()
     {
         $paypalClient = new PayPalClient($this->environment);
@@ -68,6 +75,82 @@ class PayPalClientTest extends TestCase
         $this->assertFalse($paypalClient->hasAuthHeader($request));
     }
 
+    /**
+     * @test
+     */
+    public function testHasAllSdkHeadersOnProduction()
+    {
+        $env = new ProductionEnvironment('client_id', 'client_secret');
+
+        $paypalClient = new PayPalClient($env);
+        $paypalClient->setClient($this->httpClient);
+
+        $request = new AccessTokenRequest($this->environment);
+
+        $request = $paypalClient->injectSdkHeaders($request);
+        $this->assertEquals([
+            'Authorization' => [
+                'Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ=',
+            ],
+            'Accept' => [
+                'application/json',
+            ],
+            'Content-Type' => [
+                'application/x-www-form-urlencoded',
+            ],
+            'sdk_name' => [
+                'Checkout SDK',
+            ],
+            'sdk_version' => [
+                '1.0.0',
+            ],
+            'sdk_version' => [
+                '1.0.0',
+            ],
+            'sdk_tech_stack' => [
+                'PHP '.PHP_VERSION,
+            ],
+        ], $request->getHeaders());
+    }
+
+    /**
+     * @test
+     */
+    public function testHasSubSetOfSdkHeadersOnSandbox()
+    {
+        $env = new SandboxEnvironment('client_id', 'client_secret');
+
+        $paypalClient = new PayPalClient($env);
+        $paypalClient->setClient($this->httpClient);
+
+        $request = new AccessTokenRequest($this->environment);
+
+        $request = $paypalClient->injectSdkHeaders($request);
+        $this->assertEquals([
+            'Authorization' => [
+                'Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ=',
+            ],
+            'Accept' => [
+                'application/json',
+            ],
+            'Content-Type' => [
+                'application/x-www-form-urlencoded',
+            ],
+            'sdk_name' => [
+                'Checkout SDK',
+            ],
+            'sdk_version' => [
+                '1.0.0',
+            ],
+            'sdk_version' => [
+                '1.0.0',
+            ],
+        ], $request->getHeaders());
+    }
+
+    /**
+     * @test
+     */
     public function testHasInvalidToken()
     {
         $paypalClient = new PayPalClient($this->environment);
@@ -80,6 +163,9 @@ class PayPalClientTest extends TestCase
         $this->assertFalse($paypalClient->hasInvalidToken());
     }
 
+    /**
+     * @test
+     */
     public function testSendRequest()
     {
         $paypalClient = new PayPalClient($this->environment);

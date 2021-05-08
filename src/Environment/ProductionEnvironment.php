@@ -13,4 +13,12 @@ class ProductionEnvironment extends PayPalEnvironment
     {
         return 'https://api.paypal.com';
     }
+
+    /**
+     * @return string
+     */
+    public function name()
+    {
+        return 'production';
+    }
 }

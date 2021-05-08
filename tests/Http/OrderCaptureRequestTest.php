@@ -12,18 +12,27 @@ use PHPUnit\Framework\TestCase;
 
 class OrderCaptureRequestTest extends TestCase
 {
+    /**
+     * @test
+     */
     public function testHasCorrectUri()
     {
         $request = new OrderCaptureRequest('1KC5501443316171H');
         $this->assertEquals('/v2/checkout/orders/1KC5501443316171H/capture', $request->getUri());
     }
 
+    /**
+     * @test
+     */
     public function testHasCorrectMethod()
     {
         $request = new OrderCaptureRequest('1KC5501443316171H');
         $this->assertEquals('POST', $request->getMethod());
     }
 
+    /**
+     * @test
+     */
     public function testHasCorrectHeaders()
     {
         $request = new OrderCaptureRequest('1KC5501443316171H');
@@ -31,6 +40,9 @@ class OrderCaptureRequestTest extends TestCase
         $this->assertEquals('return=representation', $request->getHeaderLine('Prefer'));
     }
 
+    /**
+     * @test
+     */
     public function testExecuteRequest()
     {
         $mockResponse = Utils::jsonEncode([
