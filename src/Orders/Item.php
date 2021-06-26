@@ -29,7 +29,7 @@ class Item implements Arrayable, Jsonable
      * If you specify unit_amount, purchase_units[].amount.breakdown.item_total is required.
      * Must equal unit_amount * quantity for all items.
      *
-     * @var \PayPal\Checkout\Orders\Amount
+     * @var Amount
      */
     protected $unit_amount;
 
@@ -38,7 +38,7 @@ class Item implements Arrayable, Jsonable
      * If tax is specified, purchase_units[].amount.breakdown.tax_total is required.
      * Must equal tax * quantity for all items.
      *
-     * @var \PayPal\Checkout\Orders\Amount
+     * @var Amount
      */
     protected $tax = null;
 
@@ -84,16 +84,6 @@ class Item implements Arrayable, Jsonable
     }
 
     /**
-     * set's item name.
-     */
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
      * set's item amount.
      */
     public function setUnitAmount(Amount $unit_amount): self
@@ -104,41 +94,17 @@ class Item implements Arrayable, Jsonable
     }
 
     /**
-     * set's item quantity.
+     * return's item sku.
+     * @noinspection PhpUnused
      */
-    public function setQuantity(int $quantity): self
+    public function getSku(): ?string
     {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    /**
-     * set's item description.
-     */
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * set's item category.
-     */
-    public function setCategory(string $category): self
-    {
-        $validOptions = [DIGITAL_GOODS, PHYSICAL_GOODS];
-        if (!in_array($category, $validOptions)) {
-            throw new InvalidItemCategoryException();
-        }
-        $this->category = $category;
-
-        return $this;
+        return $this->sku;
     }
 
     /**
      * set's item sku.
+     * @noinspection PhpUnused
      */
     public function setSku(string $sku): self
     {
@@ -148,51 +114,11 @@ class Item implements Arrayable, Jsonable
     }
 
     /**
-     * return's item name.
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    /**
-     * return's item sku.
-     */
-    public function getSku(): ?string
-    {
-        return $this->sku;
-    }
-
-    /**
      * return's item sku.
      */
     public function getAmount(): Amount
     {
         return $this->unit_amount;
-    }
-
-    /**
-     * return's item quantity.
-     */
-    public function getQuantity(): int
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * return's item category.
-     */
-    public function getCategory(): ?string
-    {
-        return $this->category;
-    }
-
-    /**
-     * return's item description.
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
     }
 
     /**
@@ -207,5 +133,81 @@ class Item implements Arrayable, Jsonable
             'description' => $this->getDescription(),
             'category' => $this->getCategory(),
         ];
+    }
+
+    /**
+     * return's item name.
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * set's item name.
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * return's item quantity.
+     */
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * set's item quantity.
+     */
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * return's item description.
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * set's item description.
+     */
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * return's item category.
+     */
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    /**
+     * set's item category.
+     */
+    public function setCategory(string $category): self
+    {
+        $validOptions = [DIGITAL_GOODS, PHYSICAL_GOODS];
+        if (!in_array($category, $validOptions)) {
+            throw new InvalidItemCategoryException();
+        }
+        $this->category = $category;
+
+        return $this;
     }
 }

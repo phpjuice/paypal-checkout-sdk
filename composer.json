@@ -1,12 +1,4 @@
 {
-    "name": "phpjuice/paypal-checkout-sdk",
-    "description": "Paypal Checkout SDK",
-    "keywords": [
-        "paypal",
-        "checkout"
-    ],
-    "license": "MIT",
-    "type": "library",
     "autoload": {
         "psr-4": {
             "PayPal\\Checkout\\": "src/"
@@ -17,18 +9,26 @@
             "Tests\\": "tests/"
         }
     },
+    "description": "Paypal Checkout SDK",
+    "keywords": [
+        "paypal",
+        "checkout"
+    ],
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "name": "phpjuice/paypal-checkout-sdk",
+    "prefer-stable": true,
     "require": {
         "php": "^7.2",
         "guzzlehttp/psr7": "^1.6",
-        "guzzlehttp/guzzle": "^7.0"
+        "guzzlehttp/guzzle": "^7.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
         "squizlabs/php_codesniffer": "^3.4",
         "phpstan/phpstan": "^0.11.5"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "scripts": {
         "test": "phpunit",
         "phpcs": [
@@ -41,5 +41,6 @@
             "php-cs-fixer fix src --rules=@PSR2",
             "php-cs-fixer fix tests --rules=@PSR2"
         ]
-    }
+    },
+    "type": "library"
 }

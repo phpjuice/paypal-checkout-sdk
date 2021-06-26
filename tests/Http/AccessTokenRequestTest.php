@@ -3,6 +3,7 @@
 namespace Tests\Http;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -14,15 +15,9 @@ use PHPUnit\Framework\TestCase;
 class AccessTokenRequestTest extends TestCase
 {
     /**
-     * @var \PayPal\Checkout\Environment\ProductionEnvironment
+     * @var ProductionEnvironment
      */
     protected $environment = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->environment = new ProductionEnvironment('client_id', 'client_secret');
-    }
 
     /**
      * @test
@@ -57,7 +52,8 @@ class AccessTokenRequestTest extends TestCase
     public function testHasBasicAuthHeaders()
     {
         $request = new AccessTokenRequest($this->environment);
-        $this->assertEquals('Basic '.$this->environment->basicAuthorizationString(), $request->getHeaderLine('Authorization'));
+        $expected = 'Basic ' . $this->environment->basicAuthorizationString();
+        $this->assertEquals($expected, $request->getHeaderLine('Authorization'));
     }
 
     /**
@@ -67,11 +63,13 @@ class AccessTokenRequestTest extends TestCase
     {
         $request = new AccessTokenRequest($this->environment);
         $expected = http_build_query(['grant_type' => 'client_credentials']);
-        $this->assertEquals($expected, (string) $request->getBody());
+        $this->assertEquals($expected, (string)$request->getBody());
     }
 
     /**
      * @test
+     * @throws GuzzleException
+     * @noinspection SpellCheckingInspection
      */
     public function testExecuteRequest()
     {
@@ -90,9 +88,15 @@ class AccessTokenRequestTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
 
-        $body = Utils::jsonDecode((string) $response->getBody());
+        $body = Utils::jsonDecode((string)$response->getBody());
         $this->assertEquals('A21AAFSO5otrlVigoJUQ1p', $body->access_token);
         $this->assertEquals('Bearer', $body->token_type);
         $this->assertEquals(32400, $body->expires_in);
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->environment = new ProductionEnvironment('client_id', 'client_secret');
     }
 }

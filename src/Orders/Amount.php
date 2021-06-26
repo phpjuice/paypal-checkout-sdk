@@ -41,11 +41,14 @@ class Amount implements Arrayable, Jsonable
     }
 
     /**
-     * gets amount value.
+     * convert amount to an array.
      */
-    public function getValue(): float
+    public function toArray(): array
     {
-        return (float) $this->value;
+        return [
+            'currency_code' => $this->getCurrencyCode(),
+            'value' => $this->getValue(),
+        ];
     }
 
     /**
@@ -54,16 +57,6 @@ class Amount implements Arrayable, Jsonable
     public function getCurrencyCode(): string
     {
         return $this->currency_code;
-    }
-
-    /**
-     * sets amount value.
-     */
-    public function setValue(float $value): self
-    {
-        $this->value = $value;
-
-        return $this;
     }
 
     /**
@@ -77,13 +70,20 @@ class Amount implements Arrayable, Jsonable
     }
 
     /**
-     * convert amount to an array.
+     * gets amount value.
      */
-    public function toArray(): array
+    public function getValue(): float
     {
-        return [
-            'currency_code' => $this->getCurrencyCode(),
-            'value' => $this->getValue(),
-        ];
+        return $this->value;
+    }
+
+    /**
+     * sets amount value.
+     */
+    public function setValue(float $value): self
+    {
+        $this->value = $value;
+
+        return $this;
     }
 }

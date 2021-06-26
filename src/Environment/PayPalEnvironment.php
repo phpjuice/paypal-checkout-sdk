@@ -14,7 +14,7 @@ abstract class PayPalEnvironment implements Environment
     protected $clientId;
 
     /**
-     * Paypal client secret.
+     * PayPal client secret.
      *
      * @var string
      */
@@ -26,8 +26,11 @@ abstract class PayPalEnvironment implements Environment
         $this->clientSecret = $clientSecret;
     }
 
-    public function basicAuthorizationString()
+    /**
+     * @return string
+     */
+    public function basicAuthorizationString(): string
     {
-        return base64_encode($this->clientId.':'.$this->clientSecret);
+        return base64_encode($this->clientId . ':' . $this->clientSecret);
     }
 }

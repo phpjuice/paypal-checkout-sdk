@@ -2,7 +2,6 @@
 
 namespace PayPal\Checkout\Orders;
 
-use ArrayAccess;
 use PayPal\Checkout\Concerns\HasCollection;
 use PayPal\Checkout\Concerns\HasJson;
 use PayPal\Checkout\Contracts\Arrayable;
@@ -13,7 +12,7 @@ use PayPal\Checkout\Exceptions\MultiCurrencyOrderException;
 /**
  * https://developer.paypal.com/docs/api/orders/v2/#definition-purchase_unit.
  */
-class PurchaseUnit implements Arrayable, Jsonable, ArrayAccess
+class PurchaseUnit implements Arrayable, Jsonable
 {
     use HasJson;
     use HasCollection;
@@ -23,21 +22,19 @@ class PurchaseUnit implements Arrayable, Jsonable, ArrayAccess
      * such as the total item Amount, total tax Amount, shipping, handling, insurance,
      * and discounts, if any.
      *
-     * @var \PayPal\Checkout\Orders\AmountBreakdown
+     * @var AmountBreakdown
      */
     protected $amount;
 
     /**
      * An array of items that the customer purchases from the merchant.
      *
-     * @var \PayPal\Checkout\Orders\Item[]
+     * @var Item[]
      */
     protected $items = [];
 
     /**
      * Create a new collection.
-     *
-     * @return self
      */
     public function __construct(string $currency_code, float $value)
     {
@@ -95,24 +92,6 @@ class PurchaseUnit implements Arrayable, Jsonable, ArrayAccess
     }
 
     /**
-     * return's recalculated amount of the purchase unit.
-     */
-    public function getCalculatedAmount(): float
-    {
-        return (float) array_reduce(
-            $this->items,
-            function ($totalAmount, Item $item) {
-                $amount = $item->getAmount();
-                $quantity = $item->getQuantity();
-                $totalAmount += $amount->getValue() * $quantity;
-
-                return $totalAmount;
-            },
-            0
-        );
-    }
-
-    /**
      * convert a purchase unit instance to array.
      */
     public function toArray(): array
@@ -134,5 +113,23 @@ class PurchaseUnit implements Arrayable, Jsonable, ArrayAccess
                 $this->items
             ),
         ];
+    }
+
+    /**
+     * return's recalculated amount of the purchase unit.
+     */
+    public function getCalculatedAmount(): float
+    {
+        return (float)array_reduce(
+            $this->items,
+            function ($totalAmount, Item $item) {
+                $amount = $item->getAmount();
+                $quantity = $item->getQuantity();
+                $totalAmount += $amount->getValue() * $quantity;
+
+                return $totalAmount;
+            },
+            0
+        );
     }
 }

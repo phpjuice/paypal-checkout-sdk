@@ -6,5 +6,5 @@ use RuntimeException;
 
 class MultiCurrencyOrderException extends RuntimeException
 {
-    protected $message = 'Multiple differing values of currency_code are not supported. Entire Order request must have the same currency_code.';   // exception message
+    protected $message = 'Multiple differing values of currency_code are not supported. Entire Order request must have the same currency_code.';
 }

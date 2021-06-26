@@ -23,7 +23,7 @@ class ItemTest extends TestCase
 
         $item = new Item('booking', 'USD', 100.00, 1);
         $item->setDescription('this is my test description')
-             ->setQuantity(2);
+            ->setQuantity(2);
         $this->assertEquals($expected, $item->toArray());
     }
 
@@ -42,7 +42,7 @@ class ItemTest extends TestCase
 
         $item = new Item('booking', 'USD', 100.00, 1);
         $item->setDescription('this is my test description')
-             ->setQuantity(2);
+            ->setQuantity(2);
         $this->assertJsonStringEqualsJsonString($expected, $item->toJson());
     }
 
