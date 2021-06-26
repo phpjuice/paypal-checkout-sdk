@@ -3,7 +3,7 @@
 ![PHP Composer](https://github.com/phpjuice/paypal-checkout-sdk/workflows/PHP%20Composer/badge.svg?branch=master)
 [![Build Status](https://travis-ci.com/phpjuice/paypal-checkout-sdk.svg?branch=master)](https://travis-ci.com/phpjuice/paypal-checkout-sdk)
 
-PayPal Checkout SDK is a wrapper around the V2 Paypal rest API.
+PayPal Checkout SDK is a wrapper around the V2 PayPal rest API.
 
 ## Installation
 
@@ -19,19 +19,20 @@ composer require phpjuice/paypal-checkout-sdk
 
 ## Usage
 
-PayPal Checkout SDK is designed to simplify using the new paypal checkout api in your app.
-
+PayPal Checkout SDK is designed to simplify using the new PayPal checkout api in your app.
 
 ### Setup Credentials
 
-Get client ID and client secret by going to [https://developer.paypal.com/developer/applications](https://developer.paypal.com/developer/applications) and generating a REST API app. Get Client ID and Secret from there.
+Get client ID and client secret by going
+to [https://developer.paypal.com/developer/applications](https://developer.paypal.com/developer/applications) and
+generating a REST API app. Get Client ID and Secret from there.
 
 ### Setup a Paypal Client
 
-Inorder to communicate with paypal platform we need to setup a client first :
+Inorder to communicate with PayPal platform we need to set up a client first :
 
-- Create a client with sandbox environment : 
-  
+- Create a client with sandbox environment :
+
 ```php
 // import namespace
 use PayPal\Checkout\Environment\SandboxEnvironment;
@@ -49,7 +50,7 @@ $client = new PayPalClient($environment);
 ```
 
 - Create a client with production environment :
-  
+
 ```php
 // import namespace
 use PayPal\Checkout\Environment\ProductionEnvironment;
@@ -113,7 +114,8 @@ If you discover any security related issues, please email author instead of usin
 
 ## License
 
-license. Please see the [Licence](https://github.com/phpjuice/paypal-checkout-sdk/blob/master/LICENSE) for more information.
+license. Please see the [Licence](https://github.com/phpjuice/paypal-checkout-sdk/blob/master/LICENSE) for more
+information.
 
 ![PHP Composer](https://github.com/phpjuice/paypal-checkout-sdk/workflows/PHP%20Composer/badge.svg?branch=master)
 [![Build Status](https://travis-ci.com/phpjuice/paypal-checkout-sdk.svg?branch=master)](https://travis-ci.com/phpjuice/paypal-checkout-sdk)
