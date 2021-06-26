@@ -28,7 +28,7 @@ class ApplicationContextTest extends TestCase
         $this->assertEquals('CONTINUE', $applicationContext->getUserAction());
     }
 
-    public function testSetInvalidShippingPrefs()
+    public function testSetInvalidShippingPreferences()
     {
         $this->expectException(InvalidShippingPreferenceException::class);
         $this->expectExceptionMessage('Shipping preference provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context.');
@@ -37,7 +37,7 @@ class ApplicationContextTest extends TestCase
         $applicationContext->setShippingPreference('invalid shipping preference');
     }
 
-    public function testSetValidShippingPrefs()
+    public function testSetValidShippingPreferences()
     {
         $applicationContext = new ApplicationContext();
         $this->assertEquals('NO_SHIPPING', $applicationContext->getShippingPreference());

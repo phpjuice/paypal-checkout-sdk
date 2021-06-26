@@ -9,7 +9,10 @@ class SandboxEnvironment extends PayPalEnvironment
         parent::__construct($clientId, $clientSecret);
     }
 
-    public function baseUrl()
+    /**
+     * @return string
+     */
+    public function baseUrl(): string
     {
         return 'https://api.sandbox.paypal.com';
     }
@@ -17,7 +20,7 @@ class SandboxEnvironment extends PayPalEnvironment
     /**
      * @return string
      */
-    public function name()
+    public function name(): string
     {
         return 'sandbox';
     }

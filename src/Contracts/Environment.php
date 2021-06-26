@@ -7,15 +7,15 @@ interface Environment
     /**
      * @return string
      */
-    public function name();
+    public function name(): string;
 
     /**
      * @return string
      */
-    public function baseUrl();
+    public function baseUrl(): string;
 
     /**
      * @return string
      */
-    public function basicAuthorizationString();
+    public function basicAuthorizationString(): string;
 }

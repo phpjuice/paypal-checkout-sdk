@@ -11,9 +11,20 @@ trait HasCollection
      *
      * @return bool
      */
-    public function __isset($key)
+    public function __isset(string $key)
     {
         return $this->offsetExists($key);
+    }
+
+    /**
+     * Determine if a key exists on the items.
+     *
+     * @param string $offset
+     * @return bool
+     */
+    public function offsetExists(string $offset): bool
+    {
+        return isset($this->items[$offset]);
     }
 
     /**
@@ -23,9 +34,20 @@ trait HasCollection
      *
      * @return void
      */
-    public function __unset($key)
+    public function __unset(string $key)
     {
         $this->offsetUnset($key);
+    }
+
+    /**
+     * Unset an attribute on the model.
+     *
+     * @param string $offset
+     * @return void
+     */
+    public function offsetUnset(string $offset)
+    {
+        unset($this->items[$offset]);
     }
 
     public function offsetSet($offset, $value)
@@ -38,32 +60,12 @@ trait HasCollection
     }
 
     /**
-     * Unset an attribute on the model.
+     * @param string $offset
      *
-     * @param string $key
-     *
-     * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetGet(string $offset)
     {
-        unset($this->items[$offset]);
-    }
-
-    public function offsetGet($offset)
-    {
-        return isset($this->items[$offset]) ? $this->items[$offset] : null;
-    }
-
-    /**
-     * Determine if a key exists on the items.
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function offsetExists($offset)
-    {
-        return isset($this->items[$offset]);
+        return $this->items[$offset] ?? null;
     }
 
     /**
@@ -71,7 +73,7 @@ trait HasCollection
      *
      * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return empty($this->items);
     }

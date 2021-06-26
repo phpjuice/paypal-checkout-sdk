@@ -2,7 +2,7 @@
 
 namespace PayPal\Checkout\Http;
 
-use function GuzzleHttp\Psr7\stream_for;
+use GuzzleHttp\Psr7\Utils;
 use PayPal\Checkout\Orders\Order;
 
 class OrderCreateRequest extends PaypalRequest
@@ -14,7 +14,7 @@ class OrderCreateRequest extends PaypalRequest
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ];
-        $body = stream_for((string) $order);
+        $body = Utils::streamFor((string)$order);
         parent::__construct('POST', '/v2/checkout/orders', $headers, $body);
     }
 }

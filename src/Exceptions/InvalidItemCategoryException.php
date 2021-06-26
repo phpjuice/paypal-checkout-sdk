@@ -6,5 +6,5 @@ use RuntimeException;
 
 class InvalidItemCategoryException extends RuntimeException
 {
-    protected $message = 'Item category is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#definition-item.';   // exception message
+    protected $message = 'Item category is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#definition-item.';
 }

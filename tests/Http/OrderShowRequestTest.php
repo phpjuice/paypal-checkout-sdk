@@ -3,6 +3,7 @@
 namespace Tests\Http;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -42,6 +43,7 @@ class OrderShowRequestTest extends TestCase
 
     /**
      * @test
+     * @throws GuzzleException
      */
     public function testExecuteRequest()
     {
@@ -60,7 +62,7 @@ class OrderShowRequestTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
 
-        $result = Utils::jsonDecode((string) $response->getBody());
+        $result = Utils::jsonDecode((string)$response->getBody());
         $this->assertEquals('1KC5501443316171H', $result->id);
         $this->assertEquals('CAPTURE', $result->intent);
         $this->assertEquals('CREATED', $result->status);

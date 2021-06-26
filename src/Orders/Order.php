@@ -27,9 +27,14 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     protected $id;
 
     /**
-     * The intent to either capture payment immediately or authorize a payment for an order after order creation.
-     *      CAPTURE : The merchant intends to capture payment immediately after the customer makes a payment.
-     *      AUTHORIZE : The merchant intends to authorize a payment and place funds on hold after the customer makes a payment.
+     * The intent to either capture payment immediately
+     * or authorize a payment for an order after order creation.
+     *
+     * CAPTURE : The merchant intends to capture payment immediately after
+     * the customer makes a payment.
+     *
+     * AUTHORIZE : The merchant intends to authorize a payment and place funds
+     * on hold after the customer makes a payment.
      *
      * @var string
      */
@@ -40,19 +45,20 @@ class Order implements Arrayable, Jsonable, ArrayAccess
      * Each purchase unit establishes a contract between a payer and the payee.
      * https://developer.paypal.com/docs/api/orders/v2/#definition-purchase_unit_request.
      *
-     * @var \PayPal\Checkout\Orders\PurchaseUnit[]
+     * @var PurchaseUnit[]
      */
     protected $purchase_units = [];
 
     /**
      * The intent to either capture payment immediately or authorize a payment for an order after order creation.
-     *      CREATED : The order was created with the specified context.
-     *      SAVED : The order was saved and persisted.
-     *      The order status continues to be in progress until a capture is made with final_capture = true for all purchase units within the order.
-     *      APPROVED :  The customer approved the payment through the PayPal wallet or another form of guest or unbranded payment.
-     *      For example, a card, bank account, or so on.
-     *      VOIDED : All purchase units in the order are voided.
-     *      COMPLETED : The payment was authorized or the authorized payment was captured for the order.
+     * - CREATED : The order was created with the specified context.
+     * - SAVED : The order was saved and persisted.
+     * - APPROVED :  The customer approved the payment through the PayPal wallet
+     *   or another form of guest or unbranded payment. For example, a card,
+     *   bank account, or so on.
+     * - VOIDED : All purchase units in the order are voided.
+     * - COMPLETED : The payment was authorized or the authorized payment was captured
+     *   for the order.
      *
      * @var string read only
      */
@@ -62,7 +68,7 @@ class Order implements Arrayable, Jsonable, ArrayAccess
      * The order application context.
      * https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context.
      *
-     * @var \PayPal\Checkout\Orders\ApplicationContext
+     * @var ApplicationContext
      */
     protected $application_context = null;
 
@@ -70,7 +76,7 @@ class Order implements Arrayable, Jsonable, ArrayAccess
      * The order payee.
      * https://developer.paypal.com/docs/api/orders/v2/#definition-payee.
      *
-     * @var \PayPal\Checkout\Orders\Payee
+     * @var Payee
      */
     protected $payee = null;
 
@@ -105,6 +111,14 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     }
 
     /**
+     * return's order application context.
+     */
+    public function getApplicationContext(): ?ApplicationContext
+    {
+        return $this->application_context;
+    }
+
+    /**
      * set's order application context.
      */
     public function setApplicationContext(ApplicationContext $application_context): self
@@ -115,11 +129,11 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     }
 
     /**
-     * return's order application context.
+     * return's order intent.
      */
-    public function getApplicationContext(): ?ApplicationContext
+    public function getIntent(): string
     {
-        return $this->application_context;
+        return $this->intent;
     }
 
     /**
@@ -134,14 +148,6 @@ class Order implements Arrayable, Jsonable, ArrayAccess
         $this->intent = $intent;
 
         return $this;
-    }
-
-    /**
-     * return's order intent.
-     */
-    public function getIntent(): string
-    {
-        return $this->intent;
     }
 
     /**
@@ -193,8 +199,7 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     /**
      * Unset an attribute on the model.
      *
-     * @param string $key
-     *
+     * @param $offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -202,20 +207,32 @@ class Order implements Arrayable, Jsonable, ArrayAccess
         unset($this->purchase_units[$offset]);
     }
 
-    public function offsetGet($offset)
+    /**
+     * @param mixed $offset
+     * @return PurchaseUnit|null
+     */
+    public function offsetGet($offset): ?PurchaseUnit
     {
-        return isset($this->purchase_units[$offset]) ? $this->purchase_units[$offset] : null;
+        return $this->purchase_units[$offset] ?? null;
     }
 
     /**
      * Determine if a key exists on the purchase_units.
      *
-     * @param string $key
-     *
+     * @param mixed $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->purchase_units[$offset]);
+    }
+
+    /**
+     * @return Payee
+     * @noinspection PhpUnused
+     */
+    public function getPayee(): ?Payee
+    {
+        return $this->payee;
     }
 }

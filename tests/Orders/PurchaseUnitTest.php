@@ -25,7 +25,7 @@ class PurchaseUnitTest extends TestCase
         $item1 = new Item('item 1', 'CAD', 100.00, 1);
         $item2 = new Item('item 2', 'CAD', 100.00, 1);
         $purchase_unit->addItem($item1)
-                      ->addItem($item2);
+            ->addItem($item2);
         $this->assertEquals(2, count($purchase_unit->getItems()));
     }
 
@@ -38,8 +38,8 @@ class PurchaseUnitTest extends TestCase
         $item2 = new Item('item 2', 'USD', 100.00, 1);
         $item3 = new Item('item 3', 'CAD', 100.00, 1);
         $purchase_unit->addItem($item1)
-                      ->addItem($item2)
-                      ->addItem($item3);
+            ->addItem($item2)
+            ->addItem($item3);
     }
 
     public function testGetCalculatedAmount()
@@ -49,8 +49,8 @@ class PurchaseUnitTest extends TestCase
         $item2 = new Item('item 2', 'USD', 100.00, 2);
         $item3 = new Item('item 3', 'USD', 50.00, 4);
         $purchase_unit->addItem($item1)
-                      ->addItem($item2)
-                      ->addItem($item3);
+            ->addItem($item2)
+            ->addItem($item3);
         $this->assertEquals(500, $purchase_unit->getCalculatedAmount());
     }
 
@@ -73,7 +73,7 @@ class PurchaseUnitTest extends TestCase
         $item2 = new Item('item 2', 'USD', 50.33, 1);
         $pu->addItem($item1);
         $pu->addItem($item2);
-        $this->assertEquals($pu->getCalculatedAmount(), 100);
+        $this->assertEquals(100, $pu->getCalculatedAmount());
     }
 
     public function testToArray()
@@ -83,7 +83,7 @@ class PurchaseUnitTest extends TestCase
         $item1->setDescription('item 1 description');
         $item2 = new Item('item 2', 'USD', 100.00, 2);
         $purchase_unit->addItem($item1)
-                      ->addItem($item2);
+            ->addItem($item2);
         $actual = $purchase_unit->toArray();
         $expected = [
             'amount' => [
@@ -128,7 +128,7 @@ class PurchaseUnitTest extends TestCase
         $item1 = new Item('item 1', 'USD', 100.00, 1);
         $item2 = new Item('item 2', 'USD', 100.00, 2);
         $purchase_unit->addItem($item1)
-                      ->addItem($item2);
+            ->addItem($item2);
         $actual = $purchase_unit->toJson();
         $expected = '{
             "amount": {

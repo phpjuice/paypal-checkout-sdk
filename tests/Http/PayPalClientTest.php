@@ -1,8 +1,9 @@
-<?php
+<?php /** @noinspection SpellCheckingInspection */
 
 namespace Tests\Http;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -17,38 +18,15 @@ use PHPUnit\Framework\TestCase;
 class PayPalClientTest extends TestCase
 {
     /**
-     * @var \PayPal\Checkout\Environment\ProductionEnvironment
+     * @var ProductionEnvironment
      */
     protected $environment = null;
 
     protected $httpClient;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->environment = new ProductionEnvironment('client_id', 'client_secret');
-
-        $response1 = json_encode([
-            'access_token' => 'A21AAFSO5otrlVigoJUQ1p',
-            'token_type' => 'Bearer',
-            'expires_in' => 32400,
-        ]);
-
-        $response2 = json_encode([
-            'id' => '1KC5501443316171H',
-            'intent' => 'CAPTURE',
-            'status' => 'CREATED',
-        ]);
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], $response1),
-            new Response(200, ['Content-Type' => 'application/json'], $response2),
-        ]);
-        $handlerStack = HandlerStack::create($mock);
-        $this->httpClient = new Client(['handler' => $handlerStack]);
-    }
-
     /**
      * @test
+     * @throws GuzzleException
      */
     public function testFetchAccessToken()
     {
@@ -104,11 +82,8 @@ class PayPalClientTest extends TestCase
             'sdk_version' => [
                 '1.0.0',
             ],
-            'sdk_version' => [
-                '1.0.0',
-            ],
             'sdk_tech_stack' => [
-                'PHP '.PHP_VERSION,
+                'PHP ' . PHP_VERSION,
             ],
         ], $request->getHeaders());
     }
@@ -142,14 +117,12 @@ class PayPalClientTest extends TestCase
             'sdk_version' => [
                 '1.0.0',
             ],
-            'sdk_version' => [
-                '1.0.0',
-            ],
         ], $request->getHeaders());
     }
 
     /**
      * @test
+     * @throws GuzzleException
      */
     public function testHasInvalidToken()
     {
@@ -165,6 +138,7 @@ class PayPalClientTest extends TestCase
 
     /**
      * @test
+     * @throws GuzzleException
      */
     public function testSendRequest()
     {
@@ -175,7 +149,31 @@ class PayPalClientTest extends TestCase
 
         $response = $paypalClient->send($request);
 
-        $result = Utils::jsonDecode((string) $response->getBody());
+        $result = Utils::jsonDecode((string)$response->getBody());
         $this->assertEquals('1KC5501443316171H', $result->id);
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->environment = new ProductionEnvironment('client_id', 'client_secret');
+
+        $response1 = json_encode([
+            'access_token' => 'A21AAFSO5otrlVigoJUQ1p',
+            'token_type' => 'Bearer',
+            'expires_in' => 32400,
+        ]);
+
+        $response2 = json_encode([
+            'id' => '1KC5501443316171H',
+            'intent' => 'CAPTURE',
+            'status' => 'CREATED',
+        ]);
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], $response1),
+            new Response(200, ['Content-Type' => 'application/json'], $response2),
+        ]);
+        $handlerStack = HandlerStack::create($mock);
+        $this->httpClient = new Client(['handler' => $handlerStack]);
     }
 }

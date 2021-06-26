@@ -37,6 +37,17 @@ class Payee implements Arrayable, Jsonable
     }
 
     /**
+     * Get the instance as an array.
+     */
+    public function toArray(): array
+    {
+        return [
+            'email_address' => $this->getEmailAddress(),
+            'merchant_id' => $this->getMerchantId(),
+        ];
+    }
+
+    /**
      * Gets payee email address.
      */
     public function getEmailAddress(): string
@@ -70,16 +81,5 @@ class Payee implements Arrayable, Jsonable
         $this->merchant_id = $merchant_id;
 
         return $this;
-    }
-
-    /**
-     * Get the instance as an array.
-     */
-    public function toArray(): array
-    {
-        return [
-            'email_address' => $this->getEmailAddress(),
-            'merchant_id' => $this->getMerchantId(),
-        ];
     }
 }

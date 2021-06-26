@@ -3,7 +3,9 @@
 namespace PayPal\Checkout\Http;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Utils;
 use PayPal\Checkout\Contracts\Environment;
 use PayPal\Checkout\Contracts\HttpClient;
@@ -13,21 +15,21 @@ class PayPalClient implements HttpClient
     /**
      * Paypal environment (sandbox|production).
      *
-     * @var \PayPal\Checkout\Contracts\Environment
+     * @var Environment
      */
     protected $environment;
 
     /**
      * Http client.
      *
-     * @var \GuzzleHttp\Client
+     * @var Client
      */
     protected $client;
 
     /**
      * Access Token.
      *
-     * @var \PayPal\Checkout\Http\AccessToken
+     * @var AccessToken
      */
     protected $access_token;
 
@@ -41,15 +43,17 @@ class PayPalClient implements HttpClient
     public function __construct(Environment $environment)
     {
         $this->environment = $environment;
-        $this->client = new \GuzzleHttp\Client(['base_uri' => $environment->baseUrl()]);
+        $this->client = new Client(['base_uri' => $environment->baseUrl()]);
     }
 
     /**
-     * Send an http request.
+     * Send http request.
      *
-     * @return \GuzzleHttp\Psr7\Response
+     * @param Request $request
+     * @return Response
+     * @throws GuzzleException
      */
-    public function send(Request $request)
+    public function send(Request $request): Response
     {
         // if request doesn't have a authorization header
         if (!$this->hasAuthHeader($request)) {
@@ -75,34 +79,62 @@ class PayPalClient implements HttpClient
     }
 
     /**
+     * Check if headers contain an auth header.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public function hasAuthHeader(Request $request): bool
+    {
+        return array_key_exists('Authorization', $request->getHeaders());
+    }
+
+    /**
+     * Check if request has a valid token
+     *
+     * @return bool
+     */
+    public function hasInvalidToken(): bool
+    {
+        return is_null($this->access_token) || $this->access_token->isExpired();
+    }
+
+    /**
+     * Sends a request that fetches the access token.
+     *
+     * @return AccessToken
+     * @throws GuzzleException
+     */
+    public function fetchAccessToken(): AccessToken
+    {
+        $response = $this->client->send(new AccessTokenRequest($this->environment));
+        $result = Utils::jsonDecode((string)$response->getBody());
+        $this->access_token = new AccessToken($result->access_token, $result->token_type, $result->expires_in);
+
+        return $this->access_token;
+    }
+
+    /**
      * Injects default user-agent into the request.
      *
-     * @return \GuzzleHttp\Psr7\Request
+     * @param Request $request
+     * @return Request
      */
-    public function injectUserAgentHeaders(Request $request)
+    public function injectUserAgentHeaders(Request $request): Request
     {
         return $request->withHeader('User-Agent', 'PayPalHttp-PHP HTTP/1.1');
     }
 
     /**
-     * Inject gzip headers into the request.
-     *
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    public function injectGzipHeaders(Request $request)
-    {
-        return $request->withHeader('Accept-Encoding', 'gzip');
-    }
-
-    /**
      * Inject paypal sdk headers into request.
      *
-     * @return \GuzzleHttp\Psr7\Request
+     * @param Request $request
+     * @return Request
      */
-    public function injectSdkHeaders(Request $request)
+    public function injectSdkHeaders(Request $request): Request
     {
         $r = $request->withHeader('sdk_name', 'Checkout SDK')
-                    ->withHeader('sdk_version', '1.0.0');
+            ->withHeader('sdk_version', '1.0.0');
 
         /*
          * Only inject this header on production
@@ -110,10 +142,21 @@ class PayPalClient implements HttpClient
          * @see https://github.com/phpjuice/paypal-checkout-sdk/issues/6
          */
         if ('production' == $this->environment->name()) {
-            $r = $r->withHeader('sdk_tech_stack', 'PHP '.PHP_VERSION);
+            $r = $r->withHeader('sdk_tech_stack', 'PHP ' . PHP_VERSION);
         }
 
         return $r;
+    }
+
+    /**
+     * Inject gzip headers into the request.
+     *
+     * @param Request $request
+     * @return Request
+     */
+    public function injectGzipHeaders(Request $request): Request
+    {
+        return $request->withHeader('Accept-Encoding', 'gzip');
     }
 
     /**
@@ -124,39 +167,5 @@ class PayPalClient implements HttpClient
         $this->client = $client;
 
         return $this;
-    }
-
-    /**
-     * Send an http request.
-     *
-     * @return bool
-     */
-    public function hasAuthHeader(Request $request)
-    {
-        return array_key_exists('Authorization', $request->getHeaders());
-    }
-
-    /**
-     * Send an http request.
-     *
-     * @return bool
-     */
-    public function hasInvalidToken()
-    {
-        return is_null($this->access_token) || $this->access_token->isExpired();
-    }
-
-    /**
-     * Send an http request.
-     *
-     * @return \PayPal\Checkout\Http\AccessToken
-     */
-    public function fetchAccessToken()
-    {
-        $response = $this->client->send(new AccessTokenRequest($this->environment));
-        $result = Utils::jsonDecode((string) $response->getBody());
-        $this->access_token = new AccessToken($result->access_token, $result->token_type, $result->expires_in);
-
-        return $this->access_token;
     }
 }

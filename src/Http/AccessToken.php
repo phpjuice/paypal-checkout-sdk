@@ -5,7 +5,7 @@ namespace PayPal\Checkout\Http;
 class AccessToken
 {
     /**
-     * Access token returned by paypal.
+     * Access token returned by PayPal.
      *
      * @var string
      */
@@ -61,7 +61,7 @@ class AccessToken
      */
     public function authorizationString(): ?string
     {
-        return $this->token_type.' '.$this->token;
+        return $this->token_type . ' ' . $this->token;
     }
 
     /**

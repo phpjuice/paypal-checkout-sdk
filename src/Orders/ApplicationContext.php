@@ -48,10 +48,16 @@ class ApplicationContext implements Arrayable, Jsonable
 
     /**
      * The type of landing page to show on the PayPal site for customer checkout. The possible values are:
-     *     - LOGIN: When the customer clicks PayPal Checkout, the customer is redirected to a page to log in to PayPal and approve the payment.
-     *     - BILLING: When the customer clicks PayPal Checkout, the customer is redirected to a page to enter credit or debit card
-     *       and other relevant billing information required to complete the purchase.
-     *     - NO_PREFERENCE: A decimal fraction for currencies like TND that are subdivided into thousandths.
+     *
+     * - LOGIN: When the customer clicks PayPal Checkout,
+     *   the customer is redirected to a page to log in to PayPal and approve the payment.
+     *
+     * - BILLING: When the customer clicks PayPal Checkout,
+     *   the customer is redirected to a page to enter credit or debit card
+     *   and other relevant billing information required to complete the purchase.
+     *
+     * - NO_PREFERENCE: A decimal fraction for currencies like TND
+     *   that are subdivided into thousandths.
      *
      * @var string
      */
@@ -59,9 +65,10 @@ class ApplicationContext implements Arrayable, Jsonable
 
     /**
      * The shipping preferences. The possible values are:
-     *     - GET_FROM_FILE: Use the customer-provided shipping address on the PayPal site.
-     *     - NO_SHIPPING: Redact the shipping address from the PayPal site. Recommended for digital goods.
-     *     - SET_PROVIDED_ADDRESS: Use the merchant-provided address. The customer cannot change this address on the PayPal site.
+     *  - GET_FROM_FILE: Use the customer-provided shipping address on the PayPal site.
+     *  - NO_SHIPPING: Redact the shipping address from the PayPal site. Recommended for digital goods.
+     *  - SET_PROVIDED_ADDRESS: Use the merchant-provided address.
+     *    The customer cannot change this address on the PayPal site.
      *
      * @var string
      */
@@ -83,12 +90,16 @@ class ApplicationContext implements Arrayable, Jsonable
 
     /**
      * Configures a Continue or Pay Now checkout flow. The possible values are:
-     *     - CONTINUE: After you redirect the customer to the PayPal payment page, a Continue button appears.
-     *       Use this option when the final amount is not known when the checkout flow is initiated
-     *       and you want to redirect the customer to the merchant page without processing the payment.
-     *     - PAY_NOW: After you redirect the customer to the PayPal payment page, a Pay Now button appears.
-     *       Use this option when the final amount is known when the checkout is initiated
-     *       and you want to process the payment immediately when the customer clicks Pay Now.
+     *
+     * - CONTINUE: After you redirect the customer to the PayPal payment page,
+     *   a Continue button appears. Use this option when the final amount
+     *   is not known when the checkout flow is initiated, and you want
+     *   to redirect the customer to the merchant page without processing the payment.
+     *
+     * - PAY_NOW: After you redirect the customer to the PayPal payment page,
+     *   a Pay Now button appears,Use this option when the final amount is known
+     *   when the checkout is initiated, and you want to process the payment
+     *   immediately when the customer clicks Pay Now.
      *
      * @var string
      */
@@ -97,22 +108,21 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * Create a new collection.
      *
-     * @param string $brand_name
+     * @param string|null $brand_name
      * @param string $locale
      * @param string $landing_page
      * @param string $shipping_preference
-     * @param string $return_url
-     * @param string $cancel_url
+     * @param string|null $return_url
+     * @param string|null $cancel_url
      *
-     * @return self
      */
     public function __construct(
-        $brand_name = null,
-        $locale = 'en-US',
-        $landing_page = NO_PREFERENCE,
-        $shipping_preference = NO_SHIPPING,
-        $return_url = null,
-        $cancel_url = null
+        string $brand_name = null,
+        string $locale = 'en-US',
+        string $landing_page = NO_PREFERENCE,
+        string $shipping_preference = NO_SHIPPING,
+        string $return_url = null,
+        string $cancel_url = null
     ) {
         $this->setBrandName($brand_name);
         $this->setLocale($locale);
@@ -120,6 +130,29 @@ class ApplicationContext implements Arrayable, Jsonable
         $this->setShippingPreference($shipping_preference);
         $this->setReturnUrl($return_url);
         $this->setCancelUrl($cancel_url);
+    }
+
+    /**
+     * Get the instance as an array.
+     */
+    public function toArray(): array
+    {
+        $arrayable = [
+            'brand_name' => $this->getBrandName() ?? null,
+            'locale' => $this->getLocale() ?? null,
+            'shipping_preference' => $this->getShippingPreference() ?? null,
+            'landing_page' => $this->getLandingPage() ?? null,
+            'user_action' => $this->getUserAction() ?? null,
+            'return_url' => $this->getReturnUrl() ?? null,
+            'cancel_url' => $this->getCancelUrl() ?? null,
+        ];
+
+        return array_filter(
+            $arrayable,
+            function ($item) {
+                return null !== $item;
+            }
+        );
     }
 
     /**
@@ -159,7 +192,32 @@ class ApplicationContext implements Arrayable, Jsonable
     }
 
     /**
+     * gets shipping_preference.
+     */
+    public function getShippingPreference(): string
+    {
+        return $this->shipping_preference;
+    }
+
+    /**
+     * sets the shipping_preference.
+     * @noinspection PhpUnused
+     */
+    public function setShippingPreference($shipping_preference): self
+    {
+        $validOptions = [GET_FROM_FILE, NO_SHIPPING, SET_PROVIDED_ADDRESS];
+        if (!in_array($shipping_preference, $validOptions)) {
+            throw new InvalidShippingPreferenceException();
+        }
+
+        $this->shipping_preference = $shipping_preference;
+
+        return $this;
+    }
+
+    /**
      * gets landing_page.
+     * @noinspection PhpUnused
      */
     public function getLandingPage(): string
     {
@@ -182,30 +240,31 @@ class ApplicationContext implements Arrayable, Jsonable
     }
 
     /**
-     * gets shipping_preference.
+     * gets user_action.
      */
-    public function getShippingPreference(): string
+    public function getUserAction(): string
     {
-        return $this->shipping_preference;
+        return $this->user_action;
     }
 
     /**
-     * sets the shipping_preference.
+     * sets the user_action.
+     * @noinspection PhpUnused
      */
-    public function setShippingPreference($shipping_preference): self
+    public function setUserAction($user_action): self
     {
-        $validOptions = [GET_FROM_FILE, NO_SHIPPING, SET_PROVIDED_ADDRESS];
-        if (!in_array($shipping_preference, $validOptions)) {
-            throw new InvalidShippingPreferenceException();
+        $validOptions = [ACTION_CONTINUE, ACTION_PAY_NOW];
+        if (!in_array($user_action, $validOptions)) {
+            throw new InvalidUserActionException();
         }
-
-        $this->shipping_preference = $shipping_preference;
+        $this->user_action = $user_action;
 
         return $this;
     }
 
     /**
      * gets return_url.
+     * @noinspection PhpUnused
      */
     public function getReturnUrl(): ?string
     {
@@ -238,50 +297,5 @@ class ApplicationContext implements Arrayable, Jsonable
         $this->cancel_url = $cancel_url;
 
         return $this;
-    }
-
-    /**
-     * gets user_action.
-     */
-    public function getUserAction(): string
-    {
-        return $this->user_action;
-    }
-
-    /**
-     * sets the user_action.
-     */
-    public function setUserAction($user_action): self
-    {
-        $validOptions = [ACTION_CONTINUE, ACTION_PAY_NOW];
-        if (!in_array($user_action, $validOptions)) {
-            throw new InvalidUserActionException();
-        }
-        $this->user_action = $user_action;
-
-        return $this;
-    }
-
-    /**
-     * Get the instance as an array.
-     */
-    public function toArray(): array
-    {
-        $arrayable = [
-            'brand_name' => $this->getBrandName() ?? null,
-            'locale' => $this->getLocale() ?? null,
-            'shipping_preference' => $this->getShippingPreference() ?? null,
-            'landing_page' => $this->getLandingPage() ?? null,
-            'user_action' => $this->getUserAction() ?? null,
-            'return_url' => $this->getReturnUrl() ?? null,
-            'cancel_url' => $this->getCancelUrl() ?? null,
-        ];
-
-        return array_filter(
-            $arrayable,
-            function ($item) {
-                return null !== $item;
-            }
-        );
     }
 }
