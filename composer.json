@@ -31,11 +31,6 @@
     },
     "scripts": {
         "test": "phpunit",
-        "phpcs": [
-            "phpcs --config-set show_warnings 0 ",
-            "phpcs src --standard=PSR2 --extensions=php --encoding=utf-8"
-        ],
-        "phpcbf": "phpcbf src --standard=PSR2 --extensions=php --encoding=utf-8",
         "analyse": "phpstan analyse src tests",
         "php-cs-fixer": [
             "php-cs-fixer fix src --rules=@PSR2",
