@@ -12,14 +12,14 @@ class PurchaseUnitTest extends TestCase
 {
     public function testCreatePurchaseUnit()
     {
-        $purchase_unit = new PurchaseUnit('USD', 100.00);
+        $purchase_unit = new PurchaseUnit('USD', 100.00, 100.00);
         $this->assertEquals('USD', $purchase_unit->getAmount()->getCurrencyCode());
         $this->assertEquals(100.00, $purchase_unit->getAmount()->getValue());
     }
 
     public function testAddItemToPurchaseUnit()
     {
-        $purchase_unit = new PurchaseUnit('CAD', 100.00);
+        $purchase_unit = new PurchaseUnit('CAD', 100.00, 100.00);
         $this->assertEmpty($purchase_unit->getItems());
 
         $item1 = new Item('item 1', 'CAD', 100.00, 1);
@@ -33,7 +33,7 @@ class PurchaseUnitTest extends TestCase
     {
         $this->expectException(MultiCurrencyOrderException::class);
         $this->expectExceptionMessage('Multiple differing values of currency_code are not supported. Entire Order request must have the same currency_code.');
-        $purchase_unit = new PurchaseUnit('USD', 100.00);
+        $purchase_unit = new PurchaseUnit('USD', 100.00, 100.00);
         $item1 = new Item('item 1', 'USD', 100.00, 1);
         $item2 = new Item('item 2', 'USD', 100.00, 1);
         $item3 = new Item('item 3', 'CAD', 100.00, 1);
@@ -44,7 +44,7 @@ class PurchaseUnitTest extends TestCase
 
     public function testGetCalculatedAmount()
     {
-        $purchase_unit = new PurchaseUnit('USD', 100.00);
+        $purchase_unit = new PurchaseUnit('USD', 100.00, 100.00);
         $item1 = new Item('item 1', 'USD', 100.00, 1);
         $item2 = new Item('item 2', 'USD', 100.00, 2);
         $item3 = new Item('item 3', 'USD', 50.00, 4);
@@ -58,7 +58,7 @@ class PurchaseUnitTest extends TestCase
     {
         $this->expectException(ItemTotalMismatchException::class);
         $this->expectExceptionMessage('Items Total Should equal sum of (unit_amount * quantity) across all items for a given purchase_unit');
-        $pu = new PurchaseUnit('USD', 100);
+        $pu = new PurchaseUnit('USD', 100, 100);
         $item1 = new Item('item 1', 'USD', 49.66, 1);
         $item2 = new Item('item 2', 'USD', 50.33, 1);
         $pu->addItem($item1);
@@ -68,7 +68,7 @@ class PurchaseUnitTest extends TestCase
 
     public function testCalculatedAmountMatchesAmount()
     {
-        $pu = new PurchaseUnit('USD', 100);
+        $pu = new PurchaseUnit('USD', 100, 100);
         $item1 = new Item('item 1', 'USD', 49.67, 1);
         $item2 = new Item('item 2', 'USD', 50.33, 1);
         $pu->addItem($item1);
@@ -78,7 +78,7 @@ class PurchaseUnitTest extends TestCase
 
     public function testToArray()
     {
-        $purchase_unit = new PurchaseUnit('USD', 300.00);
+        $purchase_unit = new PurchaseUnit('USD', 300.00, 300.00);
         $item1 = new Item('item 1', 'USD', 100.00, 1);
         $item1->setDescription('item 1 description');
         $item2 = new Item('item 2', 'USD', 100.00, 2);
@@ -93,6 +93,10 @@ class PurchaseUnitTest extends TestCase
                     'item_total' => [
                         'currency_code' => 'USD',
                         'value' => 300.00,
+                    ],
+                    'discount' => [
+                        'currency_code' => 'USD',
+                        'value' => 0.00,
                     ],
                 ],
             ],
@@ -124,7 +128,7 @@ class PurchaseUnitTest extends TestCase
 
     public function testToJson()
     {
-        $purchase_unit = new PurchaseUnit('USD', 300.00);
+        $purchase_unit = new PurchaseUnit('USD', 300.00, 300.00);
         $item1 = new Item('item 1', 'USD', 100.00, 1);
         $item2 = new Item('item 2', 'USD', 100.00, 2);
         $purchase_unit->addItem($item1)
@@ -138,6 +142,10 @@ class PurchaseUnitTest extends TestCase
                     "item_total": {
                         "currency_code": "USD",
                         "value": 300.00
+                    },
+                    "discount": {
+                        "currency_code": "USD",
+                        "value": 0.00
                     }
                 }
             },

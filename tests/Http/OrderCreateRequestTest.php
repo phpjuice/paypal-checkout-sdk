@@ -50,7 +50,7 @@ class OrderCreateRequestTest extends TestCase
      */
     public function testHasCorrectDataWithGetBody()
     {
-        $purchase_unit = new PurchaseUnit('USD', 100.00);
+        $purchase_unit = new PurchaseUnit('USD', 100.00, 100.00);
         $purchase_unit->addItem(new Item('Item 1', 'USD', 100.00, 1));
         $order = new Order('CAPTURE');
         $order->addPurchaseUnit($purchase_unit);
@@ -82,7 +82,7 @@ class OrderCreateRequestTest extends TestCase
         $handlerStack = HandlerStack::create($mock);
         $client = new Client(['handler' => $handlerStack]);
 
-        $purchase_unit = new PurchaseUnit('USD', 100.00);
+        $purchase_unit = new PurchaseUnit('USD', 100.00, 100.00);
         $purchase_unit->addItem(new Item('Item 1', 'USD', 100.00, 1));
         $order = new Order('CAPTURE');
         $order->addPurchaseUnit($purchase_unit);

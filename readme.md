@@ -77,7 +77,7 @@ use PayPal\Checkout\Orders\Order;
 use PayPal\Checkout\Orders\PurchaseUnit;
 
 // create a purchase unit with the total amount
-$purchase_unit = new PurchaseUnit('USD', 100.00);
+$purchase_unit = new PurchaseUnit('USD', 100.00, 100.00);
 // create a new item
 $item = new Item('Item 1', 'USD', 100.00, 1);
 // add item to purchase unit

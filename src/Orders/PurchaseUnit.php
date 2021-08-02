@@ -36,9 +36,9 @@ class PurchaseUnit implements Arrayable, Jsonable
     /**
      * Create a new collection.
      */
-    public function __construct(string $currency_code, float $value)
+    public function __construct(string $currency_code, float $value, float $item_total, float $discount= 0.0)
     {
-        $this->amount = new AmountBreakdown($currency_code, $value);
+        $this->amount = new AmountBreakdown($currency_code, $value, $item_total, $discount);
     }
 
     /**
@@ -120,7 +120,7 @@ class PurchaseUnit implements Arrayable, Jsonable
      */
     public function getCalculatedAmount(): float
     {
-        return (float)array_reduce(
+        $itemsTotal =  (float)array_reduce(
             $this->items,
             function ($totalAmount, Item $item) {
                 $amount = $item->getAmount();
@@ -131,5 +131,8 @@ class PurchaseUnit implements Arrayable, Jsonable
             },
             0
         );
+        $discount = $this->amount->getDiscount();
+
+        return $itemsTotal - $discount;
     }
 }
