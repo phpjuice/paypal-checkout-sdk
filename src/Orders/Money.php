@@ -2,14 +2,14 @@
 
 namespace PayPal\Checkout\Orders;
 
-use PayPal\Checkout\Concerns\MoneyInterface;
+use PayPal\Checkout\Contracts\Money as MoneyContract;
 
 /**
  * Money Value Object.
  *
  * Holds money specific data.
  */
-class Money implements MoneyInterface
+class Money implements MoneyContract
 {
 
     /**

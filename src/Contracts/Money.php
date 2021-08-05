@@ -1,10 +1,10 @@
 <?php
 
-namespace PayPal\Checkout\Concerns;
+namespace PayPal\Checkout\Contracts;
 
 use PayPal\Checkout\Orders\Currency;
 
-interface MoneyInterface
+interface Money
 {
     /**
      * return money's currency code.
