@@ -120,7 +120,7 @@ class PurchaseUnit implements Arrayable, Jsonable
      */
     public function getCalculatedAmount(): float
     {
-        return (float)array_reduce(
+        $itemsTotal = (float)array_reduce(
             $this->items,
             function ($totalAmount, Item $item) {
                 $amount = $item->getAmount();
@@ -131,5 +131,9 @@ class PurchaseUnit implements Arrayable, Jsonable
             },
             0
         );
+
+        $discount = $this->amount->hasDiscount() ? $this->amount->getDiscount()->getValue() : 0 ;
+
+        return $itemsTotal - $discount;
     }
 }
