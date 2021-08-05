@@ -52,7 +52,7 @@ class AccessTokenRequestTest extends TestCase
     public function testHasBasicAuthHeaders()
     {
         $request = new AccessTokenRequest($this->environment);
-        $expected = 'Basic ' . $this->environment->basicAuthorizationString();
+        $expected = 'Basic '.$this->environment->basicAuthorizationString();
         $this->assertEquals($expected, $request->getHeaderLine('Authorization'));
     }
 
@@ -63,7 +63,7 @@ class AccessTokenRequestTest extends TestCase
     {
         $request = new AccessTokenRequest($this->environment);
         $expected = http_build_query(['grant_type' => 'client_credentials']);
-        $this->assertEquals($expected, (string)$request->getBody());
+        $this->assertEquals($expected, (string) $request->getBody());
     }
 
     /**
@@ -88,7 +88,7 @@ class AccessTokenRequestTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
 
-        $body = Utils::jsonDecode((string)$response->getBody());
+        $body = Utils::jsonDecode((string) $response->getBody());
         $this->assertEquals('A21AAFSO5otrlVigoJUQ1p', $body->access_token);
         $this->assertEquals('Bearer', $body->token_type);
         $this->assertEquals(32400, $body->expires_in);

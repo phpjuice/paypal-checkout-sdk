@@ -9,7 +9,7 @@ class AccessTokenRequest extends PaypalRequest
     public function __construct(Environment $environment, $refresh_token = null)
     {
         $headers = [
-            'Authorization' => 'Basic ' . $environment->basicAuthorizationString(),
+            'Authorization' => 'Basic '.$environment->basicAuthorizationString(),
             'Accept' => 'application/json',
             'Content-Type' => 'application/x-www-form-urlencoded',
         ];

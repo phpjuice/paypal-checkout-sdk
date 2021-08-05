@@ -60,7 +60,7 @@ class OrderCaptureRequestTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
 
-        $result = Utils::jsonDecode((string)$response->getBody());
+        $result = Utils::jsonDecode((string) $response->getBody());
         $this->assertEquals('1KC5501443316171H', $result->id);
     }
 }

@@ -49,7 +49,7 @@ class PayPalClient implements HttpClient
     /**
      * Send http request.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return Response
      * @throws GuzzleException
      */
@@ -81,7 +81,7 @@ class PayPalClient implements HttpClient
     /**
      * Check if headers contain an auth header.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return bool
      */
     public function hasAuthHeader(Request $request): bool
@@ -108,7 +108,7 @@ class PayPalClient implements HttpClient
     public function fetchAccessToken(): AccessToken
     {
         $response = $this->client->send(new AccessTokenRequest($this->environment));
-        $result = Utils::jsonDecode((string)$response->getBody());
+        $result = Utils::jsonDecode((string) $response->getBody());
         $this->access_token = new AccessToken($result->access_token, $result->token_type, $result->expires_in);
 
         return $this->access_token;
@@ -117,7 +117,7 @@ class PayPalClient implements HttpClient
     /**
      * Injects default user-agent into the request.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return Request
      */
     public function injectUserAgentHeaders(Request $request): Request
@@ -128,7 +128,7 @@ class PayPalClient implements HttpClient
     /**
      * Inject paypal sdk headers into request.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return Request
      */
     public function injectSdkHeaders(Request $request): Request
@@ -142,7 +142,7 @@ class PayPalClient implements HttpClient
          * @see https://github.com/phpjuice/paypal-checkout-sdk/issues/6
          */
         if ('production' == $this->environment->name()) {
-            $r = $r->withHeader('sdk_tech_stack', 'PHP ' . PHP_VERSION);
+            $r = $r->withHeader('sdk_tech_stack', 'PHP '.PHP_VERSION);
         }
 
         return $r;
@@ -151,7 +151,7 @@ class PayPalClient implements HttpClient
     /**
      * Inject gzip headers into the request.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return Request
      */
     public function injectGzipHeaders(Request $request): Request

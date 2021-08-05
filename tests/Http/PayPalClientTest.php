@@ -83,7 +83,7 @@ class PayPalClientTest extends TestCase
                 '1.0.0',
             ],
             'sdk_tech_stack' => [
-                'PHP ' . PHP_VERSION,
+                'PHP '.PHP_VERSION,
             ],
         ], $request->getHeaders());
     }
@@ -149,7 +149,7 @@ class PayPalClientTest extends TestCase
 
         $response = $paypalClient->send($request);
 
-        $result = Utils::jsonDecode((string)$response->getBody());
+        $result = Utils::jsonDecode((string) $response->getBody());
         $this->assertEquals('1KC5501443316171H', $result->id);
     }
 

@@ -7,7 +7,7 @@ trait HasCollection
     /**
      * Determine if an attribute or relation exists on the model.
      *
-     * @param string $key
+     * @param  string  $key
      *
      * @return bool
      */
@@ -19,7 +19,7 @@ trait HasCollection
     /**
      * Determine if a key exists on the items.
      *
-     * @param string $offset
+     * @param  string  $offset
      * @return bool
      */
     public function offsetExists(string $offset): bool
@@ -30,7 +30,7 @@ trait HasCollection
     /**
      * Unset an attribute on the model.
      *
-     * @param string $key
+     * @param  string  $key
      *
      * @return void
      */
@@ -42,7 +42,7 @@ trait HasCollection
     /**
      * Unset an attribute on the model.
      *
-     * @param string $offset
+     * @param  string  $offset
      * @return void
      */
     public function offsetUnset(string $offset)
@@ -60,7 +60,7 @@ trait HasCollection
     }
 
     /**
-     * @param string $offset
+     * @param  string  $offset
      *
      */
     public function offsetGet(string $offset)

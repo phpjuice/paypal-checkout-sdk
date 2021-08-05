@@ -2,21 +2,25 @@
 
 namespace Tests\Orders;
 
-use PHPUnit\Framework\TestCase;
-use PayPal\Checkout\Orders\Item;
-use PayPal\Checkout\Orders\Order;
-use PayPal\Checkout\Orders\Amount;
-use PayPal\Checkout\Orders\PurchaseUnit;
-use PayPal\Checkout\Orders\ApplicationContext;
-use PayPal\Checkout\Exceptions\OrderPurchaseUnitException;
 use PayPal\Checkout\Exceptions\InvalidOrderIntentException;
+use PayPal\Checkout\Exceptions\OrderPurchaseUnitException;
+use PayPal\Checkout\Orders\ApplicationContext;
+use PayPal\Checkout\Orders\Currency;
+use PayPal\Checkout\Orders\Item;
+use PayPal\Checkout\Orders\Money;
+use PayPal\Checkout\Orders\Order;
+use PayPal\Checkout\Orders\PurchaseUnit;
+use PHPUnit\Framework\TestCase;
 
 class OrderTest extends TestCase
 {
     public function testCreateOrderWithInvalidIntent()
     {
         $this->expectException(InvalidOrderIntentException::class);
-        $this->expectExceptionMessage('Order intent provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#orders_create.');
+        $this->expectExceptionMessage(<<<'MESSAGE'
+Order intent provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#orders_create.
+MESSAGE
+        );
 
         new Order('invalid intent');
     }
@@ -24,7 +28,10 @@ class OrderTest extends TestCase
     public function testSetInvalidOrderIntent()
     {
         $this->expectException(InvalidOrderIntentException::class);
-        $this->expectExceptionMessage('Order intent provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#orders_create.');
+        $this->expectExceptionMessage(<<<'MESSAGE'
+Order intent provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#orders_create.
+MESSAGE
+        );
 
         $order = new Order();
         $order->setIntent('invalid intent');
@@ -139,12 +146,14 @@ class OrderTest extends TestCase
 
     public function testCreateAFullOrderWithDiscount()
     {
+        $currency = Currency::from('USD');
         $purchase_unit = new PurchaseUnit('USD', 250.00);
         $purchase_unit->addItem(new Item('Item 1', 'USD', 100.00, 1));
         $purchase_unit->addItem(new Item('Item 2', 'USD', 100.00, 2));
+
         $amountBreakdown = $purchase_unit->getAmount();
-        $amountBreakdown->setItemTotal(new Amount('USD', 300.00));
-        $amountBreakdown->setDiscount(new Amount('USD', 50.00));
+        $amountBreakdown->setItemTotal(new Money(300.00, $currency));
+        $amountBreakdown->setDiscount(new Money(50.00, $currency));
 
         $order = new Order('CAPTURE');
         $order->addPurchaseUnit($purchase_unit);
@@ -211,11 +220,12 @@ class OrderTest extends TestCase
 
     public function testConvertOrderToJson()
     {
-        $purchase_unit = new PurchaseUnit('USD', 70.00);
+        $currency = Currency::from('USD');
+        $purchase_unit = new PurchaseUnit($currency->getCode(), 70.00);
         $purchase_unit->addItem(new Item('Item 1', 'USD', 100.00, 1));
         $amountBreakdown = $purchase_unit->getAmount();
-        $amountBreakdown->setItemTotal(new Amount('USD', 100.00));
-        $amountBreakdown->setDiscount(new Amount('USD', 30.00));
+        $amountBreakdown->setItemTotal(new Money(100.00, $currency));
+        $amountBreakdown->setDiscount(new Money(30.00, $currency));
 
 
         $order = new Order('CAPTURE');
@@ -270,6 +280,7 @@ class OrderTest extends TestCase
         $actual = $order->toJson();
         $this->assertJsonStringEqualsJsonString($expected, $actual);
     }
+
     public function testConvertOrderToJsonWithDiscount()
     {
         $purchase_unit = new PurchaseUnit('USD', 100.00);

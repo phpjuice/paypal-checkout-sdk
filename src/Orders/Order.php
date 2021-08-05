@@ -208,7 +208,7 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     }
 
     /**
-     * @param mixed $offset
+     * @param  mixed  $offset
      * @return PurchaseUnit|null
      */
     public function offsetGet($offset): ?PurchaseUnit
@@ -219,7 +219,7 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     /**
      * Determine if a key exists on the purchase_units.
      *
-     * @param mixed $offset
+     * @param  mixed  $offset
      * @return bool
      */
     public function offsetExists($offset): bool
