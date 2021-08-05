@@ -16,28 +16,16 @@ class Amount implements Arrayable, Jsonable
     /**
      * The three-character ISO-4217 currency code that identifies the currency.
      *
-     * @var string
+     * @var Money
      */
-    protected $currency_code;
-
-    /**
-     * The value, which might be:
-     *     - An integer for currencies like JPY that are not typically fractional.
-     *     - A decimal fraction for currencies like TND that are subdivided into thousandths.
-     *
-     * @pattern ^((-?[0-9]+)|(-?([0-9]+)?[.][0-9]+))$
-     *
-     * @var float
-     */
-    protected $value;
+    protected $money;
 
     /**
      * create a new amount instance.
      */
     public function __construct(string $currency_code, float $value)
     {
-        $this->currency_code = $currency_code;
-        $this->value = $value;
+        $this->money = new Money($value, $currency_code);
     }
 
     /**
@@ -52,38 +40,18 @@ class Amount implements Arrayable, Jsonable
     }
 
     /**
-     * return amount's currency code.
+     * @return string
      */
     public function getCurrencyCode(): string
     {
-        return $this->currency_code;
+        return $this->money->getCurrencyCode();
     }
 
     /**
-     * sets amount's currency code.
-     */
-    public function setCurrencyCode(string $currency_code): self
-    {
-        $this->currency_code = $currency_code;
-
-        return $this;
-    }
-
-    /**
-     * gets amount value.
+     * @return float
      */
     public function getValue(): float
     {
-        return $this->value;
-    }
-
-    /**
-     * sets amount value.
-     */
-    public function setValue(float $value): self
-    {
-        $this->value = $value;
-
-        return $this;
+        return $this->money->getAmount();
     }
 }
