@@ -19,7 +19,7 @@ trait HasJson
     /**
      * Convert the model instance to JSON.
      *
-     * @param int $options
+     * @param  int  $options
      *
      * @return string
      *

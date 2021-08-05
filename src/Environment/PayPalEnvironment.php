@@ -31,6 +31,6 @@ abstract class PayPalEnvironment implements Environment
      */
     public function basicAuthorizationString(): string
     {
-        return base64_encode($this->clientId . ':' . $this->clientSecret);
+        return base64_encode($this->clientId.':'.$this->clientSecret);
     }
 }

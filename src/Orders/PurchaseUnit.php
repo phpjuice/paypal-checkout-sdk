@@ -72,26 +72,6 @@ class PurchaseUnit implements Arrayable, Jsonable
     }
 
     /**
-     * sets the amount currency code.
-     */
-    public function setCurrencyCode(string $currency_code): self
-    {
-        $this->amount->setCurrencyCode($currency_code);
-
-        return $this;
-    }
-
-    /**
-     * set's the amount value.
-     */
-    public function setValue(float $value): self
-    {
-        $this->amount->setValue($value);
-
-        return $this;
-    }
-
-    /**
      * convert a purchase unit instance to array.
      */
     public function toArray(): array
@@ -120,7 +100,7 @@ class PurchaseUnit implements Arrayable, Jsonable
      */
     public function getCalculatedAmount(): float
     {
-        return (float)array_reduce(
+        $itemsTotal = (float) array_reduce(
             $this->items,
             function ($totalAmount, Item $item) {
                 $amount = $item->getAmount();
@@ -131,5 +111,9 @@ class PurchaseUnit implements Arrayable, Jsonable
             },
             0
         );
+
+        $discount = $this->amount->hasDiscount() ? $this->amount->getDiscount()->getAmount() : 0;
+
+        return $itemsTotal - $discount;
     }
 }

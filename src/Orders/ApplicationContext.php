@@ -108,12 +108,12 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * Create a new collection.
      *
-     * @param string|null $brand_name
-     * @param string $locale
-     * @param string $landing_page
-     * @param string $shipping_preference
-     * @param string|null $return_url
-     * @param string|null $cancel_url
+     * @param  string|null  $brand_name
+     * @param  string  $locale
+     * @param  string  $landing_page
+     * @param  string  $shipping_preference
+     * @param  string|null  $return_url
+     * @param  string|null  $cancel_url
      *
      */
     public function __construct(
