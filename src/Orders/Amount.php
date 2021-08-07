@@ -5,13 +5,12 @@ namespace PayPal\Checkout\Orders;
 use Brick\Money\Exception\UnknownCurrencyException;
 use Brick\Money\Money;
 use PayPal\Checkout\Concerns\CastsToJson;
-use PayPal\Checkout\Contracts\Arrayable;
-use PayPal\Checkout\Contracts\Jsonable;
+use PayPal\Checkout\Contracts\Amount as AmountContract;
 
 /**
  * https://developer.paypal.com/docs/api/orders/v2/#definition-Amount_breakdown.
  */
-class Amount implements Arrayable, Jsonable
+class Amount implements AmountContract
 {
     use CastsToJson;
 

@@ -11,9 +11,10 @@ use PHPUnit\Framework\TestCase;
 class AmountBreakdownTest extends TestCase
 {
     /**
+     * @test
      * @throws UnknownCurrencyException
      */
-    public function testToArray()
+    public function canCastToArray()
     {
         // Arrange
         $currency = Currency::of('USD');
@@ -36,9 +37,10 @@ class AmountBreakdownTest extends TestCase
     }
 
     /**
+     * @test
      * @throws UnknownCurrencyException
      */
-    public function testToArrayWithDiscount()
+    public function canCastToArrayWithDiscount()
     {
         // Arrange
         $currency = Currency::of('USD');
@@ -67,9 +69,10 @@ class AmountBreakdownTest extends TestCase
     }
 
     /**
+     * @test
      * @throws UnknownCurrencyException
      */
-    public function testToJson()
+    public function canCastToJson()
     {
         // Arrange
         $currency = Currency::of('USD');
@@ -92,9 +95,10 @@ class AmountBreakdownTest extends TestCase
     }
 
     /**
+     * @test
      * @throws UnknownCurrencyException
      */
-    public function testToJsonWithDiscount()
+    public function canCastToJsonWithDiscount()
     {
         // Arrange
         $currency = Currency::of('USD');
