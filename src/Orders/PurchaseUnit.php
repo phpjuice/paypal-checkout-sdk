@@ -3,7 +3,7 @@
 namespace PayPal\Checkout\Orders;
 
 use PayPal\Checkout\Concerns\HasCollection;
-use PayPal\Checkout\Concerns\HasJson;
+use PayPal\Checkout\Concerns\CastsToJson;
 use PayPal\Checkout\Contracts\Arrayable;
 use PayPal\Checkout\Contracts\Jsonable;
 use PayPal\Checkout\Exceptions\ItemTotalMismatchException;
@@ -14,7 +14,7 @@ use PayPal\Checkout\Exceptions\MultiCurrencyOrderException;
  */
 class PurchaseUnit implements Arrayable, Jsonable
 {
-    use HasJson;
+    use CastsToJson;
     use HasCollection;
 
     /**

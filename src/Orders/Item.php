@@ -2,7 +2,7 @@
 
 namespace PayPal\Checkout\Orders;
 
-use PayPal\Checkout\Concerns\HasJson;
+use PayPal\Checkout\Concerns\CastsToJson;
 use PayPal\Checkout\Contracts\Arrayable;
 use PayPal\Checkout\Contracts\Jsonable;
 use PayPal\Checkout\Exceptions\InvalidItemCategoryException;
@@ -15,7 +15,7 @@ const PHYSICAL_GOODS = 'PHYSICAL_GOODS';
  */
 class Item implements Arrayable, Jsonable
 {
-    use HasJson;
+    use CastsToJson;
 
     /**
      * The item name or title.

@@ -2,7 +2,7 @@
 
 namespace PayPal\Checkout\Orders;
 
-use PayPal\Checkout\Concerns\HasJson;
+use PayPal\Checkout\Concerns\CastsToJson;
 use PayPal\Checkout\Contracts\Arrayable;
 use PayPal\Checkout\Contracts\Jsonable;
 
@@ -11,7 +11,7 @@ use PayPal\Checkout\Contracts\Jsonable;
  */
 class Payee implements Arrayable, Jsonable
 {
-    use HasJson;
+    use CastsToJson;
 
     /**
      * The email address of merchant.
