@@ -2,7 +2,9 @@
 
 namespace PayPal\Checkout\Orders;
 
-use PayPal\Checkout\Concerns\HasJson;
+use Brick\Money\Exception\UnknownCurrencyException;
+use Brick\Money\Money;
+use PayPal\Checkout\Concerns\CastsToJson;
 use PayPal\Checkout\Contracts\Arrayable;
 use PayPal\Checkout\Contracts\Jsonable;
 
@@ -11,25 +13,40 @@ use PayPal\Checkout\Contracts\Jsonable;
  */
 class Amount implements Arrayable, Jsonable
 {
-    use HasJson;
+    use CastsToJson;
 
     /**
      * The three-character ISO-4217 currency code that identifies the currency.
      *
      * @var Money
      */
-    protected $money;
+    protected Money $money;
 
     /**
      * create a new amount instance.
+     * @param  string  $value
+     * @param  string  $currency_code
+     * @throws UnknownCurrencyException
      */
-    public function __construct(string $currency_code, float $value)
+    public function __construct(string $value, string $currency_code = 'USD')
     {
-        $this->money = new Money($value, $currency_code);
+        $this->money = Money::of($value, $currency_code);
+    }
+
+    /**
+     * @param  string  $value
+     * @param  string  $currency_code
+     * @return Amount
+     * @throws UnknownCurrencyException
+     */
+    public static function of(string $value, string $currency_code = 'USD'): Amount
+    {
+        return new self($value, $currency_code);
     }
 
     /**
      * convert amount to an array.
+     * @return array
      */
     public function toArray(): array
     {
@@ -44,14 +61,14 @@ class Amount implements Arrayable, Jsonable
      */
     public function getCurrencyCode(): string
     {
-        return $this->money->getCurrencyCode();
+        return $this->money->getCurrency()->getCurrencyCode();
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getValue(): float
+    public function getValue(): string
     {
-        return $this->money->getAmount();
+        return (string) $this->money->getAmount();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace PayPal\Checkout\Orders;
 
-use PayPal\Checkout\Concerns\HasJson;
+use PayPal\Checkout\Concerns\CastsToJson;
 use PayPal\Checkout\Contracts\Arrayable;
 use PayPal\Checkout\Contracts\Jsonable;
 use PayPal\Checkout\Exceptions\InvalidLandingPageException;
@@ -28,14 +28,14 @@ const ACTION_PAY_NOW = 'PAY_NOW';
  */
 class ApplicationContext implements Arrayable, Jsonable
 {
-    use HasJson;
+    use CastsToJson;
 
     /**
      * The label that overrides the business name in the PayPal account on the PayPal site.
      *
      * @var string
      */
-    protected $brand_name;
+    protected string $brand_name;
 
     /**
      * The BCP 47-formatted locale of pages that the PayPal payment experience shows.
@@ -44,7 +44,7 @@ class ApplicationContext implements Arrayable, Jsonable
      *
      * @var string
      */
-    protected $locale = 'en-US';
+    protected string $locale = 'en-US';
 
     /**
      * The type of landing page to show on the PayPal site for customer checkout. The possible values are:
@@ -61,7 +61,7 @@ class ApplicationContext implements Arrayable, Jsonable
      *
      * @var string
      */
-    protected $landing_page = NO_PREFERENCE;
+    protected string $landing_page = NO_PREFERENCE;
 
     /**
      * The shipping preferences. The possible values are:
@@ -72,21 +72,21 @@ class ApplicationContext implements Arrayable, Jsonable
      *
      * @var string
      */
-    protected $shipping_preference = NO_SHIPPING;
+    protected string $shipping_preference = NO_SHIPPING;
 
     /**
      * The URL where the customer is redirected after the customer approves the payment.
      *
-     * @var string
+     * @var string|null
      */
-    protected $return_url = null;
+    protected ?string $return_url = null;
 
     /**
      * The URL where the customer is redirected after the customer cancels the payment.
      *
-     * @var string
+     * @var string|null
      */
-    protected $cancel_url = null;
+    protected ?string $cancel_url = null;
 
     /**
      * Configures a Continue or Pay Now checkout flow. The possible values are:
@@ -103,7 +103,7 @@ class ApplicationContext implements Arrayable, Jsonable
      *
      * @var string
      */
-    protected $user_action = ACTION_CONTINUE;
+    protected string $user_action = ACTION_CONTINUE;
 
     /**
      * Create a new collection.

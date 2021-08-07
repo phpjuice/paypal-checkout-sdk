@@ -3,7 +3,7 @@
 namespace PayPal\Checkout\Orders;
 
 use ArrayAccess;
-use PayPal\Checkout\Concerns\HasJson;
+use PayPal\Checkout\Concerns\CastsToJson;
 use PayPal\Checkout\Contracts\Arrayable;
 use PayPal\Checkout\Contracts\Jsonable;
 use PayPal\Checkout\Exceptions\InvalidOrderIntentException;
@@ -17,7 +17,7 @@ const AUTHORIZE = 'AUTHORIZE';
  */
 class Order implements Arrayable, Jsonable, ArrayAccess
 {
-    use HasJson;
+    use CastsToJson;
 
     /**
      * The ID of the order.
