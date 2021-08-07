@@ -18,14 +18,14 @@ class Payee implements Arrayable, Jsonable
      *
      * @var string
      */
-    protected $email_address;
+    protected string $email_address;
 
     /**
      * The encrypted PayPal account ID of the merchant.
      *
      * @var string
      */
-    protected $merchant_id;
+    protected string $merchant_id;
 
     /**
      * create a new payee instance.
@@ -34,6 +34,14 @@ class Payee implements Arrayable, Jsonable
     {
         $this->email_address = $email_address;
         $this->merchant_id = $merchant_id;
+    }
+
+    /**
+     * create a new payee instance.
+     */
+    public static function make(string $email_address, string $merchant_id): Payee
+    {
+        return new self($email_address, $merchant_id);
     }
 
     /**

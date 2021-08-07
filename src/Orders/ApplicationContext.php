@@ -33,9 +33,9 @@ class ApplicationContext implements Arrayable, Jsonable
     /**
      * The label that overrides the business name in the PayPal account on the PayPal site.
      *
-     * @var string
+     * @var string|null
      */
-    protected string $brand_name;
+    protected ?string $brand_name = null;
 
     /**
      * The BCP 47-formatted locale of pages that the PayPal payment experience shows.
@@ -109,20 +109,19 @@ class ApplicationContext implements Arrayable, Jsonable
      * Create a new collection.
      *
      * @param  string|null  $brand_name
-     * @param  string  $locale
-     * @param  string  $landing_page
-     * @param  string  $shipping_preference
+     * @param  string|null  $locale
+     * @param  string|null  $landing_page
+     * @param  string|null  $shipping_preference
      * @param  string|null  $return_url
      * @param  string|null  $cancel_url
-     *
      */
     public function __construct(
-        string $brand_name = null,
-        string $locale = 'en-US',
-        string $landing_page = NO_PREFERENCE,
-        string $shipping_preference = NO_SHIPPING,
-        string $return_url = null,
-        string $cancel_url = null
+        ?string $brand_name = null,
+        ?string $locale = 'en-US',
+        ?string $landing_page = NO_PREFERENCE,
+        ?string $shipping_preference = NO_SHIPPING,
+        ?string $return_url = null,
+        ?string $cancel_url = null
     ) {
         $this->setBrandName($brand_name);
         $this->setLocale($locale);
@@ -130,6 +129,35 @@ class ApplicationContext implements Arrayable, Jsonable
         $this->setShippingPreference($shipping_preference);
         $this->setReturnUrl($return_url);
         $this->setCancelUrl($cancel_url);
+    }
+
+    /**
+     * Create a new collection.
+     *
+     * @param  string|null  $brand_name
+     * @param  string|null  $locale
+     * @param  string|null  $landing_page
+     * @param  string|null  $shipping_preference
+     * @param  string|null  $return_url
+     * @param  string|null  $cancel_url
+     * @return ApplicationContext
+     */
+    public static function make(
+        ?string $brand_name = null,
+        ?string $locale = 'en-US',
+        ?string $landing_page = NO_PREFERENCE,
+        ?string $shipping_preference = NO_SHIPPING,
+        ?string $return_url = null,
+        ?string $cancel_url = null
+    ): ApplicationContext {
+        return new self(
+            $brand_name,
+            $locale,
+            $landing_page,
+            $shipping_preference,
+            $return_url,
+            $cancel_url
+        );
     }
 
     /**
