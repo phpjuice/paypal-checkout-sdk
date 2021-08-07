@@ -20,7 +20,7 @@ The supported way of installing PayPal Checkout SDK package is via Composer.
 composer require phpjuice/paypal-checkout-sdk
 ```
 
-## Usage
+## Setup
 
 PayPal Checkout SDK is designed to simplify using the new PayPal checkout api in your app.
 
@@ -41,7 +41,7 @@ Inorder to communicate with PayPal platform we need to set up a client first :
 use PayPal\Checkout\Environment\SandboxEnvironment;
 use PayPal\Checkout\Http\PayPalClient;
 
-// client id and client secret retrieved from paypal
+// client id and client secret retrieved from PayPal
 $clientId = "<<PAYPAL-CLIENT-ID>>";
 $clientSecret = "<<PAYPAL-CLIENT-SECRET>>";
 
@@ -59,7 +59,7 @@ $client = new PayPalClient($environment);
 use PayPal\Checkout\Environment\ProductionEnvironment;
 use PayPal\Checkout\Http\PayPalClient;
 
-// client id and client secret retrieved from paypal
+// client id and client secret retrieved from PayPal
 $clientId = "<<PAYPAL-CLIENT-ID>>";
 $clientSecret = "<<PAYPAL-CLIENT-SECRET>>";
 
@@ -70,33 +70,59 @@ $environment = new ProductionEnvironment($clientId, $clientSecret);
 $client = new PayPalClient($environment);
 ```
 
-### Create a new Order
+## Usage
+
+### Create an Order
 
 ```php
-// import namespace
+// Import namespace
 use PayPal\Checkout\Http\OrderCreateRequest;
+use PayPal\Checkout\Orders\AmountBreakdown;
 use PayPal\Checkout\Orders\Item;
 use PayPal\Checkout\Orders\Order;
 use PayPal\Checkout\Orders\PurchaseUnit;
 
-// create a purchase unit with the total amount
-$purchase_unit = new PurchaseUnit('USD', 100.00);
-// create a new item
-$item = new Item('Item 1', 'USD', 100.00, 1);
-// add item to purchase unit
-$purchase_unit->addItem($item);
-// create a new order with intent to capture a payment
-$order = new Order('CAPTURE');
-// add a purchase unit to order
+// Create a purchase unit with the total amount
+$purchase_unit = new PurchaseUnit(AmountBreakdown::of('100.00'));
+
+// Create & add item to purchase unit
+$purchase_unit->addItem(Item::make('Item 1', '100.00', 'USD', 1));
+
+// Create a new order with intent to capture a payment
+$order = new Order();
+
+// Add a purchase unit to order
 $order->addPurchaseUnit($purchase_unit);
 
-// create an order create http request
+// Create an order create http request
 $request = new OrderCreateRequest($order);
-// send request to paypal
+
+// Send request to PayPal
 $response = $client->send($request);
-// parse result
+
+// Parse result
 $result = json_decode((string) $response->getBody());
 echo $result->id; // id of the created order
+echo $result->intent; // CAPTURE
+echo $result->status; // CREATED
+```
+
+### Capture an Order
+
+```php
+// Import namespace
+use PayPal\Checkout\Http\OrderCaptureRequest;
+
+// Create an order capture http request
+$request = new OrderCaptureRequest($order_id);
+
+// Send request to PayPal
+$response = $client->send($request);
+
+// Parse result
+$result = json_decode((string) $response->getBody());
+echo $result->id; // id of the captured order
+echo $result->status; // CAPTURED
 ```
 
 ## Change log
