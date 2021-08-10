@@ -21,7 +21,7 @@ $order = (new Order())->addPurchaseUnit($purchase_unit);
 $response = $client->send(new OrderCreateRequest($order));
 ```
 
-### Capture an Order
+## Capture an Order
 
 ```php
 // Create an order capture http request
