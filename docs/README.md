@@ -1,6 +1,6 @@
 # Introduction
 
-This Package is a php sdk wrapper around the version 2 of PayPal rest API. It provides a simple, fluent API to create
+This Package is a PHP SDK wrapper around version 2 of the PayPal rest API. It provides a simple, fluent API to create
 and capture orders with both sandbox and production environments supported.
 
 Here are some quick code examples:
