@@ -6,7 +6,8 @@
 [![Total Downloads](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/downloads)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
 [![License](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/license)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
 
-PayPal Checkout SDK is a wrapper around the V2 PayPal rest API.
+This Package is a PHP SDK wrapper around version 2 of the PayPal rest API. It provides a simple, fluent API to create
+and capture orders with both sandbox and production environments supported.
 
 ## Installation
 
@@ -34,7 +35,7 @@ generating a REST API app. Get Client ID and Secret from there.
 
 Inorder to communicate with PayPal platform we need to set up a client first :
 
-- Create a client with sandbox environment :
+#### Create a client with sandbox environment :
 
 ```php
 // import namespace
@@ -52,7 +53,7 @@ $environment = new SandboxEnvironment($clientId, $clientSecret);
 $client = new PayPalClient($environment);
 ```
 
-- Create a client with production environment :
+#### Create a client with production environment :
 
 ```php
 // import namespace
@@ -125,7 +126,7 @@ echo $result->id; // id of the captured order
 echo $result->status; // CAPTURED
 ```
 
-## Change log
+## Changelog
 
 Please see the [changelog](changelog.md) for more information on what has changed recently.
 
@@ -140,6 +141,7 @@ If you discover any security related issues, please email author instead of usin
 ## Credits
 
 - [PayPal Docs](https://developer.paypal.com/docs/)
+- [Gitbook](https://www.gitbook.com/)
 
 ## License
 
