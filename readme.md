@@ -1,6 +1,6 @@
 # PayPal Checkout SDK
 
-![PHP Composer](https://github.com/phpjuice/paypal-checkout-sdk/workflows/PHP%20Composer/badge.svg?branch=master)
+![Tests](https://github.com/phpjuice/paypal-checkout-sdk/workflows/Tests/badge.svg?branch=master)
 [![Build Status](https://travis-ci.com/phpjuice/paypal-checkout-sdk.svg?branch=master)](https://travis-ci.com/phpjuice/paypal-checkout-sdk)
 [![Latest Stable Version](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/v)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk) 
 [![Total Downloads](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/downloads)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
@@ -120,7 +120,7 @@ If you discover any security related issues, please email author instead of usin
 license. Please see the [Licence](https://github.com/phpjuice/paypal-checkout-sdk/blob/master/LICENSE) for more
 information.
 
-![PHP Composer](https://github.com/phpjuice/paypal-checkout-sdk/workflows/PHP%20Composer/badge.svg?branch=master)
+![Tests](https://github.com/phpjuice/paypal-checkout-sdk/workflows/Tests/badge.svg?branch=master)
 [![Build Status](https://travis-ci.com/phpjuice/paypal-checkout-sdk.svg?branch=master)](https://travis-ci.com/phpjuice/paypal-checkout-sdk)
 [![Latest Stable Version](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/v)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk) 
 [![Total Downloads](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/downloads)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
