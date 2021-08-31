@@ -1,6 +1,11 @@
-/vendor
-/.idea
-/.vscode
-.env
-.phpunit.result.cache
+.idea
+.php_cs
 .php_cs.cache
+.phpunit.result.cache
+build
+coverage
+psalm.xml
+testbench.yaml
+vendor
+.php-cs-fixer.cache
+.phpunit.cache

@@ -5,7 +5,7 @@ All notable changes to `phpjuice/paypal-checkout-sdk` will be documented in this
 ## Version 1.2.0
 
 ### Changed
-fix amount breakdown to include discount #12
+- fix amount breakdown to include discount #12
 
 ### Removed
 - Removed `setValue` & `setCurrencyCode` from `Amount.php`

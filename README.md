@@ -132,7 +132,7 @@ Please see the [changelog](changelog.md) for more information on what has change
 
 ## Contributing
 
-Please see [contributing.md](contributing.md) for details and a todo list.
+Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for details and a todo list.
 
 ## Security
 
