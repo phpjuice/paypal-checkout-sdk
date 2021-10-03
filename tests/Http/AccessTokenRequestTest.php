@@ -1,4 +1,7 @@
-<?php /** @noinspection SpellCheckingInspection */
+<?php
+/** @noinspection PhpUnhandledExceptionInspection */
+
+/** @noinspection SpellCheckingInspection */
 
 namespace Tests\Http;
 
@@ -57,8 +60,10 @@ it('can excute a request', function () {
 
     expect($response->getStatusCode())->toBe(200);
 
-    $body = Utils::jsonDecode((string) $response->getBody());
-    expect($body->access_token)->toBe('A21AAFSO5otrlVigoJUQ1p');
-    expect($body->token_type)->toBe('Bearer');
-    expect($body->expires_in)->toBe(32400);
+    $result = Utils::jsonDecode((string) $response->getBody(), true);
+    expect($result)->toBe([
+        'access_token' => 'A21AAFSO5otrlVigoJUQ1p',
+        'token_type' => 'Bearer',
+        'expires_in' => 32400,
+    ]);
 });
