@@ -1,138 +1,102 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Tests\Orders;
 
-use Brick\Money\Exception\UnknownCurrencyException;
 use PayPal\Checkout\Exceptions\InvalidItemCategoryException;
 use PayPal\Checkout\Orders\Amount;
 use PayPal\Checkout\Orders\Item;
-use PHPUnit\Framework\TestCase;
 
-class ItemTest extends TestCase
-{
-    /**
-     * @throws UnknownCurrencyException
-     * @test
-     */
-    public function canInitializeNewItem()
-    {
-        // Arrange
-        $value = "100.00";
-        $currency_code = "USD";
-        $amount = new Amount($value, $currency_code);
+it("can initialize new item", function () {
+    // Arrange
+    $value = "100.00";
+    $currency_code = "USD";
+    $amount = new Amount($value, $currency_code);
 
-        // Act
-        $item = new Item('Item 1', $amount, 1);
+    // Act
+    $item = new Item('Item 1', $amount, 1);
 
-        // Assert
-        $this->assertEquals('Item 1', $item->getName());
-        $this->assertEquals(1, $item->getQuantity());
-    }
+    // Assert
+    expect($item->getName())->toBe('Item 1');
+    expect($item->getQuantity())->toBe(1);
+});
 
-    /**
-     * @throws UnknownCurrencyException
-     * @test
-     */
-    public function canMakeItem()
-    {
-        // Arrange
-        $value = "100.00";
-        $currency_code = "USD";
 
-        // Act
-        $item = Item::make('Item 1', $value, $currency_code, 2);
+it("can create new item", function () {
+    // Arrange
+    $value = "100.00";
+    $currency_code = "USD";
 
-        // Assert
-        $this->assertInstanceOf(Item::class, $item);
-        $this->assertEquals('Item 1', $item->getName());
-        $this->assertEquals(2, $item->getQuantity());
-    }
+    // Act
+    $item = Item::create('Item 1', $value, $currency_code, 2);
 
-    /**
-     * @throws UnknownCurrencyException
-     * @test
-     */
-    public function canCastToArray()
-    {
-        // Arrange
-        $expected = [
-            'name' => 'Item 1',
-            'unit_amount' => [
-                'currency_code' => 'CAD',
-                'value' => '100.00',
-            ],
-            'quantity' => 2,
-            'description' => 'Item Description',
-            'category' => 'DIGITAL_GOODS',
-        ];
+    // Assert
+    expect($item)->toBeInstanceOf(Item::class);
+    expect($item->getName())->toBe('Item 1');
+    expect($item->getQuantity())->toBe(2);
+});
 
-        // Act
-        $item = Item::make('Item 1', "100.00", "CAD");
-        $item->setDescription('Item Description')
-            ->setQuantity(2);
+it("can cast to an array", function () {
+    // Arrange
+    $expected = [
+        'name' => 'Item 1',
+        'unit_amount' => [
+            'currency_code' => 'CAD',
+            'value' => '100.00',
+        ],
+        'quantity' => 2,
+        'description' => 'Item Description',
+        'category' => 'DIGITAL_GOODS',
+    ];
 
-        // Assert
-        $this->assertEquals($expected, $item->toArray());
-    }
+    // Act
+    $item = Item::create('Item 1', "100.00", "CAD");
+    $item->setDescription('Item Description')
+        ->setQuantity(2);
 
-    /**
-     * @throws UnknownCurrencyException
-     * @test
-     */
-    public function canCastToJson()
-    {
-        // Arrange
-        $expected = json_encode([
-            'name' => 'Item 1',
-            'unit_amount' => [
-                'currency_code' => 'CAD',
-                'value' => '100.00',
-            ],
-            'quantity' => 2,
-            'description' => 'Item Description',
-            'category' => 'DIGITAL_GOODS',
-        ]);
+    // Assert
+    expect($item->toArray())->toBe($expected);
+});
 
-        // Act
-        $item = Item::make('Item 1', "100.00", "CAD");
-        $item->setDescription('Item Description')
-            ->setQuantity(2);
 
-        // Assert
-        $this->assertJsonStringEqualsJsonString($expected, $item->toJson());
-    }
+it("can cast to json", function () {
+    // Arrange
+    $expected = json_encode([
+        'name' => 'Item 1',
+        'unit_amount' => [
+            'currency_code' => 'CAD',
+            'value' => '100.00',
+        ],
+        'quantity' => 2,
+        'description' => 'Item Description',
+        'category' => 'DIGITAL_GOODS',
+    ]);
 
-    /**
-     * @throws UnknownCurrencyException
-     * @test
-     */
-    public function canNotAcceptInvalidItemCategory()
-    {
-        // Arrange
-        $this->expectException(InvalidItemCategoryException::class);
-        $this->expectExceptionMessage(<<<'MSG'
-Item category is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#definition-item.
-MSG
-        );
+    // Act
+    $item = Item::create('Item 1', "100.00", "CAD");
+    $item->setDescription('Item Description')
+        ->setQuantity(2);
 
-        // Act
-        $item = Item::make('Item', '100.00', 'CAD', 2);
-        $item->setCategory('invalid category');
-    }
+    // Assert
+    expect($item->toJson())->toBe($expected);
+});
 
-    /**
-     * @throws UnknownCurrencyException
-     * @test
-     */
-    public function canReturnItemSku()
-    {
-        // Arrange
-        $item = Item::make('Item', '100.00', 'CAD', 2);
+it("throws an exception when setting invalid category", function () {
+    // Act
+    $item = Item::create('Item', '100.00', 'CAD', 2);
+    $item->setCategory('invalid category');
+})->throws(
+    InvalidItemCategoryException::class,
+    'Item category is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#definition-item.'
+);
 
-        // Act
-        $item->setSku('123456789');
+it("returns item sku", function () {
+    // Arrange
+    $item = Item::create('Item', '100.00', 'CAD', 2);
 
-        // Assert
-        $this->assertEquals('123456789', $item->getSku());
-    }
-}
+    // Act
+    $item->setSku('123456789');
+
+    // Assert
+    expect($item->getSku())->toBe('123456789');
+});

@@ -87,7 +87,7 @@ use PayPal\Checkout\Orders\PurchaseUnit;
 $purchase_unit = new PurchaseUnit(AmountBreakdown::of('100.00'));
 
 // Create & add item to purchase unit
-$purchase_unit->addItem(Item::make('Item 1', '100.00', 'USD', 1));
+$purchase_unit->addItem(Item::create('Item 1', '100.00', 'USD', 1));
 
 // Create a new order with intent to capture a payment
 $order = new Order();

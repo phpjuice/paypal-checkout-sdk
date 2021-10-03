@@ -32,7 +32,7 @@ it("has correct request body", function () {
     $amount = AmountBreakdown::of('100.00');
     $purchase_unit = new PurchaseUnit($amount);
     /** @noinspection PhpUnhandledExceptionInspection */
-    $purchase_unit->addItem(Item::make('Item 1', '100.00'));
+    $purchase_unit->addItem(Item::create('Item 1', '100.00'));
 
     $application_context = new ApplicationContext('Paypal Inc', 'en');
     $application_context->setUserAction('PAY_NOW');
@@ -57,7 +57,7 @@ it("can execute request", function () {
     $amount = AmountBreakdown::of('100.00');
     $purchase_unit = new PurchaseUnit($amount);
     /** @noinspection PhpUnhandledExceptionInspection */
-    $purchase_unit->addItem(Item::make('Item 1', '100.00'));
+    $purchase_unit->addItem(Item::create('Item 1', '100.00'));
 
     $application_context = new ApplicationContext('Paypal Inc', 'en');
     $application_context->setUserAction('PAY_NOW');

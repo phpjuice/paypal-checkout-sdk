@@ -89,7 +89,7 @@ class Item implements Arrayable, Jsonable
      * create a new item instance.
      * @throws UnknownCurrencyException
      */
-    public static function make(string $name, string $value, string $currency_code = 'USD', int $quantity = 1): Item
+    public static function create(string $name, string $value, string $currency_code = 'USD', int $quantity = 1): Item
     {
         $amount = Amount::of($value, $currency_code);
         return new self($name, $amount, $quantity);

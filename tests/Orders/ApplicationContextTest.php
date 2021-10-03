@@ -6,176 +6,156 @@ use PayPal\Checkout\Exceptions\InvalidLandingPageException;
 use PayPal\Checkout\Exceptions\InvalidShippingPreferenceException;
 use PayPal\Checkout\Exceptions\InvalidUserActionException;
 use PayPal\Checkout\Orders\ApplicationContext;
-use PHPUnit\Framework\TestCase;
 
-class ApplicationContextTest extends TestCase
-{
-    public function testSetInvalidUserAction()
-    {
-        $this->expectException(InvalidUserActionException::class);
-        $this->expectExceptionMessage('User Action provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context.');
+it("throws an exception when setting invalid user action", function () {
+    $applicationContext = new ApplicationContext();
+    $applicationContext->setUserAction('invalid user action');
+})->throws(
+    InvalidUserActionException::class,
+    // phpcs:ignore
+    'User Action provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context.'
+);
 
-        $applicationContext = new ApplicationContext();
-        $applicationContext->setUserAction('invalid user action');
-    }
+it("can set a valid user action", function () {
+    $applicationContext = new ApplicationContext();
+    $applicationContext->setUserAction('PAY_NOW');
+    expect($applicationContext->getUserAction())->toBe('PAY_NOW');
+    $applicationContext->setUserAction('CONTINUE');
+    expect($applicationContext->getUserAction())->toBe('CONTINUE');
+});
 
-    public function testSetValidUserAction()
-    {
-        $applicationContext = new ApplicationContext();
-        $applicationContext->setUserAction('PAY_NOW');
-        $this->assertEquals('PAY_NOW', $applicationContext->getUserAction());
-        $applicationContext->setUserAction('CONTINUE');
-        $this->assertEquals('CONTINUE', $applicationContext->getUserAction());
-    }
+it("throws an exception when setting invalid shipping preferences", function () {
+    $applicationContext = new ApplicationContext();
+    $applicationContext->setShippingPreference('invalid shipping preference');
+})->throws(
+    InvalidShippingPreferenceException::class,
+    // phpcs:ignore
+    'Shipping preference provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context.'
+);
 
-    public function testSetInvalidShippingPreferences()
-    {
-        $this->expectException(InvalidShippingPreferenceException::class);
-        $this->expectExceptionMessage('Shipping preference provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context.');
+it("can set shipping preferences", function () {
+    $applicationContext = new ApplicationContext();
+    expect($applicationContext->getShippingPreference())->toBe('NO_SHIPPING');
+    $applicationContext->setShippingPreference('GET_FROM_FILE');
+    expect($applicationContext->getShippingPreference())->toBe('GET_FROM_FILE');
+    $applicationContext->setShippingPreference('NO_SHIPPING');
+    expect($applicationContext->getShippingPreference())->toBe('NO_SHIPPING');
+    $applicationContext->setShippingPreference('SET_PROVIDED_ADDRESS');
+    expect($applicationContext->getShippingPreference())->toBe('SET_PROVIDED_ADDRESS');
+});
 
-        $applicationContext = new ApplicationContext();
-        $applicationContext->setShippingPreference('invalid shipping preference');
-    }
+it("throws an exception when setting invalid landing page", function () {
+    $applicationContext = new ApplicationContext();
+    $applicationContext->setLandingPage('invalid landing page');
+})->throws(
+    InvalidLandingPageException::class,
+    // phpcs:ignore
+    'Landing page provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context.' //
+);
 
-    public function testSetValidShippingPreferences()
-    {
-        $applicationContext = new ApplicationContext();
-        $this->assertEquals('NO_SHIPPING', $applicationContext->getShippingPreference());
-        $applicationContext->setShippingPreference('GET_FROM_FILE');
-        $this->assertEquals('GET_FROM_FILE', $applicationContext->getShippingPreference());
-        $applicationContext->setShippingPreference('NO_SHIPPING');
-        $this->assertEquals('NO_SHIPPING', $applicationContext->getShippingPreference());
-        $applicationContext->setShippingPreference('SET_PROVIDED_ADDRESS');
-        $this->assertEquals('SET_PROVIDED_ADDRESS', $applicationContext->getShippingPreference());
-    }
+it("can set landing page", function () {
+    $applicationContext = new ApplicationContext();
+    expect($applicationContext->getLandingPage())->toBe('NO_PREFERENCE');
+    $applicationContext->setLandingPage('LOGIN');
+    expect($applicationContext->getLandingPage())->toBe('LOGIN');
+    $applicationContext->setLandingPage('BILLING');
+    expect($applicationContext->getLandingPage())->toBe('BILLING');
+    $applicationContext->setLandingPage('NO_PREFERENCE');
+    expect($applicationContext->getLandingPage())->toBe('NO_PREFERENCE');
+});
 
-    public function testSetInvalidLandingPage()
-    {
-        $this->expectException(InvalidLandingPageException::class);
-        $this->expectExceptionMessage('Landing page provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context.');
+it("can set locale", function () {
+    // Act
+    $applicationContext = new ApplicationContext();
+    // Assert
+    expect($applicationContext->getLocale())->toBe('en-US');
 
-        $applicationContext = new ApplicationContext();
-        $applicationContext->setLandingPage('invalid landing page');
-    }
+    // Act
+    $applicationContext->setLocale('fr');
+    // Assert
+    expect($applicationContext->getLocale())->toBe('fr');
+});
 
-    public function testSetValidLandingPage()
-    {
-        $applicationContext = new ApplicationContext();
-        $this->assertEquals('NO_PREFERENCE', $applicationContext->getLandingPage());
-        $applicationContext->setLandingPage('LOGIN');
-        $this->assertEquals('LOGIN', $applicationContext->getLandingPage());
-        $applicationContext->setLandingPage('BILLING');
-        $this->assertEquals('BILLING', $applicationContext->getLandingPage());
-        $applicationContext->setLandingPage('NO_PREFERENCE');
-        $this->assertEquals('NO_PREFERENCE', $applicationContext->getLandingPage());
-    }
+it("can set return and cancel urls", function () {
+    // Act
+    $applicationContext = new ApplicationContext();
 
-    public function testSetsLocale()
-    {
-        // Act
-        $applicationContext = new ApplicationContext();
-        // Assert
-        $this->assertEquals('en-US', $applicationContext->getLocale());
+    // Assert
+    expect($applicationContext->getReturnUrl())->toBeNull();
+    expect($applicationContext->getCancelUrl())->toBeNull();
 
-        // Act
-        $applicationContext->setLocale('fr');
-        // Assert
-        $this->assertEquals('fr', $applicationContext->getLocale());
-    }
+    // Act
+    $applicationContext->setReturnUrl('test return url');
+    $applicationContext->setCancelUrl('test cancel url');
 
-    public function testSetsUrls()
-    {
-        // Act
-        $applicationContext = new ApplicationContext();
+    // Assert
+    expect($applicationContext->getReturnUrl())->toBe('test return url');
+    expect($applicationContext->getCancelUrl())->toBe('test cancel url');
+});
 
-        // Assert
-        $this->assertEquals(null, $applicationContext->getReturnUrl());
-        $this->assertEquals(null, $applicationContext->getCancelUrl());
 
-        // Act
-        $applicationContext->setReturnUrl('test return url');
-        $applicationContext->setCancelUrl('test cancel url');
+it("can cast to an array with no null values", function () {
+    // Arrange
+    $expected = [
+        'locale' => 'en-US',
+        'shipping_preference' => 'NO_SHIPPING',
+        'landing_page' => 'NO_PREFERENCE',
+        'user_action' => 'CONTINUE',
+    ];
 
-        // Assert
-        $this->assertEquals('test return url', $applicationContext->getReturnUrl());
-        $this->assertEquals('test cancel url', $applicationContext->getCancelUrl());
-    }
+    // Act
+    $applicationContext = new ApplicationContext();
 
-    /**
-     * @test
-     */
-    public function canCastToArrayWithNoNullValues()
-    {
-        // Arrange
-        $expected = [
-            'locale' => 'en-US',
-            'shipping_preference' => 'NO_SHIPPING',
-            'landing_page' => 'NO_PREFERENCE',
-            'user_action' => 'CONTINUE',
-        ];
+    // Assert
+    expect($applicationContext->toArray())->toBe($expected);
+});
 
-        // Act
-        $applicationContext = new ApplicationContext();
+it("can cast to an array", function () {
+    // Arrange
+    $expected = [
+        'brand_name' => 'Paypal Inc',
+        'locale' => 'fr',
+        'shipping_preference' => 'GET_FROM_FILE',
+        'landing_page' => 'BILLING',
+        'user_action' => 'PAY_NOW',
+        'return_url' => 'https://site.com/payment/return',
+        'cancel_url' => 'https://site.com/payment/cancel',
+    ];
 
-        // Assert
-        $this->assertEquals($expected, $applicationContext->toArray());
-    }
+    // Act
+    $applicationContext = new ApplicationContext('Paypal Inc');
+    $applicationContext->setCancelUrl('https://site.com/payment/cancel');
+    $applicationContext->setReturnUrl('https://site.com/payment/return');
+    $applicationContext->setLocale('fr');
+    $applicationContext->setShippingPreference('GET_FROM_FILE');
+    $applicationContext->setLandingPage('BILLING');
+    $applicationContext->setUserAction('PAY_NOW');
 
-    /**
-     * @test
-     */
-    public function canCastToArray()
-    {
-        // Arrange
-        $expected = [
-            'brand_name' => 'Paypal Inc',
-            'locale' => 'fr',
-            'shipping_preference' => 'GET_FROM_FILE',
-            'landing_page' => 'BILLING',
-            'user_action' => 'PAY_NOW',
-            'return_url' => 'https://site.com/payment/return',
-            'cancel_url' => 'https://site.com/payment/cancel',
-        ];
+    // Assert
+    expect($applicationContext->toArray())->toBe($expected);
+});
 
-        // Act
-        $applicationContext = new ApplicationContext('Paypal Inc');
-        $applicationContext->setCancelUrl('https://site.com/payment/cancel');
-        $applicationContext->setReturnUrl('https://site.com/payment/return');
-        $applicationContext->setLocale('fr');
-        $applicationContext->setShippingPreference('GET_FROM_FILE');
-        $applicationContext->setLandingPage('BILLING');
-        $applicationContext->setUserAction('PAY_NOW');
+it("can cast to json", function () {
+    // Arrange
+    $expected = json_encode([
+        'brand_name' => 'Paypal Inc',
+        'locale' => 'fr',
+        'shipping_preference' => 'GET_FROM_FILE',
+        'landing_page' => 'BILLING',
+        'user_action' => 'PAY_NOW',
+        'return_url' => 'https://site.com/payment/return',
+        'cancel_url' => 'https://site.com/payment/cancel',
+    ]);
 
-        // Assert
-        $this->assertEquals($expected, $applicationContext->toArray());
-    }
+    // Act
+    $applicationContext = new ApplicationContext('Paypal Inc');
+    $applicationContext->setCancelUrl('https://site.com/payment/cancel');
+    $applicationContext->setReturnUrl('https://site.com/payment/return');
+    $applicationContext->setLocale('fr');
+    $applicationContext->setShippingPreference('GET_FROM_FILE');
+    $applicationContext->setLandingPage('BILLING');
+    $applicationContext->setUserAction('PAY_NOW');
 
-    /**
-     * @test
-     */
-    public function canCastToJson()
-    {
-        // Arrange
-        $expected = json_encode([
-            'brand_name' => 'Paypal Inc',
-            'locale' => 'fr',
-            'shipping_preference' => 'GET_FROM_FILE',
-            'landing_page' => 'BILLING',
-            'user_action' => 'PAY_NOW',
-            'return_url' => 'https://site.com/payment/return',
-            'cancel_url' => 'https://site.com/payment/cancel',
-        ]);
-
-        // Act
-        $applicationContext = new ApplicationContext('Paypal Inc');
-        $applicationContext->setCancelUrl('https://site.com/payment/cancel');
-        $applicationContext->setReturnUrl('https://site.com/payment/return');
-        $applicationContext->setLocale('fr');
-        $applicationContext->setShippingPreference('GET_FROM_FILE');
-        $applicationContext->setLandingPage('BILLING');
-        $applicationContext->setUserAction('PAY_NOW');
-
-        // Assert
-        $this->assertJsonStringEqualsJsonString($expected, $applicationContext->toJson());
-    }
-}
+    // Assert
+    expect($applicationContext->toJson())->toBe($expected);
+});

@@ -56,7 +56,7 @@ class PurchaseUnitTest extends TestCase
         $purchase_unit = new PurchaseUnit($amount);
 
         // Act
-        $purchase_unit->addItem(Item::make('Item 1', '100.00', 'CAD', 2));
+        $purchase_unit->addItem(Item::create('Item 1', '100.00', 'CAD', 2));
 
         // Assert
         $this->assertCount(1, $purchase_unit->getItems());
@@ -72,7 +72,7 @@ class PurchaseUnitTest extends TestCase
         $amount = AmountBreakdown::of('100', 'CAD');
         $purchase_unit = new PurchaseUnit($amount);
         $items = array_map(function ($index) {
-            return Item::make("Item $index", '100.00', 'CAD', $index);
+            return Item::create("Item $index", '100.00', 'CAD', $index);
         }, [1, 2, 3]);
 
         // Act
@@ -95,7 +95,7 @@ class PurchaseUnitTest extends TestCase
         $purchase_unit = new PurchaseUnit($amount);
 
         // Act
-        $item = Item::make('Item', '100', 'EUR', 2);
+        $item = Item::create('Item', '100', 'EUR', 2);
 
         $purchase_unit->addItem($item);
     }
