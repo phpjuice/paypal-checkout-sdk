@@ -39,7 +39,7 @@ class Payee implements Arrayable, Jsonable
     /**
      * create a new payee instance.
      */
-    public static function make(string $email_address, string $merchant_id): Payee
+    public static function create(string $email_address, string $merchant_id): Payee
     {
         return new self($email_address, $merchant_id);
     }

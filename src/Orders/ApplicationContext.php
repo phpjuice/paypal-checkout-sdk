@@ -142,7 +142,7 @@ class ApplicationContext implements Arrayable, Jsonable
      * @param  string|null  $cancel_url
      * @return ApplicationContext
      */
-    public static function make(
+    public static function create(
         ?string $brand_name = null,
         ?string $locale = 'en-US',
         ?string $landing_page = NO_PREFERENCE,
