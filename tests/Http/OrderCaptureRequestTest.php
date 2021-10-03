@@ -3,64 +3,45 @@
 namespace Tests\Http;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Utils;
 use PayPal\Checkout\Http\OrderCaptureRequest;
-use PHPUnit\Framework\TestCase;
 
-class OrderCaptureRequestTest extends TestCase
-{
-    /**
-     * @test
-     */
-    public function testHasCorrectUri()
-    {
-        $request = new OrderCaptureRequest('1KC5501443316171H');
-        $this->assertEquals('/v2/checkout/orders/1KC5501443316171H/capture', $request->getUri());
-    }
+it("has correct request uri", function () {
+    $request = new OrderCaptureRequest('1KC5501443316171H');
+    expect((string) $request->getUri())->toBe('/v2/checkout/orders/1KC5501443316171H/capture');
+});
 
-    /**
-     * @test
-     */
-    public function testHasCorrectMethod()
-    {
-        $request = new OrderCaptureRequest('1KC5501443316171H');
-        $this->assertEquals('POST', $request->getMethod());
-    }
+it("has correct request method", function () {
+    $request = new OrderCaptureRequest('1KC5501443316171H');
+    expect($request->getMethod())->toBe('POST');
+});
 
-    /**
-     * @test
-     */
-    public function testHasCorrectHeaders()
-    {
-        $request = new OrderCaptureRequest('1KC5501443316171H');
-        $this->assertEquals('application/json', $request->getHeaderLine('Content-Type'));
-        $this->assertEquals('return=representation', $request->getHeaderLine('Prefer'));
-    }
+it("has correct request headers", function () {
+    $request = new OrderCaptureRequest('1KC5501443316171H');
 
-    /**
-     * @test
-     * @throws GuzzleException
-     */
-    public function testExecuteRequest()
-    {
-        $mockResponse = Utils::jsonEncode([
-            'id' => '1KC5501443316171H',
-        ]);
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], $mockResponse),
-        ]);
-        $handlerStack = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handlerStack]);
+    expect($request->getHeaderLine('Content-Type'))->toBe('application/json');
+    expect($request->getHeaderLine('Prefer'))->toBe('return=representation');
+});
 
-        $response = $client->send(new OrderCaptureRequest('1KC5501443316171H'));
+it("can execute request", function () {
+    $mockResponse = Utils::jsonEncode([
+        'id' => '1KC5501443316171H',
+    ]);
+    $mock = new MockHandler([
+        new Response(200, ['Content-Type' => 'application/json'], $mockResponse),
+    ]);
+    $handlerStack = HandlerStack::create($mock);
+    $client = new Client(['handler' => $handlerStack]);
 
-        $this->assertEquals(200, $response->getStatusCode());
+    /** @noinspection PhpUnhandledExceptionInspection */
+    $response = $client->send(new OrderCaptureRequest('1KC5501443316171H'));
 
-        $result = Utils::jsonDecode((string) $response->getBody());
-        $this->assertEquals('1KC5501443316171H', $result->id);
-    }
-}
+    expect($response->getStatusCode())->toBe(200);
+
+    $result = Utils::jsonDecode((string) $response->getBody(), true);
+
+    expect($result['id'])->toBe('1KC5501443316171H');
+});

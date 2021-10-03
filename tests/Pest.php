@@ -1,5 +1,11 @@
 <?php
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Utils;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -34,3 +40,17 @@
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
+
+function mockCreateOrderResponse(): Client
+{
+    $mockResponse = Utils::jsonEncode([
+        'id' => '1KC5501443316171H',
+        'intent' => 'CAPTURE',
+        'status' => 'CREATED',
+    ]);
+    $mock = new MockHandler([
+        new Response(200, ['Content-Type' => 'application/json'], $mockResponse),
+    ]);
+    $handlerStack = HandlerStack::create($mock);
+    return new Client(['handler' => $handlerStack]);
+}

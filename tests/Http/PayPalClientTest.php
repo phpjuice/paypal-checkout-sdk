@@ -3,7 +3,6 @@
 namespace Tests\Http;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -13,167 +12,135 @@ use PayPal\Checkout\Environment\SandboxEnvironment;
 use PayPal\Checkout\Http\AccessTokenRequest;
 use PayPal\Checkout\Http\OrderCaptureRequest;
 use PayPal\Checkout\Http\PayPalClient;
-use PHPUnit\Framework\TestCase;
 
-class PayPalClientTest extends TestCase
-{
-    /**
-     * @var ProductionEnvironment
-     */
-    protected $environment = null;
+it("fetches access token", function () {
+    $env = new ProductionEnvironment('client_id', 'client_secret');
+    $paypalClient = new PayPalClient($env);
+    $paypalClient->setClient($this->client);
+    /** @noinspection PhpUnhandledExceptionInspection */
+    $accessToken = $paypalClient->fetchAccessToken();
+    expect($accessToken->authorizationString())->toBe('Bearer A21AAFSO5otrlVigoJUQ1p');
+});
 
-    protected $httpClient;
+it("has authorization header", function () {
+    $env = new ProductionEnvironment('client_id', 'client_secret');
+    $paypalClient = new PayPalClient($env);
+    $paypalClient->setClient($this->client);
 
-    /**
-     * @test
-     * @throws GuzzleException
-     */
-    public function testFetchAccessToken()
-    {
-        $paypalClient = new PayPalClient($this->environment);
-        $paypalClient->setClient($this->httpClient);
-        $accessToken = $paypalClient->fetchAccessToken();
-        $this->assertEquals('Bearer A21AAFSO5otrlVigoJUQ1p', $accessToken->authorizationString());
-    }
+    $request = new AccessTokenRequest($env);
+    expect($paypalClient->hasAuthHeader($request))->toBeTrue();
 
-    /**
-     * @test
-     */
-    public function testHasAuthorizationHeader()
-    {
-        $paypalClient = new PayPalClient($this->environment);
-        $paypalClient->setClient($this->httpClient);
+    $request = new OrderCaptureRequest('1KC5501443316171H');
 
-        $request = new AccessTokenRequest($this->environment);
+    expect($paypalClient->hasAuthHeader($request))->toBeFalse();
+});
 
-        $this->assertTrue($paypalClient->hasAuthHeader($request));
 
-        $request = new OrderCaptureRequest('1KC5501443316171H');
+it("has all sdk headers on production", function () {
+    $env = new ProductionEnvironment('client_id', 'client_secret');
+    $paypalClient = new PayPalClient($env);
+    $paypalClient->setClient($this->client);
 
-        $this->assertFalse($paypalClient->hasAuthHeader($request));
-    }
+    $request = new AccessTokenRequest($env);
+    $request = $paypalClient->injectSdkHeaders($request);
+    expect($request->getHeaders())->toBe([
+        'Authorization' => [
+            'Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ=',
+        ],
+        'Accept' => [
+            'application/json',
+        ],
+        'Content-Type' => [
+            'application/x-www-form-urlencoded',
+        ],
+        'sdk_name' => [
+            'Checkout SDK',
+        ],
+        'sdk_version' => [
+            '1.0.0',
+        ],
+        'sdk_tech_stack' => [
+            'PHP '.PHP_VERSION,
+        ],
+    ]);
+});
 
-    /**
-     * @test
-     */
-    public function testHasAllSdkHeadersOnProduction()
-    {
-        $env = new ProductionEnvironment('client_id', 'client_secret');
 
-        $paypalClient = new PayPalClient($env);
-        $paypalClient->setClient($this->httpClient);
+it("has only a subset of sdk headers on sandbox", function () {
+    $env = new SandboxEnvironment('client_id', 'client_secret');
+    $paypalClient = new PayPalClient($env);
+    $paypalClient->setClient($this->client);
 
-        $request = new AccessTokenRequest($this->environment);
+    $request = new AccessTokenRequest($env);
+    $request = $paypalClient->injectSdkHeaders($request);
+    expect($request->getHeaders())->toBe([
+        'Authorization' => [
+            'Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ=',
+        ],
+        'Accept' => [
+            'application/json',
+        ],
+        'Content-Type' => [
+            'application/x-www-form-urlencoded',
+        ],
+        'sdk_name' => [
+            'Checkout SDK',
+        ],
+        'sdk_version' => [
+            '1.0.0',
+        ],
+    ]);
+});
 
-        $request = $paypalClient->injectSdkHeaders($request);
-        $this->assertEquals([
-            'Authorization' => [
-                'Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ=',
-            ],
-            'Accept' => [
-                'application/json',
-            ],
-            'Content-Type' => [
-                'application/x-www-form-urlencoded',
-            ],
-            'sdk_name' => [
-                'Checkout SDK',
-            ],
-            'sdk_version' => [
-                '1.0.0',
-            ],
-            'sdk_tech_stack' => [
-                'PHP '.PHP_VERSION,
-            ],
-        ], $request->getHeaders());
-    }
 
-    /**
-     * @test
-     */
-    public function testHasSubSetOfSdkHeadersOnSandbox()
-    {
-        $env = new SandboxEnvironment('client_id', 'client_secret');
+it("tests has invalid token method", function () {
+    $env = new ProductionEnvironment('client_id', 'client_secret');
+    $paypalClient = new PayPalClient($env);
+    $paypalClient->setClient($this->client);
 
-        $paypalClient = new PayPalClient($env);
-        $paypalClient->setClient($this->httpClient);
+    expect($paypalClient->hasInvalidToken())->toBeTrue();
 
-        $request = new AccessTokenRequest($this->environment);
+    /** @noinspection PhpUnhandledExceptionInspection */
+    $paypalClient->fetchAccessToken();
 
-        $request = $paypalClient->injectSdkHeaders($request);
-        $this->assertEquals([
-            'Authorization' => [
-                'Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ=',
-            ],
-            'Accept' => [
-                'application/json',
-            ],
-            'Content-Type' => [
-                'application/x-www-form-urlencoded',
-            ],
-            'sdk_name' => [
-                'Checkout SDK',
-            ],
-            'sdk_version' => [
-                '1.0.0',
-            ],
-        ], $request->getHeaders());
-    }
+    expect($paypalClient->hasInvalidToken())->toBeFalse();
+});
 
-    /**
-     * @test
-     * @throws GuzzleException
-     */
-    public function testHasInvalidToken()
-    {
-        $paypalClient = new PayPalClient($this->environment);
-        $paypalClient->setClient($this->httpClient);
 
-        $this->assertTrue($paypalClient->hasInvalidToken());
+it("can execute request", function () {
+    $env = new ProductionEnvironment('client_id', 'client_secret');
+    $paypalClient = new PayPalClient($env);
+    $paypalClient->setClient($this->client);
 
-        $paypalClient->fetchAccessToken();
+    $request = new OrderCaptureRequest('1KC5501443316171H');
 
-        $this->assertFalse($paypalClient->hasInvalidToken());
-    }
+    /** @noinspection PhpUnhandledExceptionInspection */
+    $response = $paypalClient->send($request);
 
-    /**
-     * @test
-     * @throws GuzzleException
-     */
-    public function testSendRequest()
-    {
-        $paypalClient = new PayPalClient($this->environment);
-        $paypalClient->setClient($this->httpClient);
+    $result = Utils::jsonDecode((string) $response->getBody(), true);
+    expect($result['id'])->toBe('1KC5501443316171H');
+});
 
-        $request = new OrderCaptureRequest('1KC5501443316171H');
 
-        $response = $paypalClient->send($request);
+beforeEach(function () {
+    $response1 = json_encode([
+        'access_token' => 'A21AAFSO5otrlVigoJUQ1p',
+        'token_type' => 'Bearer',
+        'expires_in' => 32400,
+    ]);
 
-        $result = Utils::jsonDecode((string) $response->getBody());
-        $this->assertEquals('1KC5501443316171H', $result->id);
-    }
+    $response2 = json_encode([
+        'id' => '1KC5501443316171H',
+        'intent' => 'CAPTURE',
+        'status' => 'CREATED',
+    ]);
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->environment = new ProductionEnvironment('client_id', 'client_secret');
+    $mock = new MockHandler([
+        new Response(200, ['Content-Type' => 'application/json'], $response1),
+        new Response(200, ['Content-Type' => 'application/json'], $response2),
+    ]);
 
-        $response1 = json_encode([
-            'access_token' => 'A21AAFSO5otrlVigoJUQ1p',
-            'token_type' => 'Bearer',
-            'expires_in' => 32400,
-        ]);
+    $handlerStack = HandlerStack::create($mock);
 
-        $response2 = json_encode([
-            'id' => '1KC5501443316171H',
-            'intent' => 'CAPTURE',
-            'status' => 'CREATED',
-        ]);
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], $response1),
-            new Response(200, ['Content-Type' => 'application/json'], $response2),
-        ]);
-        $handlerStack = HandlerStack::create($mock);
-        $this->httpClient = new Client(['handler' => $handlerStack]);
-    }
-}
+    $this->client = new Client(['handler' => $handlerStack]);
+});
