@@ -28,17 +28,33 @@ default, the response is minimal.
 {
     "id": "8F783829JA718493L",
     "intent": "CAPTURE",
-    "status": "CREATED",
+    "status": "COMPLETED",
     "purchase_units": [
         {
             "reference_id": "default",
             "amount": {
-                "currency_code": "USD",
-                "value": "100.00",
+                "currency_code": "CAD",
+                "value": "200.00",
                 "breakdown": {
                     "item_total": {
-                        "currency_code": "USD",
-                        "value": "100.00"
+                        "currency_code": "CAD",
+                        "value": "200.00"
+                    },
+                    "shipping": {
+                        "currency_code": "CAD",
+                        "value": "0.00"
+                    },
+                    "handling": {
+                        "currency_code": "CAD",
+                        "value": "0.00"
+                    },
+                    "insurance": {
+                        "currency_code": "CAD",
+                        "value": "0.00"
+                    },
+                    "shipping_discount": {
+                        "currency_code": "CAD",
+                        "value": "0.00"
                     }
                 }
             },
@@ -46,41 +62,94 @@ default, the response is minimal.
                 "email_address": "merchant@phpjuice.com",
                 "merchant_id": "ZCM7386XH4H6Q"
             },
+            "description": "My item description",
             "items": [
                 {
-                    "name": "Item 1",
+                    "name": "Item",
                     "unit_amount": {
-                        "currency_code": "USD",
+                        "currency_code": "CAD",
                         "value": "100.00"
                     },
-                    "quantity": "1",
-                    "description": "My item description",
-                    "category": "DIGITAL_GOODS"
+                    "tax": {
+                        "currency_code": "CAD",
+                        "value": "0.00"
+                    },
+                    "quantity": "2"
                 }
-            ]
+            ],
+            "payments": {
+                "captures": [
+                    {
+                        "id": "6SW93058HS0959910",
+                        "status": "COMPLETED",
+                        "amount": {
+                            "currency_code": "CAD",
+                            "value": "200.00"
+                        },
+                        "final_capture": true,
+                        "seller_protection": {
+                            "status": "ELIGIBLE",
+                            "dispute_categories": [
+                                "ITEM_NOT_RECEIVED",
+                                "UNAUTHORIZED_TRANSACTION"
+                            ]
+                        },
+                        "seller_receivable_breakdown": {
+                            "gross_amount": {
+                                "currency_code": "CAD",
+                                "value": "200.00"
+                            },
+                            "paypal_fee": {
+                                "currency_code": "CAD",
+                                "value": "6.10"
+                            },
+                            "net_amount": {
+                                "currency_code": "CAD",
+                                "value": "193.90"
+                            }
+                        },
+                        "links": [
+                            {
+                                "href": "https:\/\/api.sandbox.paypal.com\/v2\/payments\/captures\/6SW93058HS0959910",
+                                "rel": "self",
+                                "method": "GET"
+                            },
+                            {
+                                "href": "https:\/\/api.sandbox.paypal.com\/v2\/payments\/captures\/6SW93058HS0959910\/refund",
+                                "rel": "refund",
+                                "method": "POST"
+                            },
+                            {
+                                "href": "https:\/\/api.sandbox.paypal.com\/v2\/checkout\/orders\/8F783829JA718493L",
+                                "rel": "up",
+                                "method": "GET"
+                            }
+                        ],
+                        "create_time": "2021-10-04T16:19:27Z",
+                        "update_time": "2021-10-04T16:19:27Z"
+                    }
+                ]
+            }
         }
     ],
+    "payer": {
+        "name": {
+            "given_name": "John",
+            "surname": "Doe"
+        },
+        "email_address": "buyer@phpjuice.com",
+        "payer_id": "DCTWHLD9BMMMC",
+        "address": {
+            "country_code": "CA"
+        }
+    },
     "create_time": "2021-10-04T13:21:27Z",
+    "update_time": "2021-10-04T16:19:27Z",
     "links": [
         {
-            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/8F783829JA718493L",
+            "href": "https:\/\/api.sandbox.paypal.com\/v2\/checkout\/orders\/8F783829JA718493L",
             "rel": "self",
             "method": "GET"
-        },
-        {
-            "href": "https://www.sandbox.paypal.com/checkoutnow?token=8F783829JA718493L",
-            "rel": "approve",
-            "method": "GET"
-        },
-        {
-            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/8F783829JA718493L",
-            "rel": "update",
-            "method": "PATCH"
-        },
-        {
-            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/8F783829JA718493L/capture",
-            "rel": "capture",
-            "method": "POST"
         }
     ]
 }

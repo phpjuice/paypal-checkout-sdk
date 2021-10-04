@@ -18,21 +18,21 @@ class PayPalClient implements HttpClient
      *
      * @var Environment
      */
-    protected $environment;
+    protected Environment $environment;
 
     /**
      * Http client.
      *
      * @var Client
      */
-    protected $client;
+    protected Client $client;
 
     /**
      * Access Token.
      *
-     * @var AccessToken
+     * @var ?AccessToken
      */
-    protected $access_token;
+    protected ?AccessToken $access_token;
 
     /**
      * HttpClient constructor. Pass the environment you wish to make calls to.
@@ -43,6 +43,7 @@ class PayPalClient implements HttpClient
     {
         $this->environment = $environment;
         $this->client = new Client(['base_uri' => $environment->baseUrl()]);
+        $this->access_token = null;
     }
 
     /**
@@ -55,7 +56,7 @@ class PayPalClient implements HttpClient
      */
     public function send(Request $request): Response
     {
-        // if request doesn't have a authorization header
+        // if request doesn't have an authorization header
         if (!$this->hasAuthHeader($request)) {
             // fetch access token if null or expired
             if ($this->hasInvalidToken()) {
@@ -96,7 +97,7 @@ class PayPalClient implements HttpClient
      */
     public function hasInvalidToken(): bool
     {
-        return is_null($this->access_token) || $this->access_token->isExpired();
+        return !$this->access_token || $this->access_token->isExpired();
     }
 
     /**
