@@ -22,6 +22,9 @@ $order = (new Order())->addPurchaseUnit($purchase_unit);
 
 // Send request to PayPal
 $response = $client->send(new OrderCreateRequest($order));
+
+// Get results
+$result = json_decode($response->getBody()->getContents());
 ```
 
 A successful request returns the HTTP `201` Created status code and a JSON response body that includes by default a

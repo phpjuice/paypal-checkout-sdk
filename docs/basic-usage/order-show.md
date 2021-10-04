@@ -13,6 +13,9 @@ $request = new OrderShowRequest($order_id);
 
 // Send request to PayPal
 $response = $client->send($request);
+
+// Get results
+$result = json_decode($response->getBody()->getContents());
 ```
 
 A successful request returns the HTTP `200` status code and a JSON response body that includes by default a minimal

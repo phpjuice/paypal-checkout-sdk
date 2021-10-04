@@ -29,6 +29,9 @@ $request = new OrderShowRequest($order_id);
 
 // Send request to PayPal
 $response = $client->send($request);
+
+// Get results
+$result = json_decode($response->getBody()->getContents());
 ```
 
 ## Capture an Order
@@ -39,6 +42,9 @@ $request = new OrderCaptureRequest($order_id);
 
 // Send request to PayPal
 $response = $client->send($request);
+
+// Get results
+$result = json_decode($response->getBody()->getContents());
 ```
 
 ## We have badges!

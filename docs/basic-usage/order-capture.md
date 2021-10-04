@@ -15,6 +15,9 @@ $request = new OrderCaptureRequest($order_id);
 
 // Send request to PayPal
 $response = $client->send($request);
+
+// Get results
+$result = json_decode($response->getBody()->getContents());
 ```
 
 A successful response to a non-idempotent request returns the HTTP `201` Created status code with a JSON response body
@@ -83,8 +86,26 @@ default, the response is minimal.
 }
 ```
 
+## Catching Errors
+
 If a payment is not yet approved by the buyer, An error response with status code `422` is returned with a JSON response
 body that shows errors.
+
+Inorder to catch validation errors from PayPal, you can add the following:
+
+```php
+use GuzzleHttp\Exception\RequestException;
+
+try {
+    $id = '8F783829JA718493L';
+    $response = $client->send(new OrderCaptureRequest($id));
+    $result = json_decode($response->getBody()->getContents());
+} catch (RequestException $e) {
+    $errors = json_decode($e->getResponse()->getBody()->getContents());
+}
+```
+
+Errors :
 
 ```json
 {
@@ -104,21 +125,5 @@ body that shows errors.
             "method": "GET"
         }
     ]
-}
-```
-
-## Catching Errors from PayPal
-
-Inorder to catch validation errors from PayPal, you can add the following:
-
-```php
-use GuzzleHttp\Exception\GuzzleException;
-
-try {
-    $id = '8F783829JA718493L';
-    $response = $client->send(new OrderCaptureRequest($id));
-} catch (GuzzleException $e) {
-    $r = $e->getResponse();
-    $response = json_decode((string) $r->getBody());
 }
 ```

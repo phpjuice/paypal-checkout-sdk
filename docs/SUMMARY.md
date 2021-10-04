@@ -14,6 +14,7 @@
 - [Capture an Order](basic-usage/order-capture.md)
 
 ## Api
+
 - [Amount](api/amount.md)
 - [Amount Breakdown](api/amount-breakdown.md)
 - [Application Context](api/application-context.md)

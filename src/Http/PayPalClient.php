@@ -4,6 +4,7 @@ namespace PayPal\Checkout\Http;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Utils;
@@ -35,9 +36,7 @@ class PayPalClient implements HttpClient
 
     /**
      * HttpClient constructor. Pass the environment you wish to make calls to.
-     *
-     * @param $environment Environment
-     *
+     * @param  Environment  $environment
      * @see Environment
      */
     public function __construct(Environment $environment)
@@ -52,6 +51,7 @@ class PayPalClient implements HttpClient
      * @param  Request  $request
      * @return Response
      * @throws GuzzleException
+     * @throws RequestException
      */
     public function send(Request $request): Response
     {
@@ -126,7 +126,7 @@ class PayPalClient implements HttpClient
     }
 
     /**
-     * Inject paypal sdk headers into request.
+     * Inject PayPal sdk headers into request.
      *
      * @param  Request  $request
      * @return Request
