@@ -7,7 +7,9 @@
 [![License](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/license)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
 
 This Package is a PHP SDK wrapper around version 2 of the PayPal rest API. It provides a simple, fluent API to create
-and capture orders with both sandbox and production environments supported.
+and capture orders with both sandbox and production environments supported. 
+
+To learn all about it, head over to the extensive [documentation](https://phpjuice.gitbook.io/paypal-checkout-sdk).
 
 ## Installation
 
@@ -71,6 +73,8 @@ $environment = new ProductionEnvironment($clientId, $clientSecret);
 $client = new PayPalClient($environment);
 ```
 
+> **INFO**: head over to the extensive [documentation](https://phpjuice.gitbook.io/paypal-checkout-sdk).
+
 ## Usage
 
 ### Create an Order
@@ -108,6 +112,8 @@ echo $result->intent; // CAPTURE
 echo $result->status; // CREATED
 ```
 
+> **INFO**: head over to the extensive [documentation](https://phpjuice.gitbook.io/paypal-checkout-sdk).
+
 ### Capture an Order
 
 ```php
@@ -125,6 +131,7 @@ $result = json_decode((string) $response->getBody());
 echo $result->id; // id of the captured order
 echo $result->status; // CAPTURED
 ```
+> **INFO**: head over to the extensive [documentation](https://phpjuice.gitbook.io/paypal-checkout-sdk).
 
 ## Changelog
 
