@@ -1,336 +1,235 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Tests\Orders;
 
+use Brick\Money\Money;
+use PayPal\Checkout\Exceptions\InvalidOrderException;
 use PayPal\Checkout\Exceptions\InvalidOrderIntentException;
-use PayPal\Checkout\Exceptions\OrderPurchaseUnitException;
+use PayPal\Checkout\Orders\AmountBreakdown;
 use PayPal\Checkout\Orders\ApplicationContext;
-use PayPal\Checkout\Orders\Currency;
 use PayPal\Checkout\Orders\Item;
-use PayPal\Checkout\Orders\Money;
 use PayPal\Checkout\Orders\Order;
 use PayPal\Checkout\Orders\PurchaseUnit;
-use PHPUnit\Framework\TestCase;
 
-class OrderTest extends TestCase
-{
-    public function testCreateOrderWithInvalidIntent()
-    {
-        $this->expectException(InvalidOrderIntentException::class);
-        $this->expectExceptionMessage(<<<'MESSAGE'
-Order intent provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#orders_create.
-MESSAGE
-        );
+it("can not create an order with invalid intent", function () {
+    new Order('Invalid Intent');
+})->throws(
+    InvalidOrderIntentException::class,
+    // phpcs:ignore
+    'Order intent provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#orders_create.'
+);
 
-        new Order('invalid intent');
-    }
+it("can not set an invalid intent on an order", function () {
+    $order = new Order();
+    $order->setIntent('invalid intent');
+})->throws(
+    InvalidOrderIntentException::class,
+    // phpcs:ignore
+    'Order intent provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#orders_create.'
+);
 
-    public function testSetInvalidOrderIntent()
-    {
-        $this->expectException(InvalidOrderIntentException::class);
-        $this->expectExceptionMessage(<<<'MESSAGE'
-Order intent provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#orders_create.
-MESSAGE
-        );
+it("can initialize an order", function () {
+    // Act
+    $order = new Order();
 
-        $order = new Order();
-        $order->setIntent('invalid intent');
-    }
+    // Assert
+    expect($order->getIntent())->toBe('CAPTURE');
+    expect($order->getApplicationContext()->toArray())->toBe([
+        'locale' => 'en-US',
+        'shipping_preference' => 'NO_SHIPPING',
+        'landing_page' => 'NO_PREFERENCE',
+        'user_action' => 'CONTINUE',
+    ]);
 
-    public function testCreatesNewOrder()
-    {
-        $order = new Order();
-        $this->assertEquals('CAPTURE', $order->getIntent());
-        $this->assertEquals([
-            'locale' => 'en-US',
+    // Act
+    $order->setIntent('AUTHORIZE');
+
+    // Assert
+    expect($order->getIntent())->toBe('AUTHORIZE');
+    expect($order->getPurchaseUnits())->toBeEmpty();
+});
+
+it("can add a purchase unit to an order", function () {
+    // Arrange
+    $amount = AmountBreakdown::of('200.00', 'EUR');
+    $purchase_unit = new PurchaseUnit($amount);
+    $order = new Order();
+
+    // Act
+    $order->addPurchaseUnit($purchase_unit);
+
+    // Assert
+    expect(count($order->getPurchaseUnits()))->toBe(1);
+});
+
+it("can not add multiple purchase units to an order", function () {
+    $amount = AmountBreakdown::of('200.00', 'EUR');
+    $purchase_unit = new PurchaseUnit($amount);
+    $order = new Order();
+
+    // Act
+    $order->addPurchaseUnit($purchase_unit);
+    $order->addPurchaseUnit($purchase_unit);
+})->throws(
+    InvalidOrderException::class,
+    'At present only 1 purchase_unit is supported.'
+);
+
+it("asserts an order has at least one purchase unit", function () {
+    (new Order())->toArray();
+})->throws(
+    InvalidOrderException::class,
+    'Paypal orders must have 1 purchase_unit at least.'
+);
+
+it("casts to an array", function () {
+    // Arrange
+    $amount = AmountBreakdown::of('250.00');
+    $amount->setItemTotal(Money::of('300', 'USD'));
+    $amount->setDiscount(Money::of('50', 'USD'));
+    $purchase_unit = new PurchaseUnit($amount);
+
+    $purchase_unit->addItem(Item::create('Item 1', '100.00'));
+    $purchase_unit->addItem(Item::create('Item 2', '100.00', 'USD', 2));
+
+    $application_context = new ApplicationContext('Paypal Inc', 'en');
+    $application_context->setUserAction('PAY_NOW');
+    $application_context->setReturnUrl('https://site.com/payment/return');
+    $application_context->setCancelUrl('https://site.com/payment/cancel');
+
+    // Act
+    $order = new Order('CAPTURE');
+    $order->addPurchaseUnit($purchase_unit);
+    $order->setApplicationContext($application_context);
+
+    // Assert
+    $expected = [
+        'intent' => 'CAPTURE',
+        'purchase_units' => [
+            [
+                'amount' => [
+                    'currency_code' => 'USD',
+                    'value' => '250.00',
+                    'breakdown' => [
+                        'item_total' => [
+                            'currency_code' => 'USD',
+                            'value' => '300.00',
+                        ],
+                        'discount' => [
+                            'currency_code' => 'USD',
+                            'value' => '50.00',
+                        ],
+                    ],
+                ],
+                'items' => [
+                    [
+                        'name' => 'Item 1',
+                        'unit_amount' => [
+                            'currency_code' => 'USD',
+                            'value' => '100.00',
+                        ],
+                        'quantity' => 1,
+                        'description' => '',
+                        'category' => 'DIGITAL_GOODS',
+                    ],
+                    [
+                        'name' => 'Item 2',
+                        'unit_amount' => [
+                            'currency_code' => 'USD',
+                            'value' => '100.00',
+                        ],
+                        'quantity' => 2,
+                        'description' => '',
+                        'category' => 'DIGITAL_GOODS',
+                    ],
+                ],
+            ],
+        ],
+        'application_context' => [
+            'brand_name' => 'Paypal Inc',
+            'locale' => 'en',
             'shipping_preference' => 'NO_SHIPPING',
             'landing_page' => 'NO_PREFERENCE',
-            'user_action' => 'CONTINUE',
-        ], $order->getApplicationContext()->toArray());
+            'user_action' => 'PAY_NOW',
+            'return_url' => 'https://site.com/payment/return',
+            'cancel_url' => 'https://site.com/payment/cancel',
+        ],
+    ];
+    expect($order->toArray())->toBe($expected);
+});
 
-        $order->setIntent('AUTHORIZE');
-        $this->assertEquals('AUTHORIZE', $order->getIntent());
-        $this->assertEmpty($order->getPurchaseUnits());
-    }
+it("casts to json", function () {
+    // Arrange
+    $amount = AmountBreakdown::of('250.00');
+    $amount->setItemTotal(Money::of('300', 'USD'));
+    $amount->setDiscount(Money::of('50', 'USD'));
+    $purchase_unit = new PurchaseUnit($amount);
 
-    public function testAddPurchaseUnit()
-    {
-        $order = new Order();
-        $this->assertEmpty($order->getPurchaseUnits());
-        $order->addPurchaseUnit(new PurchaseUnit('USD', 200));
-        $this->assertCount(1, $order->getPurchaseUnits());
-    }
+    $purchase_unit->addItem(Item::create('Item 1', '100.00'));
+    $purchase_unit->addItem(Item::create('Item 2', '100.00', 'USD', 2));
 
-    public function testDoesNotAddMultiplePurchaseUnits()
-    {
-        $this->expectException(OrderPurchaseUnitException::class);
-        $this->expectExceptionMessage('At present only 1 purchase_unit is supported.');
+    $application_context = new ApplicationContext('Paypal Inc', 'en');
+    $application_context->setUserAction('PAY_NOW');
+    $application_context->setReturnUrl('https://site.com/payment/return');
+    $application_context->setCancelUrl('https://site.com/payment/cancel');
 
-        $order = new Order();
-        $order->addPurchaseUnit(new PurchaseUnit('USD', 200));
-        $order->addPurchaseUnit(new PurchaseUnit('USD', 300));
-    }
+    // Act
+    $order = new Order('CAPTURE');
+    $order->addPurchaseUnit($purchase_unit);
+    $order->setApplicationContext($application_context);
 
-    public function testOrderHasOnePurchaseUnitAtLeast()
-    {
-        $this->expectException(OrderPurchaseUnitException::class);
-        $this->expectExceptionMessage('Paypal orders must have 1 purchase_unit at least.');
-
-        $order = new Order();
-        $order->toArray();
-    }
-
-    public function testCreateAFullOrder()
-    {
-        $purchase_unit = new PurchaseUnit('USD', 300.00);
-        $purchase_unit->addItem(new Item('Item 1', 'USD', 100.00, 1));
-        $purchase_unit->addItem(new Item('Item 2', 'USD', 100.00, 2));
-        $order = new Order('CAPTURE');
-        $order->addPurchaseUnit($purchase_unit);
-        $application_context = new ApplicationContext('Paypal Inc', 'en');
-        $application_context->setUserAction('PAY_NOW');
-        $application_context->setReturnUrl('https://site.com/payment/return');
-        $application_context->setCancelUrl('https://site.com/payment/cancel');
-        $order->setApplicationContext($application_context);
-        $actual = $order->toArray();
-        $expected = [
-            'intent' => 'CAPTURE',
-            'purchase_units' => [
-                [
-                    'amount' => [
-                        'currency_code' => 'USD',
-                        'value' => 300.00,
-                        'breakdown' => [
-                            'item_total' => [
-                                'currency_code' => 'USD',
-                                'value' => 300.00,
-                            ],
+    // Assert
+    $expected = json_encode([
+        'intent' => 'CAPTURE',
+        'purchase_units' => [
+            [
+                'amount' => [
+                    'currency_code' => 'USD',
+                    'value' => '250.00',
+                    'breakdown' => [
+                        'item_total' => [
+                            'currency_code' => 'USD',
+                            'value' => '300.00',
                         ],
-                    ],
-                    'items' => [
-                        [
-                            'name' => 'Item 1',
-                            'unit_amount' => [
-                                'currency_code' => 'USD',
-                                'value' => 100.00,
-                            ],
-                            'quantity' => 1,
-                            'description' => '',
-                            'category' => 'DIGITAL_GOODS',
-                        ],
-                        [
-                            'name' => 'Item 2',
-                            'unit_amount' => [
-                                'currency_code' => 'USD',
-                                'value' => 100.00,
-                            ],
-                            'quantity' => 2,
-                            'description' => '',
-                            'category' => 'DIGITAL_GOODS',
+                        'discount' => [
+                            'currency_code' => 'USD',
+                            'value' => '50.00',
                         ],
                     ],
                 ],
-            ],
-            'application_context' => [
-                'brand_name' => 'Paypal Inc',
-                'locale' => 'en',
-                'shipping_preference' => 'NO_SHIPPING',
-                'landing_page' => 'NO_PREFERENCE',
-                'user_action' => 'PAY_NOW',
-                'return_url' => 'https://site.com/payment/return',
-                'cancel_url' => 'https://site.com/payment/cancel',
-            ],
-        ];
-        $this->assertEquals($expected, $actual);
-    }
-
-    public function testCreateAFullOrderWithDiscount()
-    {
-        $currency = Currency::from('USD');
-        $purchase_unit = new PurchaseUnit('USD', 250.00);
-        $purchase_unit->addItem(new Item('Item 1', 'USD', 100.00, 1));
-        $purchase_unit->addItem(new Item('Item 2', 'USD', 100.00, 2));
-
-        $amountBreakdown = $purchase_unit->getAmount();
-        $amountBreakdown->setItemTotal(new Money(300.00, $currency));
-        $amountBreakdown->setDiscount(new Money(50.00, $currency));
-
-        $order = new Order('CAPTURE');
-        $order->addPurchaseUnit($purchase_unit);
-        $application_context = new ApplicationContext('Paypal Inc', 'en');
-        $application_context->setUserAction('PAY_NOW');
-        $application_context->setReturnUrl('https://site.com/payment/return');
-        $application_context->setCancelUrl('https://site.com/payment/cancel');
-        $order->setApplicationContext($application_context);
-        $actual = $order->toArray();
-        $expected = [
-            'intent' => 'CAPTURE',
-            'purchase_units' => [
-                [
-                    'amount' => [
-                        'currency_code' => 'USD',
-                        'value' => 250.00,
-                        'breakdown' => [
-                            'item_total' => [
-                                'currency_code' => 'USD',
-                                'value' => 300.00,
-                            ],
-                            'discount' => [
-                                'currency_code' => 'USD',
-                                'value' => 50.00,
-                            ],
+                'items' => [
+                    [
+                        'name' => 'Item 1',
+                        'unit_amount' => [
+                            'currency_code' => 'USD',
+                            'value' => '100.00',
                         ],
+                        'quantity' => 1,
+                        'description' => '',
+                        'category' => 'DIGITAL_GOODS',
                     ],
-                    'items' => [
-                        [
-                            'name' => 'Item 1',
-                            'unit_amount' => [
-                                'currency_code' => 'USD',
-                                'value' => 100.00,
-                            ],
-                            'quantity' => 1,
-                            'description' => '',
-                            'category' => 'DIGITAL_GOODS',
+                    [
+                        'name' => 'Item 2',
+                        'unit_amount' => [
+                            'currency_code' => 'USD',
+                            'value' => '100.00',
                         ],
-                        [
-                            'name' => 'Item 2',
-                            'unit_amount' => [
-                                'currency_code' => 'USD',
-                                'value' => 100.00,
-                            ],
-                            'quantity' => 2,
-                            'description' => '',
-                            'category' => 'DIGITAL_GOODS',
-                        ],
+                        'quantity' => 2,
+                        'description' => '',
+                        'category' => 'DIGITAL_GOODS',
                     ],
                 ],
             ],
-            'application_context' => [
-                'brand_name' => 'Paypal Inc',
-                'locale' => 'en',
-                'shipping_preference' => 'NO_SHIPPING',
-                'landing_page' => 'NO_PREFERENCE',
-                'user_action' => 'PAY_NOW',
-                'return_url' => 'https://site.com/payment/return',
-                'cancel_url' => 'https://site.com/payment/cancel',
-            ],
-        ];
-        $this->assertEquals($expected, $actual);
-    }
-
-    public function testConvertOrderToJson()
-    {
-        $currency = Currency::from('USD');
-        $purchase_unit = new PurchaseUnit($currency->getCode(), 70.00);
-        $purchase_unit->addItem(new Item('Item 1', 'USD', 100.00, 1));
-        $amountBreakdown = $purchase_unit->getAmount();
-        $amountBreakdown->setItemTotal(new Money(100.00, $currency));
-        $amountBreakdown->setDiscount(new Money(30.00, $currency));
-
-
-        $order = new Order('CAPTURE');
-        $order->addPurchaseUnit($purchase_unit);
-        $application_context = new ApplicationContext('Paypal Inc', 'en-US');
-        $application_context->setUserAction('PAY_NOW');
-        $application_context->setReturnUrl('https://site.com/payment/return');
-        $application_context->setCancelUrl('https://site.com/payment/cancel');
-        $order->setApplicationContext($application_context);
-        $expected = '{
-            "intent": "CAPTURE",
-            "purchase_units": [
-                {
-                    "amount": {
-                        "currency_code": "USD",
-                        "value": 70.00,
-                        "breakdown": {
-                            "item_total": {
-                                "currency_code": "USD",
-                                "value": 100.00
-                            },
-                            "discount": {
-                                "currency_code": "USD",
-                                "value": 30.00
-                            }
-                        }
-                    },
-                    "items": [
-                        {
-                            "name": "Item 1",
-                            "unit_amount": {
-                                "currency_code": "USD",
-                                "value": 100.00
-                            },
-                            "quantity": 1,
-                            "description": "",
-                            "category": "DIGITAL_GOODS"
-                        }
-                    ]
-                }
-            ],
-            "application_context": {
-                "brand_name" : "Paypal Inc",
-                "locale" : "en-US",
-                "shipping_preference" : "NO_SHIPPING",
-                "landing_page" : "NO_PREFERENCE",
-                "user_action" : "PAY_NOW",
-                "return_url" : "https://site.com/payment/return",
-                "cancel_url" : "https://site.com/payment/cancel"
-            }
-        }';
-        $actual = $order->toJson();
-        $this->assertJsonStringEqualsJsonString($expected, $actual);
-    }
-
-    public function testConvertOrderToJsonWithDiscount()
-    {
-        $purchase_unit = new PurchaseUnit('USD', 100.00);
-        $purchase_unit->addItem(new Item('Item 1', 'USD', 100.00, 1));
-        $order = new Order('CAPTURE');
-        $order->addPurchaseUnit($purchase_unit);
-        $application_context = new ApplicationContext('Paypal Inc', 'en-US');
-        $application_context->setUserAction('PAY_NOW');
-        $application_context->setReturnUrl('https://site.com/payment/return');
-        $application_context->setCancelUrl('https://site.com/payment/cancel');
-        $order->setApplicationContext($application_context);
-        $expected = '{
-            "intent": "CAPTURE",
-            "purchase_units": [
-                {
-                    "amount": {
-                        "currency_code": "USD",
-                        "value": 100.00,
-                        "breakdown": {
-                            "item_total": {
-                                "currency_code": "USD",
-                                "value": 100.00
-                            }
-                        }
-                    },
-                    "items": [
-                        {
-                            "name": "Item 1",
-                            "unit_amount": {
-                                "currency_code": "USD",
-                                "value": 100.00
-                            },
-                            "quantity": 1,
-                            "description": "",
-                            "category": "DIGITAL_GOODS"
-                        }
-                    ]
-                }
-            ],
-            "application_context": {
-                "brand_name" : "Paypal Inc",
-                "locale" : "en-US",
-                "shipping_preference" : "NO_SHIPPING",
-                "landing_page" : "NO_PREFERENCE",
-                "user_action" : "PAY_NOW",
-                "return_url" : "https://site.com/payment/return",
-                "cancel_url" : "https://site.com/payment/cancel"
-            }
-        }';
-        $actual = $order->toJson();
-        $this->assertJsonStringEqualsJsonString($expected, $actual);
-    }
-}
+        ],
+        'application_context' => [
+            'brand_name' => 'Paypal Inc',
+            'locale' => 'en',
+            'shipping_preference' => 'NO_SHIPPING',
+            'landing_page' => 'NO_PREFERENCE',
+            'user_action' => 'PAY_NOW',
+            'return_url' => 'https://site.com/payment/return',
+            'cancel_url' => 'https://site.com/payment/cancel',
+        ],
+    ]);
+    expect($order->toJson())->toBe($expected);
+});

@@ -1,169 +1,121 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Tests\Orders;
 
-use PayPal\Checkout\Exceptions\ItemTotalMismatchException;
 use PayPal\Checkout\Exceptions\MultiCurrencyOrderException;
+use PayPal\Checkout\Orders\Amount;
+use PayPal\Checkout\Orders\AmountBreakdown;
 use PayPal\Checkout\Orders\Item;
 use PayPal\Checkout\Orders\PurchaseUnit;
-use PHPUnit\Framework\TestCase;
 
-class PurchaseUnitTest extends TestCase
-{
-    public function testCreatePurchaseUnit()
-    {
-        $purchase_unit = new PurchaseUnit('USD', 100.00);
-        $this->assertEquals('USD', $purchase_unit->getAmount()->getCurrencyCode());
-        $this->assertEquals(100.00, $purchase_unit->getAmount()->getValue());
-    }
+it("can initialize a purchase unit", function () {
+    // Arrange
+    $amount = AmountBreakdown::of('100.00', 'CAD');
 
-    public function testAddItemToPurchaseUnit()
-    {
-        $purchase_unit = new PurchaseUnit('CAD', 100.00);
-        $this->assertEmpty($purchase_unit->getItems());
+    // Act
+    $purchase_unit = new PurchaseUnit($amount);
 
-        $item1 = new Item('item 1', 'CAD', 100.00, 1);
-        $item2 = new Item('item 2', 'CAD', 100.00, 1);
-        $purchase_unit->addItem($item1)
-            ->addItem($item2);
-        $this->assertEquals(2, count($purchase_unit->getItems()));
-    }
+    // Assert
+    expect($purchase_unit->getAmount()->getCurrencyCode())->toBe('CAD');
+    expect($purchase_unit->getAmount()->getValue())->toBe('100.00');
+});
 
-    public function testThrowsMultiCurrencyException()
-    {
-        $this->expectException(MultiCurrencyOrderException::class);
-        $this->expectExceptionMessage('Multiple differing values of currency_code are not supported. Entire Order request must have the same currency_code.');
-        $purchase_unit = new PurchaseUnit('USD', 100.00);
-        $item1 = new Item('item 1', 'USD', 100.00, 1);
-        $item2 = new Item('item 2', 'USD', 100.00, 1);
-        $item3 = new Item('item 3', 'CAD', 100.00, 1);
-        $purchase_unit->addItem($item1)
-            ->addItem($item2)
-            ->addItem($item3);
-    }
 
-    public function testGetCalculatedAmount()
-    {
-        $purchase_unit = new PurchaseUnit('USD', 100.00);
-        $item1 = new Item('item 1', 'USD', 100.00, 1);
-        $item2 = new Item('item 2', 'USD', 100.00, 2);
-        $item3 = new Item('item 3', 'USD', 50.00, 4);
-        $purchase_unit->addItem($item1)
-            ->addItem($item2)
-            ->addItem($item3);
-        $this->assertEquals(500, $purchase_unit->getCalculatedAmount());
-    }
+it("can create an empty purchase unit", function () {
+    // Arrange
+    $amount = AmountBreakdown::of('100.00', 'CAD');
 
-    public function testThrowsItemTotalMismatchException()
-    {
-        $this->expectException(ItemTotalMismatchException::class);
-        $this->expectExceptionMessage('Items Total Should equal sum of (unit_amount * quantity) across all items for a given purchase_unit');
-        $pu = new PurchaseUnit('USD', 100);
-        $item1 = new Item('item 1', 'USD', 49.66, 1);
-        $item2 = new Item('item 2', 'USD', 50.33, 1);
-        $pu->addItem($item1);
-        $pu->addItem($item2);
-        $pu->toArray();
-    }
+    // Act
+    $purchase_unit = new PurchaseUnit($amount);
 
-    public function testCalculatedAmountMatchesAmount()
-    {
-        $pu = new PurchaseUnit('USD', 100);
-        $item1 = new Item('item 1', 'USD', 49.67, 1);
-        $item2 = new Item('item 2', 'USD', 50.33, 1);
-        $pu->addItem($item1);
-        $pu->addItem($item2);
-        $this->assertEquals(100, $pu->getCalculatedAmount());
-    }
+    // Assert
+    expect(count($purchase_unit->getItems()))->toBe(0);
+});
 
-    public function testToArray()
-    {
-        $purchase_unit = new PurchaseUnit('USD', 300.00);
-        $item1 = new Item('item 1', 'USD', 100.00, 1);
-        $item1->setDescription('item 1 description');
-        $item2 = new Item('item 2', 'USD', 100.00, 2);
-        $purchase_unit->addItem($item1)
-            ->addItem($item2);
-        $actual = $purchase_unit->toArray();
-        $expected = [
-            'amount' => [
-                'currency_code' => 'USD',
-                'value' => 300.00,
-                'breakdown' => [
-                    'item_total' => [
-                        'currency_code' => 'USD',
-                        'value' => 300.00,
-                    ],
+
+it("can add a single item", function () {
+    // Arrange
+    $amount = AmountBreakdown::of('100', 'CAD');
+    $purchase_unit = new PurchaseUnit($amount);
+
+    // Act
+    $purchase_unit->addItem(Item::create('Item 1', '100.00', 'CAD', 2));
+
+    // Assert
+    expect(count($purchase_unit->getItems()))->toBe(1);
+});
+
+
+it("can add multiple items", function () {
+    // Arrange
+    $amount = AmountBreakdown::of('100', 'CAD');
+    $purchase_unit = new PurchaseUnit($amount);
+    $items = array_map(function ($index) {
+        return Item::create("Item $index", '100.00', 'CAD', $index);
+    }, [1, 2, 3]);
+
+    // Act
+    $purchase_unit->addItems($items);
+
+    // Assert
+    expect(count($purchase_unit->getItems()))->toBe(3);
+});
+
+it("it throws an exception when using multiple currencies", function () {
+    $amount = AmountBreakdown::of('100', 'CAD');
+    $purchase_unit = new PurchaseUnit($amount);
+
+    // Act
+    $item = Item::create('Item', '100', 'EUR', 2);
+
+    $purchase_unit->addItem($item);
+})->throws(MultiCurrencyOrderException::class);
+
+
+it("casts to an array", function () {
+    // Arrange
+    $amount = AmountBreakdown::of('300.00', 'CAD');
+    $purchase_unit = new PurchaseUnit($amount);
+
+    // Act
+    $item_amount = Amount::of('100.00', 'CAD');
+    $item1 = new Item('Item 1', $item_amount, 1);
+    $item2 = new Item('Item 2', $item_amount, 2);
+    $purchase_unit->addItem($item1)->addItem($item2);
+
+    // Assert
+    expect($purchase_unit->toArray())->toBe([
+        'amount' => [
+            'currency_code' => 'CAD',
+            'value' => '300.00',
+            'breakdown' => [
+                'item_total' => [
+                    'currency_code' => 'CAD',
+                    'value' => '300.00',
                 ],
             ],
-            'items' => [
-                [
-                    'name' => 'item 1',
-                    'unit_amount' => [
-                        'currency_code' => 'USD',
-                        'value' => 100.00,
-                    ],
-                    'quantity' => 1,
-                    'description' => 'item 1 description',
-                    'category' => 'DIGITAL_GOODS',
+        ],
+        'items' => [
+            [
+                'name' => 'Item 1',
+                'unit_amount' => [
+                    'currency_code' => 'CAD',
+                    'value' => '100.00',
                 ],
-                [
-                    'name' => 'item 2',
-                    'unit_amount' => [
-                        'currency_code' => 'USD',
-                        'value' => 100.00,
-                    ],
-                    'quantity' => 2,
-                    'description' => '',
-                    'category' => 'DIGITAL_GOODS',
-                ],
+                'quantity' => 1,
+                'description' => '',
+                'category' => 'DIGITAL_GOODS',
             ],
-        ];
-        $this->assertEquals($expected, $actual);
-    }
-
-    public function testToJson()
-    {
-        $purchase_unit = new PurchaseUnit('USD', 300.00);
-        $item1 = new Item('item 1', 'USD', 100.00, 1);
-        $item2 = new Item('item 2', 'USD', 100.00, 2);
-        $purchase_unit->addItem($item1)
-            ->addItem($item2);
-        $actual = $purchase_unit->toJson();
-        $expected = '{
-            "amount": {
-                "currency_code": "USD",
-                "value": 300.00,
-                "breakdown": {
-                    "item_total": {
-                        "currency_code": "USD",
-                        "value": 300.00
-                    }
-                }
-            },
-            "items": [
-                {
-                    "name": "item 1",
-                    "unit_amount": {
-                        "currency_code": "USD",
-                        "value": 100.00
-                    },
-                    "quantity": 1,
-                    "description": "",
-                    "category": "DIGITAL_GOODS"
-                },
-                {
-                    "name": "item 2",
-                    "unit_amount": {
-                        "currency_code": "USD",
-                        "value": 100.00
-                    },
-                    "quantity": 2,
-                    "description": "",
-                    "category": "DIGITAL_GOODS"
-                }
-            ]
-        }';
-        $this->assertJsonStringEqualsJsonString($expected, $actual);
-    }
-}
+            [
+                'name' => 'Item 2',
+                'unit_amount' => [
+                    'currency_code' => 'CAD',
+                    'value' => '100.00',
+                ],
+                'quantity' => 2,
+                'description' => '',
+                'category' => 'DIGITAL_GOODS',
+            ],
+        ],
+    ]);
+});
