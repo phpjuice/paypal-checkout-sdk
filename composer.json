@@ -19,7 +19,7 @@
     "require": {
         "php": "^7.4|^8.0",
         "ext-json": "*",
-        "guzzlehttp/psr7": "^2.0",
+        "guzzlehttp/psr7": "^1.6|^2.0",
         "guzzlehttp/guzzle": "^7.0",
         "brick/money": "^0.5.2"
     },
