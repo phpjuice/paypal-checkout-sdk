@@ -49,8 +49,7 @@ $result = json_decode($response->getBody()->getContents());
 
 ## We have badges!
 
-![Tests](https://github.com/phpjuice/paypal-checkout-sdk/workflows/Tests/badge.svg?branch=master)
-[![Build Status](https://travis-ci.com/phpjuice/paypal-checkout-sdk.svg?branch=master)](https://travis-ci.com/phpjuice/paypal-checkout-sdk)
+![Tests](https://github.com/phpjuice/paypal-checkout-sdk/workflows/Tests/badge.svg?branch=main)
 [![Latest Stable Version](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/v)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
 [![Total Downloads](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/downloads)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
 [![License](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/license)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)

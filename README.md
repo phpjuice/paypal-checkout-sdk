@@ -1,13 +1,12 @@
 # PayPal Checkout SDK
 
-![Tests](https://github.com/phpjuice/paypal-checkout-sdk/workflows/Tests/badge.svg?branch=master)
-[![Build Status](https://travis-ci.com/phpjuice/paypal-checkout-sdk.svg?branch=master)](https://travis-ci.com/phpjuice/paypal-checkout-sdk)
-[![Latest Stable Version](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/v)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk) 
+![Tests](https://github.com/phpjuice/paypal-checkout-sdk/workflows/Tests/badge.svg?branch=main)
+[![Latest Stable Version](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/v)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
 [![Total Downloads](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/downloads)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
 [![License](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/license)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
 
 This Package is a PHP SDK wrapper around version 2 of the PayPal rest API. It provides a simple, fluent API to create
-and capture orders with both sandbox and production environments supported. 
+and capture orders with both sandbox and production environments supported.
 
 To learn all about it, head over to the extensive [documentation](https://phpjuice.gitbook.io/paypal-checkout-sdk).
 
@@ -131,6 +130,7 @@ $result = json_decode((string) $response->getBody());
 echo $result->id; // id of the captured order
 echo $result->status; // CAPTURED
 ```
+
 > **INFO**: head over to the extensive [documentation](https://phpjuice.gitbook.io/paypal-checkout-sdk).
 
 ## Changelog
@@ -152,11 +152,10 @@ If you discover any security related issues, please email author instead of usin
 
 ## License
 
-license. Please see the [Licence](https://github.com/phpjuice/paypal-checkout-sdk/blob/master/LICENSE) for more
+license. Please see the [Licence](https://github.com/phpjuice/paypal-checkout-sdk/blob/main/LICENSE) for more
 information.
 
-![Tests](https://github.com/phpjuice/paypal-checkout-sdk/workflows/Tests/badge.svg?branch=master)
-[![Build Status](https://travis-ci.com/phpjuice/paypal-checkout-sdk.svg?branch=master)](https://travis-ci.com/phpjuice/paypal-checkout-sdk)
-[![Latest Stable Version](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/v)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk) 
+![Tests](https://github.com/phpjuice/paypal-checkout-sdk/workflows/Tests/badge.svg?branch=main)
+[![Latest Stable Version](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/v)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
 [![Total Downloads](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/downloads)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
 [![License](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/license)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
