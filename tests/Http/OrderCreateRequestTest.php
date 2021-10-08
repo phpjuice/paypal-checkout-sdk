@@ -3,7 +3,7 @@
 namespace Tests\Http;
 
 use GuzzleHttp\Utils;
-use PayPal\Checkout\Http\OrderCreateRequest;
+use PayPal\Checkout\Requests\OrderCreateRequest;
 use PayPal\Checkout\Orders\AmountBreakdown;
 use PayPal\Checkout\Orders\ApplicationContext;
 use PayPal\Checkout\Orders\Item;

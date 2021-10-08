@@ -8,7 +8,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Utils;
-use PayPal\Checkout\Http\OrderAuthorizeRequest;
+use PayPal\Checkout\Requests\OrderAuthorizeRequest;
 
 it('has correct request uri', function () {
     $request = new OrderAuthorizeRequest('1KC5501443316171H');

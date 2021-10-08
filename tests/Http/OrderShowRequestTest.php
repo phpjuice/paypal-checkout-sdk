@@ -3,7 +3,7 @@
 namespace Tests\Http;
 
 use GuzzleHttp\Utils;
-use PayPal\Checkout\Http\OrderShowRequest;
+use PayPal\Checkout\Requests\OrderShowRequest;
 
 it("has correct request uri", function () {
     $request = new OrderShowRequest('1KC5501443316171H');

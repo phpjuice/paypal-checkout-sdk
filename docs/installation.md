@@ -18,8 +18,8 @@ Inorder to communicate with PayPal platform we need to set up a client first :
 
 ```php
 // import namespace
-use PayPal\Checkout\Environment\SandboxEnvironment;
-use PayPal\Checkout\Http\PayPalClient;
+use PayPal\Http\Environment\SandboxEnvironment;
+use PayPal\Http\PayPalClient;
 
 // client id and client secret retrieved from PayPal
 $clientId = "<<PAYPAL-CLIENT-ID>>";
@@ -36,8 +36,8 @@ $client = new PayPalClient($environment);
 
 ```php
 // import namespace
-use PayPal\Checkout\Environment\ProductionEnvironment;
-use PayPal\Checkout\Http\PayPalClient;
+use PayPal\Http\Environment\ProductionEnvironment;
+use PayPal\Http\PayPalClient;
 
 // client id and client secret retrieved from PayPal
 $clientId = "<<PAYPAL-CLIENT-ID>>";

@@ -61,7 +61,6 @@ trait HasCollection
 
     /**
      * @param  string  $offset
-     *
      */
     public function offsetGet(string $offset)
     {

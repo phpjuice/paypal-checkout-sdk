@@ -7,7 +7,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Utils;
-use PayPal\Checkout\Http\OrderCaptureRequest;
+use PayPal\Checkout\Requests\OrderCaptureRequest;
 
 it("has correct request uri", function () {
     $request = new OrderCaptureRequest('1KC5501443316171H');
