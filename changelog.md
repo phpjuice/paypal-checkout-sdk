@@ -2,12 +2,49 @@
 
 All notable changes to `phpjuice/paypal-checkout-sdk` will be documented in this file.
 
+## Version 2.0.2
+
+### Changed
+
+- Add .gitattributes file
+
+## Version 2.0.1
+
+### Changed
+
+- allow guzzlehttp/psr7 v2.0 dependency
+
+## Version 2.0.0
+
+### Added
+
+- Add Brick/Money for handling money values.
+- Add new method addItems to PurchaseUnit class
+- Replace PHPUnit with PestPHP for tests.
+- Add new docs.
+
+### Changed
+
+- Change the minimum required PHP version to 7.4.
+
+### Deprecated
+
+- none
+
+### Removed
+
+- Money::class
+- Currency::class
+- 7.2 PHP support
+
 ## Version 1.2.0
 
 ### Changed
+
 - fix amount breakdown to include discount #12
 
 ### Removed
+
 - Removed `setValue` & `setCurrencyCode` from `Amount.php`
 - Removed `setValue` & `setCurrencyCode` from `PurchaseUnit`
 
