@@ -1,7 +1,6 @@
 # Introduction
 
-This Package is a PHP SDK wrapper around version 2 of the PayPal rest API. It provides a simple, fluent API to create
-and capture orders with both sandbox and production environments supported.
+This Package is a PHP SDK wrapper around version 2 of the PayPal rest API. It provides a simple, fluent API to create and capture orders with both sandbox and production environments supported.
 
 Here are some quick code examples of what you can do:
 
@@ -49,7 +48,5 @@ $result = json_decode($response->getBody()->getContents());
 
 ## We have badges!
 
-![Tests](https://github.com/phpjuice/paypal-checkout-sdk/workflows/Tests/badge.svg?branch=main)
-[![Latest Stable Version](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/v)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
-[![Total Downloads](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/downloads)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
-[![License](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/license)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
+![Tests](https://github.com/phpjuice/paypal-checkout-sdk/workflows/Tests/badge.svg?branch=main) [![Latest Stable Version](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/v)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk) [![Total Downloads](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/downloads)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk) [![License](http://poser.pugx.org/phpjuice/paypal-checkout-sdk/license)](https://packagist.org/packages/phpjuice/paypal-checkout-sdk)
+

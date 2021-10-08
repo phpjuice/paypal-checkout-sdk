@@ -8,9 +8,7 @@ composer require phpjuice/paypal-checkout-sdk
 
 ## Setup Credentials
 
-Get client ID and client secret by going
-to [https://developer.paypal.com/developer/applications](https://developer.paypal.com/developer/applications) and
-generating a REST API app. Get Client ID and Secret from there.
+Get client ID and client secret by going to [https://developer.paypal.com/developer/applications](https://developer.paypal.com/developer/applications) and generating a REST API app. Get Client ID and Secret from there.
 
 ## Setup a Paypal Client
 
@@ -51,3 +49,4 @@ $environment = new ProductionEnvironment($clientId, $clientSecret);
 // create a new client
 $client = new PayPalClient($environment);
 ```
+

@@ -1,8 +1,6 @@
 # Capture an Order
 
-To successfully capture payment for an order, the buyer must first approve the order or a valid payment_source must be
-provided in the request. A buyer can approve the order upon being redirected to the `rel:
-approve` URL that was provided the HATEOAS links in the [Create Order](order-create.md) response.
+To successfully capture payment for an order, the buyer must first approve the order or a valid payment\_source must be provided in the request. A buyer can approve the order upon being redirected to the `rel: approve` URL that was provided the HATEOAS links in the [Create Order](order-create.md) response.
 
 ```php
 use PayPal\Checkout\Http\OrderCaptureRequest;
@@ -20,11 +18,9 @@ $response = $client->send($request);
 $result = json_decode($response->getBody()->getContents());
 ```
 
-A successful response to a non-idempotent request returns the HTTP `201` Created status code with a JSON response body
-that shows captured payment details. If a duplicate response is retried, returns the HTTP `200` OK status code. By
-default, the response is minimal.
+A successful response to a non-idempotent request returns the HTTP `201` Created status code with a JSON response body that shows captured payment details. If a duplicate response is retried, returns the HTTP `200` OK status code. By default, the response is minimal.
 
-```json
+```javascript
 {
     "id": "8F783829JA718493L",
     "intent": "CAPTURE",
@@ -157,8 +153,7 @@ default, the response is minimal.
 
 ## Catching Errors
 
-If a payment is not yet approved by the buyer, An error response with status code `422` is returned with a JSON response
-body that shows errors.
+If a payment is not yet approved by the buyer, An error response with status code `422` is returned with a JSON response body that shows errors.
 
 Inorder to catch validation errors from PayPal, you can add the following:
 
@@ -176,7 +171,7 @@ try {
 
 Errors :
 
-```json
+```javascript
 {
     "name": "UNPROCESSABLE_ENTITY",
     "details": [
@@ -196,3 +191,4 @@ Errors :
     ]
 }
 ```
+

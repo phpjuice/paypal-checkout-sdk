@@ -18,10 +18,9 @@ $response = $client->send($request);
 $result = json_decode($response->getBody()->getContents());
 ```
 
-A successful request returns the HTTP `200` status code and a JSON response body that includes by default a minimal
-response with the `ID`, `status`, and `HATEOAS` links.
+A successful request returns the HTTP `200` status code and a JSON response body that includes by default a minimal response with the `ID`, `status`, and `HATEOAS` links.
 
-```json
+```javascript
 {
     "id": "8F783829JA718493L",
     "intent": "CAPTURE",
@@ -82,3 +81,4 @@ response with the `ID`, `status`, and `HATEOAS` links.
     ]
 }
 ```
+

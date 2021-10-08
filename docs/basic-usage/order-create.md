@@ -1,7 +1,6 @@
 # Create an Order
 
-An order represents a payment between two or more parties. and inorder to create a new order we must send
-an `OrderCreateRequest` to PayPal API.
+An order represents a payment between two or more parties. and inorder to create a new order we must send an `OrderCreateRequest` to PayPal API.
 
 ```php
 use PayPal\Checkout\Http\OrderCreateRequest;
@@ -27,10 +26,9 @@ $response = $client->send(new OrderCreateRequest($order));
 $result = json_decode($response->getBody()->getContents());
 ```
 
-A successful request returns the HTTP `201` Created status code and a JSON response body that includes by default a
-minimal response with the `ID`, `status`, and `HATEOAS` links.
+A successful request returns the HTTP `201` Created status code and a JSON response body that includes by default a minimal response with the `ID`, `status`, and `HATEOAS` links.
 
-```json
+```javascript
 {
     "id": "8F783829JA718493L",
     "status": "CREATED",
@@ -58,3 +56,4 @@ minimal response with the `ID`, `status`, and `HATEOAS` links.
     ]
 }
 ```
+
