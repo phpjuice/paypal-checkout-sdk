@@ -4,6 +4,7 @@ namespace PayPal\Checkout\Orders;
 
 use PayPal\Checkout\Concerns\CastsToJson;
 use PayPal\Checkout\Concerns\HasCollection;
+use PayPal\Checkout\Concerns\MergeParameters;
 use PayPal\Checkout\Contracts\Arrayable;
 use PayPal\Checkout\Contracts\Jsonable;
 use PayPal\Checkout\Exceptions\MultiCurrencyOrderException;
@@ -15,6 +16,7 @@ class PurchaseUnit implements Arrayable, Jsonable
 {
     use CastsToJson;
     use HasCollection;
+    use MergeParameters;
 
     /**
      * The total order Amount with an optional breakdown that provides details,
@@ -96,12 +98,12 @@ class PurchaseUnit implements Arrayable, Jsonable
      */
     public function toArray(): array
     {
-        return [
+        return array_merge_recursive([
             'amount' => $this->amount->toArray(),
             'items' => array_map(
                 fn(Item $item) => $item->toArray(),
                 $this->items
             ),
-        ];
+        ], $this->mergeParameters);
     }
 }
