@@ -3,7 +3,7 @@
 To successfully capture payment for an order, the buyer must first approve the order or a valid payment\_source must be provided in the request. A buyer can approve the order upon being redirected to the `rel: approve` URL that was provided the HATEOAS links in the [Create Order](order-create.md) response.
 
 ```php
-use PayPal\Checkout\Http\OrderCaptureRequest;
+use PayPal\Checkout\Requests\OrderCaptureRequest;
 
 // Get order id from database or request
 $order_id = '8F783829JA718493L';

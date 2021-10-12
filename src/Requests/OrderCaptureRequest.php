@@ -1,8 +1,10 @@
 <?php
 
-namespace PayPal\Checkout\Http;
+namespace PayPal\Checkout\Requests;
 
-class OrderAuthorizeRequest extends PaypalRequest
+use PayPal\Http\PaypalRequest;
+
+class OrderCaptureRequest extends PaypalRequest
 {
     public function __construct(string $order_id)
     {
@@ -11,7 +13,7 @@ class OrderAuthorizeRequest extends PaypalRequest
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ];
-        $uri = str_replace(':order_id', urlencode($order_id), '/v2/checkout/orders/:order_id/authorize');
+        $uri = str_replace(':order_id', urlencode($order_id), '/v2/checkout/orders/:order_id/capture');
         parent::__construct('POST', $uri, $headers);
     }
 }

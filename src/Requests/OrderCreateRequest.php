@@ -1,9 +1,10 @@
 <?php
 
-namespace PayPal\Checkout\Http;
+namespace PayPal\Checkout\Requests;
 
 use GuzzleHttp\Psr7\Utils;
 use PayPal\Checkout\Orders\Order;
+use PayPal\Http\PaypalRequest;
 
 class OrderCreateRequest extends PaypalRequest
 {

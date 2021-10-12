@@ -1,6 +1,8 @@
 <?php
 
-namespace PayPal\Checkout\Http;
+namespace PayPal\Checkout\Requests;
+
+use PayPal\Http\PaypalRequest;
 
 class OrderShowRequest extends PaypalRequest
 {

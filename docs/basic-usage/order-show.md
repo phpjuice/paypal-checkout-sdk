@@ -3,7 +3,7 @@
 Inorder to show an order we must send an `OrderShowRequest` to PayPal API with `order_id` in question.
 
 ```php
-use PayPal\Checkout\Http\OrderShowRequest;
+use PayPal\Checkout\Requests\OrderShowRequest;
 
 // Get order id from database or request
 $order_id = '8F783829JA718493L';

@@ -40,8 +40,8 @@ Inorder to communicate with PayPal platform we need to set up a client first :
 
 ```php
 // import namespace
-use PayPal\Checkout\Environment\SandboxEnvironment;
-use PayPal\Checkout\Http\PayPalClient;
+use PayPal\Http\Environment\SandboxEnvironment;
+use PayPal\Http\PayPalClient;
 
 // client id and client secret retrieved from PayPal
 $clientId = "<<PAYPAL-CLIENT-ID>>";
@@ -58,8 +58,8 @@ $client = new PayPalClient($environment);
 
 ```php
 // import namespace
-use PayPal\Checkout\Environment\ProductionEnvironment;
-use PayPal\Checkout\Http\PayPalClient;
+use PayPal\Http\Environment\ProductionEnvironment;
+use PayPal\Http\PayPalClient;
 
 // client id and client secret retrieved from PayPal
 $clientId = "<<PAYPAL-CLIENT-ID>>";
@@ -80,7 +80,7 @@ $client = new PayPalClient($environment);
 
 ```php
 // Import namespace
-use PayPal\Checkout\Http\OrderCreateRequest;
+use PayPal\Checkout\Requests\OrderCreateRequest;
 use PayPal\Checkout\Orders\AmountBreakdown;
 use PayPal\Checkout\Orders\Item;
 use PayPal\Checkout\Orders\Order;
@@ -117,7 +117,7 @@ echo $result->status; // CREATED
 
 ```php
 // Import namespace
-use PayPal\Checkout\Http\OrderCaptureRequest;
+use PayPal\Checkout\Requests\OrderCaptureRequest;
 
 // Create an order capture http request
 $request = new OrderCaptureRequest($order_id);
