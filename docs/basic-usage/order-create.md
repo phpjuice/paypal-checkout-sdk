@@ -3,7 +3,7 @@
 An order represents a payment between two or more parties. and inorder to create a new order we must send an `OrderCreateRequest` to PayPal API.
 
 ```php
-use PayPal\Checkout\Http\OrderCreateRequest;
+use PayPal\Checkout\Requests\OrderCreateRequest;
 use PayPal\Checkout\Orders\AmountBreakdown;
 use PayPal\Checkout\Orders\Item;
 use PayPal\Checkout\Orders\Order;
