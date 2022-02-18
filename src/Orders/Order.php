@@ -164,7 +164,7 @@ class Order implements Arrayable, Jsonable, ArrayAccess
      */
     public function getId(): string
     {
-        return $this->status;
+        return $this->id;
     }
 
     /**

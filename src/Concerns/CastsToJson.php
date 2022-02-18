@@ -29,7 +29,7 @@ trait CastsToJson
     {
         $json = json_encode($this->toArray(), $options);
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
+        if (JSON_ERROR_NONE !== json_last_error() || !$json) {
             throw new JsonEncodingException(json_last_error_msg());
         }
 
