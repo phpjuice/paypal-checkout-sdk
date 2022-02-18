@@ -20,7 +20,7 @@ $result = json_decode($response->getBody()->getContents());
 
 A successful response to a non-idempotent request returns the HTTP `201` Created status code with a JSON response body that shows captured payment details. If a duplicate response is retried, returns the HTTP `200` OK status code. By default, the response is minimal.
 
-```javascript
+```json
 {
     "id": "8F783829JA718493L",
     "intent": "CAPTURE",
@@ -171,7 +171,7 @@ try {
 
 Errors :
 
-```javascript
+```json
 {
     "name": "UNPROCESSABLE_ENTITY",
     "details": [
