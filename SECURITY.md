@@ -5,7 +5,7 @@
 `paypal-checkout-sdk` Package requires PHP 7.4 or higher. If you are using an older version of php this package may not function correctly.
 
 | Version | Supported          |
-| ------- | ------------------ |
+|---------|--------------------|
 | 3.0.x   | :white_check_mark: |
 | 2.0.x   | :white_check_mark: |
 | < 2.0   | :x:                |
