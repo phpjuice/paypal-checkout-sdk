@@ -20,7 +20,7 @@
         "php": "^7.4|^8.0|^8.1",
         "ext-json": "*",
         "brick/money": "^0.5.2",
-        "phpjuice/paypal-http-client": "1.0.0"
+        "phpjuice/paypal-http-client": "^1.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.4",
