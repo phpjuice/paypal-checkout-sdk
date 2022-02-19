@@ -65,54 +65,43 @@ class AmountBreakdown extends Amount
         ];
 
         if ($this->hasDiscount()) {
+            /** @var Money $discount */
+            $discount = $this->getDiscount();
             $data['breakdown']['discount'] = [
-                'currency_code' => $this->discount->getCurrency()->getCurrencyCode(),
-                'value' => (string) $this->discount->getAmount(),
+                'currency_code' => $discount->getCurrency()->getCurrencyCode(),
+                'value' => (string) $discount->getAmount(),
             ];
         }
 
         return $data;
     }
 
-    /**
-     * @return bool
-     */
     public function hasDiscount(): bool
     {
         return (bool) $this->discount;
     }
 
-    /**
-     * return's discount.
-     * @return Money
-     */
-    public function getDiscount(): Money
+    public function getDiscount(): ?Money
     {
         return $this->discount;
     }
 
-    /**
-     * @param  Money  $discount
-     */
-    public function setDiscount(Money $discount)
+    public function setDiscount(Money $discount): AmountBreakdown
     {
         $this->discount = $discount;
+
+        return $this;
     }
 
-    /**
-     * return's item_total.
-     * @return Money
-     */
     public function getItemTotal(): Money
     {
         return $this->item_total;
     }
 
-    /**
-     * @param  Money  $item_total
-     */
-    public function setItemTotal(Money $item_total)
+    public function setItemTotal(Money $item_total): AmountBreakdown
     {
         $this->item_total = $item_total;
+
+        return $this;
     }
 }

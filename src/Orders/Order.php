@@ -192,10 +192,15 @@ class Order implements Arrayable, Jsonable, ArrayAccess
                 fn(PurchaseUnit $purchase_unit) => $purchase_unit->toArray(),
                 $this->purchase_units
             ),
-            'application_context' => $this->application_context->toArray(),
+            'application_context' => $this->application_context ? $this->application_context->toArray() : null,
         ];
     }
 
+    /**
+     * @param  mixed  $offset
+     * @param  mixed  $value
+     * @return void
+     */
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {

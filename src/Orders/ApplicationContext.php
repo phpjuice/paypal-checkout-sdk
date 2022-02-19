@@ -106,47 +106,34 @@ class ApplicationContext implements Arrayable, Jsonable
     protected string $user_action = ACTION_CONTINUE;
 
     /**
-     * Create a new collection.
-     *
      * @param  string|null  $brand_name
-     * @param  string|null  $locale
-     * @param  string|null  $landing_page
-     * @param  string|null  $shipping_preference
+     * @param  string  $locale
+     * @param  string  $landing_page
+     * @param  string  $shipping_preference
      * @param  string|null  $return_url
      * @param  string|null  $cancel_url
      */
     public function __construct(
         ?string $brand_name = null,
-        ?string $locale = 'en-US',
-        ?string $landing_page = NO_PREFERENCE,
-        ?string $shipping_preference = NO_SHIPPING,
+        string $locale = 'en-US',
+        string $landing_page = NO_PREFERENCE,
+        string $shipping_preference = NO_SHIPPING,
         ?string $return_url = null,
         ?string $cancel_url = null
     ) {
-        $this->setBrandName($brand_name);
-        $this->setLocale($locale);
-        $this->setLandingPage($landing_page);
-        $this->setShippingPreference($shipping_preference);
-        $this->setReturnUrl($return_url);
-        $this->setCancelUrl($cancel_url);
+        $this->brand_name = $brand_name;
+        $this->locale = $locale;
+        $this->landing_page = $landing_page;
+        $this->shipping_preference = $shipping_preference;
+        $this->return_url = $return_url;
+        $this->cancel_url = $cancel_url;
     }
 
-    /**
-     * Create a new collection.
-     *
-     * @param  string|null  $brand_name
-     * @param  string|null  $locale
-     * @param  string|null  $landing_page
-     * @param  string|null  $shipping_preference
-     * @param  string|null  $return_url
-     * @param  string|null  $cancel_url
-     * @return ApplicationContext
-     */
     public static function create(
         ?string $brand_name = null,
-        ?string $locale = 'en-US',
-        ?string $landing_page = NO_PREFERENCE,
-        ?string $shipping_preference = NO_SHIPPING,
+        string $locale = 'en-US',
+        string $landing_page = NO_PREFERENCE,
+        string $shipping_preference = NO_SHIPPING,
         ?string $return_url = null,
         ?string $cancel_url = null
     ): ApplicationContext {
@@ -183,55 +170,36 @@ class ApplicationContext implements Arrayable, Jsonable
         );
     }
 
-    /**
-     * gets brand_name.
-     */
     public function getBrandName(): ?string
     {
         return $this->brand_name;
     }
 
-    /**
-     * sets the brand_name.
-     */
-    public function setBrandName($brand_name): self
+    public function setBrandName(string $brand_name): self
     {
         $this->brand_name = $brand_name;
 
         return $this;
     }
 
-    /**
-     * gets brand_name.
-     */
     public function getLocale(): string
     {
         return $this->locale;
     }
 
-    /**
-     * sets the locale.
-     */
-    public function setLocale($locale): self
+    public function setLocale(string $locale): self
     {
         $this->locale = $locale;
 
         return $this;
     }
 
-    /**
-     * gets shipping_preference.
-     */
     public function getShippingPreference(): string
     {
         return $this->shipping_preference;
     }
 
-    /**
-     * sets the shipping_preference.
-     * @noinspection PhpUnused
-     */
-    public function setShippingPreference($shipping_preference): self
+    public function setShippingPreference(string $shipping_preference): self
     {
         $validOptions = [GET_FROM_FILE, NO_SHIPPING, SET_PROVIDED_ADDRESS];
         if (!in_array($shipping_preference, $validOptions)) {
@@ -243,19 +211,12 @@ class ApplicationContext implements Arrayable, Jsonable
         return $this;
     }
 
-    /**
-     * gets landing_page.
-     * @noinspection PhpUnused
-     */
     public function getLandingPage(): string
     {
         return $this->landing_page;
     }
 
-    /**
-     * sets the landing_page.
-     */
-    public function setLandingPage($landing_page): self
+    public function setLandingPage(string $landing_page): self
     {
         $validOptions = [LOGIN, BILLING, NO_PREFERENCE];
         if (!in_array($landing_page, $validOptions)) {
@@ -267,19 +228,12 @@ class ApplicationContext implements Arrayable, Jsonable
         return $this;
     }
 
-    /**
-     * gets user_action.
-     */
     public function getUserAction(): string
     {
         return $this->user_action;
     }
 
-    /**
-     * sets the user_action.
-     * @noinspection PhpUnused
-     */
-    public function setUserAction($user_action): self
+    public function setUserAction(string $user_action): self
     {
         $validOptions = [ACTION_CONTINUE, ACTION_PAY_NOW];
         if (!in_array($user_action, $validOptions)) {
@@ -290,37 +244,24 @@ class ApplicationContext implements Arrayable, Jsonable
         return $this;
     }
 
-    /**
-     * gets return_url.
-     * @noinspection PhpUnused
-     */
     public function getReturnUrl(): ?string
     {
         return $this->return_url;
     }
 
-    /**
-     * sets the return_url.
-     */
-    public function setReturnUrl($return_url): self
+    public function setReturnUrl(string $return_url): self
     {
         $this->return_url = $return_url;
 
         return $this;
     }
 
-    /**
-     * gets cancel_url.
-     */
     public function getCancelUrl(): ?string
     {
         return $this->cancel_url;
     }
 
-    /**
-     * sets the cancel_url.
-     */
-    public function setCancelUrl($cancel_url): self
+    public function setCancelUrl(string $cancel_url): self
     {
         $this->cancel_url = $cancel_url;
 

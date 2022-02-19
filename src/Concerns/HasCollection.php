@@ -2,6 +2,8 @@
 
 namespace PayPal\Checkout\Concerns;
 
+use PayPal\Checkout\Orders\Item;
+
 trait HasCollection
 {
     /**
@@ -50,6 +52,11 @@ trait HasCollection
         unset($this->items[$offset]);
     }
 
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     * @return void
+     */
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
@@ -61,6 +68,7 @@ trait HasCollection
 
     /**
      * @param  string  $offset
+     * @return mixed|Item|null
      */
     public function offsetGet(string $offset)
     {
