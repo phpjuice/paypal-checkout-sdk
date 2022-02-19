@@ -2,6 +2,19 @@
 
 All notable changes to `phpjuice/paypal-checkout-sdk` will be documented in this file.
 
+## Version 3.0.1
+
+### Changed
+
+- Add support for php8.1 in #25
+
+## Version 3.0.0
+
+### Changed
+
+- Update readme & changelog in #21
+- Use standalone phpjuice/paypal-http-client
+
 ## Version 2.0.2
 
 ### Changed
