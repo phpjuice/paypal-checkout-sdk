@@ -12,9 +12,9 @@ Get client ID and client secret by going to [https://developer.paypal.com/develo
 
 ## Setup a Paypal Client
 
-Inorder to communicate with PayPal platform we need to set up a client first :
+In order to communicate with PayPal platform we need to set up a client first :
 
-### Create a client with sandbox environment :
+### Create a client with sandbox environment
 
 ```php
 // import namespace
@@ -32,7 +32,7 @@ $environment = new SandboxEnvironment($clientId, $clientSecret);
 $client = new PayPalClient($environment);
 ```
 
-### Create a client with production environment :
+### Create a client with production environment
 
 ```php
 // import namespace
@@ -49,4 +49,3 @@ $environment = new ProductionEnvironment($clientId, $clientSecret);
 // create a new client
 $client = new PayPalClient($environment);
 ```
-

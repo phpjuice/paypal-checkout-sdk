@@ -22,4 +22,3 @@
 * [Order](api/order.md)
 * [Payee](api/payee.md)
 * [Purchase Unit](api/purchase-unit.md)
-

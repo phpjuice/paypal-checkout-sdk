@@ -81,4 +81,3 @@ A successful request returns the HTTP `200` status code and a JSON response body
     ]
 }
 ```
-
