@@ -56,4 +56,3 @@ A successful request returns the HTTP `201` Created status code and a JSON respo
     ]
 }
 ```
-
