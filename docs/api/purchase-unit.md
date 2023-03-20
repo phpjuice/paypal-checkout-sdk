@@ -1,69 +1,105 @@
-## PurchaseUnit
+# PurchaseUnit
 
-Namespace: `PayPal\Checkout\Orders`
+See https://developer.paypal.com/docs/api/orders/v2/#definition-purchase_unit.
 
-- Uses Traits:
-  - `CastsToJson`
-  - `HasCollection`
+## Methods
 
-### Properties
+### PurchaseUnit::__construct()
 
-- **amount** `AmountBreakdown`
+Creates a new PurchaseUnit instance.
 
-  The total order Amount with an optional breakdown that provides details, such as the total item Amount, total tax Amount, shipping, handling, insurance, and discounts, if any.
+#### Signature
 
-- **items** `Item[]`
+```php
+public function __construct(AmountBreakdown $amount);
+```
+#### Example
 
-  An array of items that the customer purchases from the merchant.
+```php
+$amount = AmountBreakdown::of('100.00', 'CAD');
+$purchase_unit = new PurchaseUnit($amount);
+```
 
-### Methods
+### PurchaseUnit::addItems()
 
-- **__construct(AmountBreakdown $amount): void**
+Pushes a new item or array of items into the items array of PurchaseUnit.
 
-  Create a new instance of the `PurchaseUnit` class.
+#### Signature
 
-  - **Parameters**
-    - `$amount` `AmountBreakdown` - The total order Amount with an optional breakdown that provides details, such as the total item Amount, total tax Amount, shipping, handling, insurance, and discounts, if any.
+```php
+public function addItems(array $items): self;
+```
 
-- **addItems(array $items): self**
+#### Example
 
-  Push a new item into the `items` array.
+```php
+$amount = AmountBreakdown::of('100', 'CAD');
+$purchase_unit = new PurchaseUnit($amount);
 
-  - **Parameters**
-    - `$items` `Item[]` - An array of `Item` objects representing the items to be added.
-  - **Returns**
-    - `PurchaseUnit` - The updated `PurchaseUnit` object.
-  - **Throws**
-    - `MultiCurrencyOrderException` - If the currency code of the `Item` being added does not match the currency code of the `PurchaseUnit`.
+$items = array_map(function ($index) {
+    return Item::create("Item $index", '100.00', 'CAD', $index);
+}, [1, 2, 3]);
 
-- **addItem(Item $item): self**
 
-  Push a new item into the `items` array.
+$purchase_unit->addItems($items);
 
-  - **Parameters**
-    - `$item` `Item` - The `Item` object to be added.
-  - **Returns**
-    - `PurchaseUnit` - The updated `PurchaseUnit` object.
-  - **Throws**
-    - `MultiCurrencyOrderException` - If the currency code of the `Item` being added does not match the currency code of the `PurchaseUnit`.
+```
 
-- **getItems(): array**
+### PurchaseUnit::addItem()
 
-  Get the `items` array.
+Pushes a new item into the items array of PurchaseUnit.
 
-  - **Returns**
-    - `Item[]` - An array of `Item` objects.
+#### Signature
 
-- **getAmount(): AmountBreakdown**
+```php
+public function addItem(Item $item): self;
+```
 
-  Get the `amount` property.
+#### Example
 
-  - **Returns**
-    - `AmountBreakdown` - The `amount` property.
+```php
+$amount = AmountBreakdown::of('100', 'CAD');
+$purchase_unit = new PurchaseUnit($amount);
 
-- **toArray(): array**
+$purchase_unit->addItem(Item::create('Item 1', '100.00', 'CAD', 2));
+```
 
-  Convert the `PurchaseUnit` object to an array.
+### PurchaseUnit::getItems()
 
-  - **Returns**
-    - `array` - An array representation of the `PurchaseUnit` object.
+Returns the items array of PurchaseUnit.
+
+#### Signature
+
+```php
+public function getItems(): array;
+```
+
+#### Example
+
+```php
+$amount = AmountBreakdown::of('100', 'CAD');
+$purchase_unit = new PurchaseUnit($amount);
+
+$purchase_unit->addItem(Item::create('Item 1', '100.00', 'CAD', 2));
+$purchase_unit->addItem(Item::create('Item 2', '100.00', 'CAD', 2));
+
+$purchase_unit->getItems();
+```
+### PurchaseUnit::getAmount()
+
+Returns the amount breakdown of PurchaseUnit.
+
+#### Signature
+
+```php
+public function getAmount(): AmountBreakdown;
+```
+
+#### Example
+
+```php
+$amount = AmountBreakdown::of('100', 'CAD');
+$purchase_unit = new PurchaseUnit($amount);
+
+$amount = $purchaseUnit->getAmount();
+```
