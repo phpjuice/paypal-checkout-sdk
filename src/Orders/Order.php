@@ -15,7 +15,7 @@ const AUTHORIZE = 'AUTHORIZE';
 /**
  * https://developer.paypal.com/docs/api/orders/v2/#definition-order.
  */
-class Order implements Arrayable, Jsonable, ArrayAccess
+class Order implements Arrayable, ArrayAccess, Jsonable
 {
     use CastsToJson;
 
@@ -35,8 +35,6 @@ class Order implements Arrayable, Jsonable, ArrayAccess
      *
      * AUTHORIZE : The merchant intends to authorize a payment and place funds
      * on hold after the customer makes a payment.
-     *
-     * @var string
      */
     protected string $intent;
 
@@ -67,16 +65,12 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     /**
      * The order application context.
      * https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context.
-     *
-     * @var ApplicationContext|null
      */
     protected ?ApplicationContext $application_context = null;
 
     /**
      * The order payee.
      * https://developer.paypal.com/docs/api/orders/v2/#definition-payee.
-     *
-     * @var Payee|null
      */
     protected ?Payee $payee = null;
 
@@ -86,7 +80,7 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     public function __construct(string $intent = CAPTURE)
     {
         $this->setIntent($intent);
-        $this->application_context = new ApplicationContext();
+        $this->application_context = new ApplicationContext;
     }
 
     /**
@@ -105,6 +99,7 @@ class Order implements Arrayable, Jsonable, ArrayAccess
 
     /**
      * return's order purchase units.
+     *
      * @return PurchaseUnit[]
      */
     public function getPurchaseUnits(): array
@@ -114,7 +109,6 @@ class Order implements Arrayable, Jsonable, ArrayAccess
 
     /**
      * return's order application context.
-     * @return ApplicationContext|null
      */
     public function getApplicationContext(): ?ApplicationContext
     {
@@ -123,8 +117,6 @@ class Order implements Arrayable, Jsonable, ArrayAccess
 
     /**
      * set's order application context.
-     * @param  ApplicationContext  $application_context
-     * @return Order
      */
     public function setApplicationContext(ApplicationContext $application_context): self
     {
@@ -135,7 +127,6 @@ class Order implements Arrayable, Jsonable, ArrayAccess
 
     /**
      * return's order intent.
-     * @return string
      */
     public function getIntent(): string
     {
@@ -144,13 +135,11 @@ class Order implements Arrayable, Jsonable, ArrayAccess
 
     /**
      * set's order intent.
-     * @param  string  $intent
-     * @return Order
      */
     public function setIntent(string $intent): self
     {
-        if (!in_array($intent, [CAPTURE, AUTHORIZE])) {
-            throw new InvalidOrderIntentException();
+        if (! in_array($intent, [CAPTURE, AUTHORIZE])) {
+            throw new InvalidOrderIntentException;
         }
 
         $this->intent = $intent;
@@ -160,7 +149,6 @@ class Order implements Arrayable, Jsonable, ArrayAccess
 
     /**
      * return's order id.
-     * @return string
      */
     public function getId(): string
     {
@@ -169,7 +157,6 @@ class Order implements Arrayable, Jsonable, ArrayAccess
 
     /**
      * return's order status.
-     * @return string
      */
     public function getStatus(): string
     {
@@ -178,7 +165,6 @@ class Order implements Arrayable, Jsonable, ArrayAccess
 
     /**
      * Get the instance as an array.
-     * @return array
      */
     public function toArray(): array
     {
@@ -189,7 +175,7 @@ class Order implements Arrayable, Jsonable, ArrayAccess
         return [
             'intent' => $this->intent,
             'purchase_units' => array_map(
-                fn(PurchaseUnit $purchase_unit) => $purchase_unit->toArray(),
+                fn (PurchaseUnit $purchase_unit) => $purchase_unit->toArray(),
                 $this->purchase_units
             ),
             'application_context' => $this->application_context ? $this->application_context->toArray() : null,
@@ -199,7 +185,6 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     /**
      * @param  mixed  $offset
      * @param  mixed  $value
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
@@ -214,7 +199,6 @@ class Order implements Arrayable, Jsonable, ArrayAccess
      * Unset an attribute on the model.
      *
      * @param  mixed  $offset
-     * @return void
      */
     public function offsetUnset($offset): void
     {
@@ -223,7 +207,6 @@ class Order implements Arrayable, Jsonable, ArrayAccess
 
     /**
      * @param  mixed  $offset
-     * @return PurchaseUnit|null
      */
     public function offsetGet($offset): ?PurchaseUnit
     {
@@ -234,7 +217,6 @@ class Order implements Arrayable, Jsonable, ArrayAccess
      * Determine if a key exists on the purchase_units.
      *
      * @param  mixed  $offset
-     * @return bool
      */
     public function offsetExists($offset): bool
     {
@@ -242,7 +224,6 @@ class Order implements Arrayable, Jsonable, ArrayAccess
     }
 
     /**
-     * @return Payee
      * @noinspection PhpUnused
      */
     public function getPayee(): ?Payee

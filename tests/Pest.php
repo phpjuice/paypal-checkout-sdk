@@ -52,5 +52,6 @@ function mockCreateOrderResponse(): Client
         new Response(200, ['Content-Type' => 'application/json'], $mockResponse),
     ]);
     $handlerStack = HandlerStack::create($mock);
+
     return new Client(['handler' => $handlerStack]);
 }

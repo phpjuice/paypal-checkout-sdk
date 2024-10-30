@@ -1,10 +1,12 @@
-<?php /** @noinspection SpellCheckingInspection */
+<?php
+
+/** @noinspection SpellCheckingInspection */
 
 namespace Tests\Orders;
 
 use PayPal\Checkout\Orders\Payee;
 
-it("can initialize a payee", function () {
+it('can initialize a payee', function () {
     // Arrange
     $expected = [
         'email_address' => 'payee@paypal.com',
@@ -18,7 +20,7 @@ it("can initialize a payee", function () {
     expect($payee->toArray())->toBe($expected);
 });
 
-it("casts to an array", function () {
+it('casts to an array', function () {
     // Arrange
     $expected = [
         'email_address' => 'payee@paypal.com',
@@ -32,7 +34,7 @@ it("casts to an array", function () {
     expect($payee->toArray())->toBe($expected);
 });
 
-it("casts to json", function () {
+it('casts to json', function () {
     // Arrange
     $expected = json_encode([
         'email_address' => 'payee@paypal.com',

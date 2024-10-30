@@ -8,7 +8,7 @@ use PayPal\Http\PaypalRequest;
 
 class OrderCreateRequest extends PaypalRequest
 {
-    public function __construct(Order $order = null)
+    public function __construct(?Order $order = null)
     {
         $headers = [
             'Prefer' => 'return=representation',

@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUnhandledExceptionInspection */
+<?php
+
+/** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Tests\Orders;
 
@@ -8,7 +10,7 @@ use PayPal\Checkout\Orders\AmountBreakdown;
 use PayPal\Checkout\Orders\Item;
 use PayPal\Checkout\Orders\PurchaseUnit;
 
-it("can initialize a purchase unit", function () {
+it('can initialize a purchase unit', function () {
     // Arrange
     $amount = AmountBreakdown::of('100.00', 'CAD');
 
@@ -20,8 +22,7 @@ it("can initialize a purchase unit", function () {
     expect($purchase_unit->getAmount()->getValue())->toBe('100.00');
 });
 
-
-it("can create an empty purchase unit", function () {
+it('can create an empty purchase unit', function () {
     // Arrange
     $amount = AmountBreakdown::of('100.00', 'CAD');
 
@@ -32,8 +33,7 @@ it("can create an empty purchase unit", function () {
     expect(count($purchase_unit->getItems()))->toBe(0);
 });
 
-
-it("can add a single item", function () {
+it('can add a single item', function () {
     // Arrange
     $amount = AmountBreakdown::of('100', 'CAD');
     $purchase_unit = new PurchaseUnit($amount);
@@ -45,8 +45,7 @@ it("can add a single item", function () {
     expect(count($purchase_unit->getItems()))->toBe(1);
 });
 
-
-it("can add multiple items", function () {
+it('can add multiple items', function () {
     // Arrange
     $amount = AmountBreakdown::of('100', 'CAD');
     $purchase_unit = new PurchaseUnit($amount);
@@ -61,7 +60,7 @@ it("can add multiple items", function () {
     expect(count($purchase_unit->getItems()))->toBe(3);
 });
 
-it("it throws an exception when using multiple currencies", function () {
+it('it throws an exception when using multiple currencies', function () {
     $amount = AmountBreakdown::of('100', 'CAD');
     $purchase_unit = new PurchaseUnit($amount);
 
@@ -71,8 +70,7 @@ it("it throws an exception when using multiple currencies", function () {
     $purchase_unit->addItem($item);
 })->throws(MultiCurrencyOrderException::class);
 
-
-it("casts to an array", function () {
+it('casts to an array', function () {
     // Arrange
     $amount = AmountBreakdown::of('300.00', 'CAD');
     $purchase_unit = new PurchaseUnit($amount);

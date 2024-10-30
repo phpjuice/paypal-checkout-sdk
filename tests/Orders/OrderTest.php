@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUnhandledExceptionInspection */
+<?php
+
+/** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Tests\Orders;
 
@@ -11,7 +13,7 @@ use PayPal\Checkout\Orders\Item;
 use PayPal\Checkout\Orders\Order;
 use PayPal\Checkout\Orders\PurchaseUnit;
 
-it("can not create an order with invalid intent", function () {
+it('can not create an order with invalid intent', function () {
     new Order('Invalid Intent');
 })->throws(
     InvalidOrderIntentException::class,
@@ -19,8 +21,8 @@ it("can not create an order with invalid intent", function () {
     'Order intent provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#orders_create.'
 );
 
-it("can not set an invalid intent on an order", function () {
-    $order = new Order();
+it('can not set an invalid intent on an order', function () {
+    $order = new Order;
     $order->setIntent('invalid intent');
 })->throws(
     InvalidOrderIntentException::class,
@@ -28,9 +30,9 @@ it("can not set an invalid intent on an order", function () {
     'Order intent provided is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#orders_create.'
 );
 
-it("can initialize an order", function () {
+it('can initialize an order', function () {
     // Act
-    $order = new Order();
+    $order = new Order;
 
     // Assert
     expect($order->getIntent())->toBe('CAPTURE');
@@ -49,11 +51,11 @@ it("can initialize an order", function () {
     expect($order->getPurchaseUnits())->toBeEmpty();
 });
 
-it("can add a purchase unit to an order", function () {
+it('can add a purchase unit to an order', function () {
     // Arrange
     $amount = AmountBreakdown::of('200.00', 'EUR');
     $purchase_unit = new PurchaseUnit($amount);
-    $order = new Order();
+    $order = new Order;
 
     // Act
     $order->addPurchaseUnit($purchase_unit);
@@ -62,10 +64,10 @@ it("can add a purchase unit to an order", function () {
     expect(count($order->getPurchaseUnits()))->toBe(1);
 });
 
-it("can not add multiple purchase units to an order", function () {
+it('can not add multiple purchase units to an order', function () {
     $amount = AmountBreakdown::of('200.00', 'EUR');
     $purchase_unit = new PurchaseUnit($amount);
-    $order = new Order();
+    $order = new Order;
 
     // Act
     $order->addPurchaseUnit($purchase_unit);
@@ -75,14 +77,14 @@ it("can not add multiple purchase units to an order", function () {
     'At present only 1 purchase_unit is supported.'
 );
 
-it("asserts an order has at least one purchase unit", function () {
-    (new Order())->toArray();
+it('asserts an order has at least one purchase unit', function () {
+    (new Order)->toArray();
 })->throws(
     InvalidOrderException::class,
     'Paypal orders must have 1 purchase_unit at least.'
 );
 
-it("casts to an array", function () {
+it('casts to an array', function () {
     // Arrange
     $amount = AmountBreakdown::of('250.00');
     $amount->setItemTotal(Money::of('300', 'USD'));
@@ -158,7 +160,7 @@ it("casts to an array", function () {
     expect($order->toArray())->toBe($expected);
 });
 
-it("casts to json", function () {
+it('casts to json', function () {
     // Arrange
     $amount = AmountBreakdown::of('250.00');
     $amount->setItemTotal(Money::of('300', 'USD'));

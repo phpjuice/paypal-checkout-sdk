@@ -21,8 +21,6 @@ class Item implements Arrayable, Jsonable
 
     /**
      * The item name or title.
-     *
-     * @var string
      */
     protected string $name;
 
@@ -30,8 +28,6 @@ class Item implements Arrayable, Jsonable
      * The item price or rate per unit.
      * If you specify unit_amount, purchase_units[].amount.breakdown.item_total is required.
      * Must equal unit_amount * quantity for all items.
-     *
-     * @var AmountContract
      */
     protected AmountContract $unit_amount;
 
@@ -39,29 +35,21 @@ class Item implements Arrayable, Jsonable
      * The item tax for each unit.
      * If tax is specified, purchase_units[].amount.breakdown.tax_total is required.
      * Must equal tax * quantity for all items.
-     *
-     * @var AmountContract|null
      */
     protected ?AmountContract $tax = null;
 
     /**
      * The item quantity. Must be a whole number.
-     *
-     * @var int
      */
     protected int $quantity;
 
     /**
      * The stock keeping unit (SKU) for the item.
-     *
-     * @var string
      */
     protected string $sku;
 
     /**
      * The detailed item description.
-     *
-     * @var string
      */
     protected string $description = '';
 
@@ -69,8 +57,6 @@ class Item implements Arrayable, Jsonable
      * The item category type. The possible values are:.The item category type. The possible values are:
      *     - DIGITAL_GOODS. Goods that are stored, delivered, and used in their electronic format.
      *     - PHYSICAL_GOODS. A tangible item that can be shipped with proof of delivery.
-     *
-     * @var string
      */
     protected string $category = DIGITAL_GOODS;
 
@@ -87,11 +73,13 @@ class Item implements Arrayable, Jsonable
 
     /**
      * create a new item instance.
+     *
      * @throws UnknownCurrencyException
      */
     public static function create(string $name, string $value, string $currency_code = 'USD', int $quantity = 1): Item
     {
         $amount = Amount::of($value, $currency_code);
+
         return new self($name, $amount, $quantity);
     }
 
@@ -213,8 +201,8 @@ class Item implements Arrayable, Jsonable
     public function setCategory(string $category): self
     {
         $validOptions = [DIGITAL_GOODS, PHYSICAL_GOODS];
-        if (!in_array($category, $validOptions)) {
-            throw new InvalidItemCategoryException();
+        if (! in_array($category, $validOptions)) {
+            throw new InvalidItemCategoryException;
         }
         $this->category = $category;
 

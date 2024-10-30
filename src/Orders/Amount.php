@@ -16,15 +16,12 @@ class Amount implements AmountContract
 
     /**
      * The three-character ISO-4217 currency code that identifies the currency.
-     *
-     * @var Money
      */
     protected Money $money;
 
     /**
      * create a new amount instance.
-     * @param  string  $value
-     * @param  string  $currency_code
+     *
      * @throws UnknownCurrencyException
      */
     public function __construct(string $value, string $currency_code = 'USD')
@@ -33,9 +30,6 @@ class Amount implements AmountContract
     }
 
     /**
-     * @param  string  $value
-     * @param  string  $currency_code
-     * @return Amount
      * @throws UnknownCurrencyException
      */
     public static function of(string $value, string $currency_code = 'USD'): Amount
@@ -45,7 +39,6 @@ class Amount implements AmountContract
 
     /**
      * convert amount to an array.
-     * @return array
      */
     public function toArray(): array
     {
@@ -55,17 +48,11 @@ class Amount implements AmountContract
         ];
     }
 
-    /**
-     * @return string
-     */
     public function getCurrencyCode(): string
     {
         return $this->money->getCurrency()->getCurrencyCode();
     }
 
-    /**
-     * @return string
-     */
     public function getValue(): string
     {
         return (string) $this->money->getAmount();

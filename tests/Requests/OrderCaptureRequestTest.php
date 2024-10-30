@@ -9,24 +9,24 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Utils;
 use PayPal\Checkout\Requests\OrderCaptureRequest;
 
-it("has correct request uri", function () {
+it('has correct request uri', function () {
     $request = new OrderCaptureRequest('1KC5501443316171H');
     expect((string) $request->getUri())->toBe('/v2/checkout/orders/1KC5501443316171H/capture');
 });
 
-it("has correct request method", function () {
+it('has correct request method', function () {
     $request = new OrderCaptureRequest('1KC5501443316171H');
     expect($request->getMethod())->toBe('POST');
 });
 
-it("has correct request headers", function () {
+it('has correct request headers', function () {
     $request = new OrderCaptureRequest('1KC5501443316171H');
 
     expect($request->getHeaderLine('Content-Type'))->toBe('application/json');
     expect($request->getHeaderLine('Prefer'))->toBe('return=representation');
 });
 
-it("can execute request", function () {
+it('can execute request', function () {
     $mockResponse = Utils::jsonEncode([
         'id' => '1KC5501443316171H',
     ]);

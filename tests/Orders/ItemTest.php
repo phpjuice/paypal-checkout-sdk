@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Tests\Orders;
@@ -7,10 +8,10 @@ use PayPal\Checkout\Exceptions\InvalidItemCategoryException;
 use PayPal\Checkout\Orders\Amount;
 use PayPal\Checkout\Orders\Item;
 
-it("can initialize new item", function () {
+it('can initialize new item', function () {
     // Arrange
-    $value = "100.00";
-    $currency_code = "USD";
+    $value = '100.00';
+    $currency_code = 'USD';
     $amount = new Amount($value, $currency_code);
 
     // Act
@@ -21,11 +22,10 @@ it("can initialize new item", function () {
     expect($item->getQuantity())->toBe(1);
 });
 
-
-it("can create new item", function () {
+it('can create new item', function () {
     // Arrange
-    $value = "100.00";
-    $currency_code = "USD";
+    $value = '100.00';
+    $currency_code = 'USD';
 
     // Act
     $item = Item::create('Item 1', $value, $currency_code, 2);
@@ -36,7 +36,7 @@ it("can create new item", function () {
     expect($item->getQuantity())->toBe(2);
 });
 
-it("can cast to an array", function () {
+it('can cast to an array', function () {
     // Arrange
     $expected = [
         'name' => 'Item 1',
@@ -50,7 +50,7 @@ it("can cast to an array", function () {
     ];
 
     // Act
-    $item = Item::create('Item 1', "100.00", "CAD");
+    $item = Item::create('Item 1', '100.00', 'CAD');
     $item->setDescription('Item Description')
         ->setQuantity(2);
 
@@ -58,8 +58,7 @@ it("can cast to an array", function () {
     expect($item->toArray())->toBe($expected);
 });
 
-
-it("can cast to json", function () {
+it('can cast to json', function () {
     // Arrange
     $expected = json_encode([
         'name' => 'Item 1',
@@ -73,7 +72,7 @@ it("can cast to json", function () {
     ]);
 
     // Act
-    $item = Item::create('Item 1', "100.00", "CAD");
+    $item = Item::create('Item 1', '100.00', 'CAD');
     $item->setDescription('Item Description')
         ->setQuantity(2);
 
@@ -81,7 +80,7 @@ it("can cast to json", function () {
     expect($item->toJson())->toBe($expected);
 });
 
-it("throws an exception when setting invalid category", function () {
+it('throws an exception when setting invalid category', function () {
     // Act
     $item = Item::create('Item', '100.00', 'CAD', 2);
     $item->setCategory('invalid category');
@@ -90,7 +89,7 @@ it("throws an exception when setting invalid category", function () {
     'Item category is not supported. Please refer to https://developer.paypal.com/docs/api/orders/v2/#definition-item.'
 );
 
-it("returns item sku", function () {
+it('returns item sku', function () {
     // Arrange
     $item = Item::create('Item', '100.00', 'CAD', 2);
 
