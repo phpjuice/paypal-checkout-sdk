@@ -15,15 +15,11 @@ class Payee implements Arrayable, Jsonable
 
     /**
      * The email address of merchant.
-     *
-     * @var string
      */
     protected string $email_address;
 
     /**
      * The encrypted PayPal account ID of the merchant.
-     *
-     * @var string
      */
     protected string $merchant_id;
 

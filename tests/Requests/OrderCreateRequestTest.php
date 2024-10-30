@@ -3,30 +3,30 @@
 namespace Tests\Requests;
 
 use GuzzleHttp\Utils;
-use PayPal\Checkout\Requests\OrderCreateRequest;
 use PayPal\Checkout\Orders\AmountBreakdown;
 use PayPal\Checkout\Orders\ApplicationContext;
 use PayPal\Checkout\Orders\Item;
 use PayPal\Checkout\Orders\Order;
 use PayPal\Checkout\Orders\PurchaseUnit;
+use PayPal\Checkout\Requests\OrderCreateRequest;
 
-it("has correct request uri", function () {
-    $request = new OrderCreateRequest();
+it('has correct request uri', function () {
+    $request = new OrderCreateRequest;
     expect((string) $request->getUri())->toBe('/v2/checkout/orders');
 });
 
-it("has correct request method", function () {
-    $request = new OrderCreateRequest();
+it('has correct request method', function () {
+    $request = new OrderCreateRequest;
     expect($request->getMethod())->toBe('POST');
 });
 
-it("has correct request headers", function () {
-    $request = new OrderCreateRequest();
+it('has correct request headers', function () {
+    $request = new OrderCreateRequest;
     expect($request->getHeaderLine('Content-Type'))->toBe('application/json');
     expect($request->getHeaderLine('Prefer'))->toBe('return=representation');
 });
 
-it("has correct request body", function () {
+it('has correct request body', function () {
     // Arrange
     /** @noinspection PhpUnhandledExceptionInspection */
     $amount = AmountBreakdown::of('100.00');
@@ -51,7 +51,7 @@ it("has correct request body", function () {
     expect(Utils::jsonDecode($request->getBody(), true))->toBe($order->toArray());
 });
 
-it("can execute request", function () {
+it('can execute request', function () {
     // Arrange
     /** @noinspection PhpUnhandledExceptionInspection */
     $amount = AmountBreakdown::of('100.00');
@@ -80,6 +80,6 @@ it("can execute request", function () {
     expect($result)->toBe([
         'id' => '1KC5501443316171H',
         'intent' => 'CAPTURE',
-        'status' => 'CREATED'
+        'status' => 'CREATED',
     ]);
 });

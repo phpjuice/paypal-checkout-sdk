@@ -9,7 +9,6 @@ trait HasCollection
     /**
      * Determine if an attribute or relation exists on the model.
      *
-     * @param  string  $key
      *
      * @return bool
      */
@@ -20,9 +19,6 @@ trait HasCollection
 
     /**
      * Determine if a key exists on the items.
-     *
-     * @param  string  $offset
-     * @return bool
      */
     public function offsetExists(string $offset): bool
     {
@@ -32,7 +28,6 @@ trait HasCollection
     /**
      * Unset an attribute on the model.
      *
-     * @param  string  $key
      *
      * @return void
      */
@@ -44,7 +39,6 @@ trait HasCollection
     /**
      * Unset an attribute on the model.
      *
-     * @param  string  $offset
      * @return void
      */
     public function offsetUnset(string $offset)
@@ -53,8 +47,8 @@ trait HasCollection
     }
 
     /**
-     * @param mixed $offset
-     * @param mixed $value
+     * @param  mixed  $offset
+     * @param  mixed  $value
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -67,7 +61,6 @@ trait HasCollection
     }
 
     /**
-     * @param  string  $offset
      * @return mixed|Item|null
      */
     public function offsetGet(string $offset)
@@ -77,8 +70,6 @@ trait HasCollection
 
     /**
      * Determine if the purchase unit is empty or not.
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {

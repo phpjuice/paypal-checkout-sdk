@@ -4,6 +4,4 @@ namespace PayPal\Checkout\Exceptions;
 
 use RuntimeException;
 
-class JsonEncodingException extends RuntimeException
-{
-}
+class JsonEncodingException extends RuntimeException {}

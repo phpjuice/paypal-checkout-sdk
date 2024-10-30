@@ -19,9 +19,7 @@ trait CastsToJson
     /**
      * Convert the model instance to JSON.
      *
-     * @param  int  $options
      *
-     * @return string
      *
      * @throws JsonEncodingException
      */
@@ -29,7 +27,7 @@ trait CastsToJson
     {
         $json = json_encode($this->toArray(), $options);
 
-        if (JSON_ERROR_NONE !== json_last_error() || !$json) {
+        if (json_last_error() !== JSON_ERROR_NONE || ! $json) {
             throw new JsonEncodingException(json_last_error_msg());
         }
 

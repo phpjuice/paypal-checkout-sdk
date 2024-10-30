@@ -20,8 +20,6 @@ class PurchaseUnit implements Arrayable, Jsonable
      * The total order Amount with an optional breakdown that provides details,
      * such as the total item Amount, total tax Amount, shipping, handling, insurance,
      * and discounts, if any.
-     *
-     * @var AmountBreakdown
      */
     protected AmountBreakdown $amount;
 
@@ -42,8 +40,9 @@ class PurchaseUnit implements Arrayable, Jsonable
 
     /**
      *  push a new item into items array.
+     *
      * @param  Item[]  $items
-     * @return PurchaseUnit
+     *
      * @throws MultiCurrencyOrderException
      */
     public function addItems(array $items): self
@@ -57,14 +56,13 @@ class PurchaseUnit implements Arrayable, Jsonable
 
     /**
      *  push a new item into items array.
-     * @param  Item  $item
-     * @return PurchaseUnit
+     *
      * @throws MultiCurrencyOrderException
      */
     public function addItem(Item $item): self
     {
         if ($item->getAmount()->getCurrencyCode() != $this->amount->getCurrencyCode()) {
-            throw new MultiCurrencyOrderException();
+            throw new MultiCurrencyOrderException;
         }
 
         $this->items[] = $item;
@@ -74,7 +72,6 @@ class PurchaseUnit implements Arrayable, Jsonable
 
     /**
      * return's purchase unit items.
-     * @return array
      */
     public function getItems(): array
     {
@@ -83,7 +80,6 @@ class PurchaseUnit implements Arrayable, Jsonable
 
     /**
      * return's the purchase unit amount breakdown.
-     * @return AmountBreakdown
      */
     public function getAmount(): AmountBreakdown
     {
@@ -92,14 +88,13 @@ class PurchaseUnit implements Arrayable, Jsonable
 
     /**
      * convert a purchase unit instance to array.
-     * @return array
      */
     public function toArray(): array
     {
         return [
             'amount' => $this->amount->toArray(),
             'items' => array_map(
-                fn(Item $item) => $item->toArray(),
+                fn (Item $item) => $item->toArray(),
                 $this->items
             ),
         ];

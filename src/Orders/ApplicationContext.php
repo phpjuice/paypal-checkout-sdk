@@ -32,8 +32,6 @@ class ApplicationContext implements Arrayable, Jsonable
 
     /**
      * The label that overrides the business name in the PayPal account on the PayPal site.
-     *
-     * @var string|null
      */
     protected ?string $brand_name = null;
 
@@ -41,8 +39,6 @@ class ApplicationContext implements Arrayable, Jsonable
      * The BCP 47-formatted locale of pages that the PayPal payment experience shows.
      * PayPal supports a five-character code.
      * Examples : da-DK, he-IL, id-ID, ja-JP, no-NO, pt-BR.
-     *
-     * @var string
      */
     protected string $locale = 'en-US';
 
@@ -58,8 +54,6 @@ class ApplicationContext implements Arrayable, Jsonable
      *
      * - NO_PREFERENCE: A decimal fraction for currencies like TND
      *   that are subdivided into thousandths.
-     *
-     * @var string
      */
     protected string $landing_page = NO_PREFERENCE;
 
@@ -69,22 +63,16 @@ class ApplicationContext implements Arrayable, Jsonable
      *  - NO_SHIPPING: Redact the shipping address from the PayPal site. Recommended for digital goods.
      *  - SET_PROVIDED_ADDRESS: Use the merchant-provided address.
      *    The customer cannot change this address on the PayPal site.
-     *
-     * @var string
      */
     protected string $shipping_preference = NO_SHIPPING;
 
     /**
      * The URL where the customer is redirected after the customer approves the payment.
-     *
-     * @var string|null
      */
     protected ?string $return_url = null;
 
     /**
      * The URL where the customer is redirected after the customer cancels the payment.
-     *
-     * @var string|null
      */
     protected ?string $cancel_url = null;
 
@@ -100,19 +88,9 @@ class ApplicationContext implements Arrayable, Jsonable
      *   a Pay Now button appears,Use this option when the final amount is known
      *   when the checkout is initiated, and you want to process the payment
      *   immediately when the customer clicks Pay Now.
-     *
-     * @var string
      */
     protected string $user_action = ACTION_CONTINUE;
 
-    /**
-     * @param  string|null  $brand_name
-     * @param  string  $locale
-     * @param  string  $landing_page
-     * @param  string  $shipping_preference
-     * @param  string|null  $return_url
-     * @param  string|null  $cancel_url
-     */
     public function __construct(
         ?string $brand_name = null,
         string $locale = 'en-US',
@@ -165,7 +143,7 @@ class ApplicationContext implements Arrayable, Jsonable
         return array_filter(
             $arrayable,
             function ($item) {
-                return null !== $item;
+                return $item !== null;
             }
         );
     }
@@ -202,8 +180,8 @@ class ApplicationContext implements Arrayable, Jsonable
     public function setShippingPreference(string $shipping_preference): self
     {
         $validOptions = [GET_FROM_FILE, NO_SHIPPING, SET_PROVIDED_ADDRESS];
-        if (!in_array($shipping_preference, $validOptions)) {
-            throw new InvalidShippingPreferenceException();
+        if (! in_array($shipping_preference, $validOptions)) {
+            throw new InvalidShippingPreferenceException;
         }
 
         $this->shipping_preference = $shipping_preference;
@@ -219,8 +197,8 @@ class ApplicationContext implements Arrayable, Jsonable
     public function setLandingPage(string $landing_page): self
     {
         $validOptions = [LOGIN, BILLING, NO_PREFERENCE];
-        if (!in_array($landing_page, $validOptions)) {
-            throw new InvalidLandingPageException();
+        if (! in_array($landing_page, $validOptions)) {
+            throw new InvalidLandingPageException;
         }
 
         $this->landing_page = $landing_page;
@@ -236,8 +214,8 @@ class ApplicationContext implements Arrayable, Jsonable
     public function setUserAction(string $user_action): self
     {
         $validOptions = [ACTION_CONTINUE, ACTION_PAY_NOW];
-        if (!in_array($user_action, $validOptions)) {
-            throw new InvalidUserActionException();
+        if (! in_array($user_action, $validOptions)) {
+            throw new InvalidUserActionException;
         }
         $this->user_action = $user_action;
 
