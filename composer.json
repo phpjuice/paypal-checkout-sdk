@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "php": "^8.1|^8.2|^8.3",
+        "php": "^8.1|^8.2|^8.3|^8.4",
         "ext-json": "*",
         "brick/money": "^0.5.2",
         "phpjuice/paypal-http-client": "^1.0"
