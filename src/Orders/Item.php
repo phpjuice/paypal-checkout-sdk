@@ -61,6 +61,11 @@ class Item implements Arrayable, Jsonable
     protected string $category = DIGITAL_GOODS;
 
     /**
+     * The URL of the item's image.
+     */
+    protected ?string $image_url = null;
+
+    /**
      * create a new item instance.
      */
     public function __construct(string $name, AmountContract $amount, int $quantity = 1)
@@ -124,13 +129,19 @@ class Item implements Arrayable, Jsonable
      */
     public function toArray(): array
     {
-        return [
+        $payload = [
             'name' => $this->getName(),
             'unit_amount' => $this->unit_amount->toArray(),
             'quantity' => $this->getQuantity(),
             'description' => $this->getDescription(),
             'category' => $this->getCategory(),
         ];
+
+        if ($this->image_url !== null) {
+            $payload['image_url'] = $this->image_url;
+        }
+
+        return $payload;
     }
 
     /**
@@ -205,6 +216,24 @@ class Item implements Arrayable, Jsonable
             throw new InvalidItemCategoryException;
         }
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * return's item image url.
+     */
+    public function getImageUrl(): ?string
+    {
+        return $this->image_url;
+    }
+
+    /**
+     * set's item image url.
+     */
+    public function setImageUrl(?string $image_url): self
+    {
+        $this->image_url = $image_url;
 
         return $this;
     }

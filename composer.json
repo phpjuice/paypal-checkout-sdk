@@ -41,7 +41,8 @@
     "prefer-stable": true,
     "scripts": {
         "test": "vendor/bin/pest --colors=always",
-        "pint": "./vendor/bin/pint",
+        "pint": "vendor/bin/pint",
+        "fmt": "vendor/bin/pint",
         "analyse": "phpstan analyse --ansi --debug"
     },
     "config": {

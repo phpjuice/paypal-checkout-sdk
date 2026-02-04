@@ -47,12 +47,14 @@ it('can cast to an array', function () {
         'quantity' => 2,
         'description' => 'Item Description',
         'category' => 'DIGITAL_GOODS',
+        'image_url' => 'https://example.com/image.png',
     ];
 
     // Act
     $item = Item::create('Item 1', '100.00', 'CAD');
     $item->setDescription('Item Description')
-        ->setQuantity(2);
+        ->setQuantity(2)
+        ->setImageUrl('https://example.com/image.png');
 
     // Assert
     expect($item->toArray())->toBe($expected);
@@ -69,12 +71,14 @@ it('can cast to json', function () {
         'quantity' => 2,
         'description' => 'Item Description',
         'category' => 'DIGITAL_GOODS',
+        'image_url' => 'https://example.com/image.png',
     ]);
 
     // Act
     $item = Item::create('Item 1', '100.00', 'CAD');
     $item->setDescription('Item Description')
-        ->setQuantity(2);
+        ->setQuantity(2)
+        ->setImageUrl('https://example.com/image.png');
 
     // Assert
     expect($item->toJson())->toBe($expected);
